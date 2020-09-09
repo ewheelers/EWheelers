@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/salesreport"
+        android:title="Sales Report"
+        android:icon="@drawable/ic_arrow_forward"/>
+    <item
+        android:id="@+id/bookingreport"
+        android:title="Booking Report"
+        android:icon="@drawable/ic_arrow_forward"/>
+    <item
+        android:id="@+id/testdrivereport"
+        android:title="Test Drive Report"
+        android:icon="@drawable/ic_arrow_forward"/>
+
+</menu>

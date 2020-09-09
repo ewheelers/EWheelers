@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.signup_two">
+
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:text="SIGN UP"
+            android:textColor="#000000"
+            android:textSize="21sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:text="Please enter Business details"
+            android:textColor="#898989"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Business Name"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:id="@+id/businessname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_bgs"
+            android:drawableLeft="@mipmap/bussiness"
+            android:drawablePadding="15dp"
+            android:hint="Enter Your Business Name"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Contact Person Name"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:background="@drawable/edit_bgs"
+            android:drawableLeft="@mipmap/username"
+            android:id="@+id/personname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawablePadding="15dp"
+            android:hint="Person name"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Contact Person Number"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:background="@drawable/edit_bgs"
+            android:id="@+id/personno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@mipmap/mobileno"
+            android:drawablePadding="15dp"
+            android:hint="Enter YOUR 10 digit mobile number"
+            android:inputType="phone"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Address 1"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:id="@+id/address1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@mipmap/address"
+            android:drawablePadding="15dp"
+            android:hint="Enter your address"
+            android:inputType="textPostalAddress"
+            android:selectAllOnFocus="true"
+            android:background="@drawable/edit_bgs"
+            android:singleLine="true">
+
+        </EditText>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Address 2"
+            android:layout_marginStart="10dp" />
+        <EditText
+            android:background="@drawable/edit_bgs"
+            android:id="@+id/address2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@mipmap/address"
+            android:drawablePadding="15dp"
+            android:hint="Enter your address"
+            android:inputType="textPostalAddress"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="24dp"
+            android:id="@+id/next_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_click_grad"
+            android:text="Next"
+            android:textColor="@color/colorWhite"></Button>
+    </LinearLayout>
+
+
+</ScrollView>

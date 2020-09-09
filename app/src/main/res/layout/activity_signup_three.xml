@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".Activities.signup_three"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:text="SIGN UP"
+            android:textColor="#000000"
+            android:textSize="21sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:text="Please enter Business details"
+            android:textColor="#898989"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="City"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:textColor="@color/colorBlack"
+            android:id="@+id/city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_bgs"
+            android:drawableLeft="@mipmap/city"
+            android:drawablePadding="15dp"
+            android:selectAllOnFocus = "true"
+            android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="State"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:textColor="@color/colorBlack"
+            android:background="@drawable/edit_bgs"
+            android:id="@+id/state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@mipmap/city"
+            android:drawablePadding="15dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Pincode"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:textColor="@color/colorBlack"
+            android:id="@+id/pincode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@mipmap/address"
+            android:drawablePadding="15dp"
+            android:hint=""
+            android:selectAllOnFocus="true"
+            android:background="@drawable/edit_bgs"
+            android:singleLine="true">
+
+        </EditText>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Please set business location on map"
+            android:layout_marginStart="10dp" />
+
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <fragment
+                android:background="@drawable/edit_bgs"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                app:srcCompat="@drawable/ic_cart"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="24dp"
+            android:id="@+id/register_but"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_click_grad"
+            android:text="Next"
+            android:textColor="@color/colorWhite"></Button>
+    </LinearLayout>

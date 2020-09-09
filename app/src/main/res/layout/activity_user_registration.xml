@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.UserRegistrationActivity">
+
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/Reg_select_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="320dp"
+            android:layout_marginTop="70dp"
+            android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
+            android:visibility="gone"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:text="SIGN UP"
+            android:textColor="#000000"
+            android:textSize="21sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:text="Please enter personal details"
+            android:textColor="#898989"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Name"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:id="@+id/Reg_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_bgs"
+            android:drawableLeft="@mipmap/username"
+            android:drawablePadding="15dp"
+            android:hint="Enter Your Name"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="User Name"
+            android:layout_marginStart="10dp" />
+
+            <EditText
+                android:background="@drawable/edit_bgs"
+                android:drawableLeft="@mipmap/username"
+                android:id="@+id/Reg_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:drawablePadding="15dp"
+                android:hint="User name"
+                android:inputType="text"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"></EditText>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Email Id"
+            android:layout_marginStart="10dp" />
+
+            <EditText
+                android:background="@drawable/edit_bgs"
+                android:id="@+id/Reg_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:drawableLeft="@mipmap/email_id"
+                android:drawablePadding="15dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"></EditText>
+
+
+            <EditText
+                android:visibility="gone"
+                android:background="@drawable/edit_bgs"
+                android:id="@+id/Reg_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:drawableLeft="@mipmap/password"
+                android:drawablePadding="15dp"
+                android:hint="Mobile no"
+                android:inputType="number"
+                android:maxLength="10"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"></EditText>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Password"
+            android:layout_marginStart="10dp" />
+
+            <EditText
+                android:id="@+id/Reg_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:drawableLeft="@mipmap/password"
+                android:drawablePadding="15dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:selectAllOnFocus="true"
+                android:background="@drawable/edit_bgs"
+                android:singleLine="true">
+
+            </EditText>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:textColor="#992b1e"
+            android:textStyle="normal"
+            android:text="Repeat Password"
+            android:layout_marginStart="10dp" />
+            <EditText
+                android:background="@drawable/edit_bgs"
+                android:id="@+id/Reg_conf_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:drawableLeft="@mipmap/password"
+                android:drawablePadding="15dp"
+                android:hint="Repeat password"
+                android:inputType="textPassword"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"></EditText>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/Reg_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="id"
+                android:inputType="number"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:text="0"
+                android:visibility="gone">
+
+            </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/id_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/agree_conditions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I Agree to the"></CheckBox>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Terms and Conditions"
+                android:textColor="@color/colorHeadings"></TextView>
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="news"
+            android:visibility="gone"></CheckBox>
+
+        <Button
+            android:layout_margin="10dp"
+            android:id="@+id/register_but"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_click_grad"
+            android:text="Next"
+            android:textColor="@color/colorWhite"></Button>
+    </LinearLayout>
+
+
+</ScrollView>

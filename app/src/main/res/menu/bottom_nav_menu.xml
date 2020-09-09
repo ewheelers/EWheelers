@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/tit_home" />
+
+    <item
+        android:id="@+id/navigation_orders"
+        android:icon="@drawable/ic_order"
+        android:title="@string/title_orderreq" />
+
+    <item
+        android:id="@+id/navigation_testdriverequests"
+        android:icon="@drawable/ic_testdriverequest"
+        android:title="@string/title_testdrivereq" />
+    <item
+        android:id="@+id/navigation_booking"
+        android:icon="@drawable/ic_booking"
+        android:title="@string/title_profile" />
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/title_notification" />
+</menu>
