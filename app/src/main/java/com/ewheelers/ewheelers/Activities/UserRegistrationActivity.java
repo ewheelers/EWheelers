@@ -17,20 +17,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.ewheelers.ewheelers.Alertdialogs;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
+import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -71,6 +69,18 @@ public class UserRegistrationActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permissions, requestCode);
         }
+
+        String userid = new SessionPreference().getStrings(this,SessionPreference.userid);
+
+        if(userid!=null){
+            Intent i = new Intent(this,signup_two.class);
+            startActivity(i);
+            finish();
+        }else {
+            Intent i = new Intent(this,UserRegistrationActivity.class);
+            startActivity(i);
+        }
+
         progressDialog = new ProgressDialog(UserRegistrationActivity.this);
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Registration...");
@@ -147,7 +157,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                custom();
+                custom(v);
             }
         });
 
@@ -226,7 +236,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
 
-    private void custom() {
+    private void custom(final View v) {
         RequestQueue queue = Volley.newRequestQueue(this);
         //String url ="http://myserveraddress";
         String url = API.register2;
@@ -239,18 +249,20 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            int getStatus = Integer.parseInt(jsonObject.getString("status"));
-                            if (getStatus != 0) {
+                            String getStatus = jsonObject.getString("status");
+                            if (getStatus.equals("1")) {
                                 int user_id = jsonObject.getInt("user_id");
+                                SessionPreference.saveString(UserRegistrationActivity.this,SessionPreference.userid, String.valueOf(user_id));
                                 Intent i = new Intent(getApplicationContext(),signup_two.class);
-                                i.putExtra("userid",user_id);
                                 startActivity(i);
                                 finish();
                                 /*String smsg = jsonObject.getString("msg");
                                 new Alertdialogs().showSuccessAlert(UserRegistrationActivity.this,smsg);*/
                             } else {
                                 String smsg = jsonObject.getString("msg");
-                                new Alertdialogs().showFailedAlert(UserRegistrationActivity.this,smsg);
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                                //new Alertdialogs().showFailedAlert(UserRegistrationActivity.this,smsg);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -265,12 +277,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     }
                 }) {
 
-            @Override
+           /* @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("X-USER-TYPE", reg_user_name.getText().toString());
                 return params;
-            }
+            }*/
 
             @Override
             protected Map<String, String> getParams() {

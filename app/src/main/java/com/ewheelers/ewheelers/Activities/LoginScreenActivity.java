@@ -2,13 +2,11 @@ package com.ewheelers.ewheelers.Activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.TooltipCompat;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,16 +24,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.ewheelers.ewheelers.Alertdialogs;
-import com.ewheelers.ewheelers.AutoScrollPagerAdapter;
-import com.ewheelers.ewheelers.AutoScrollViewPager;
-import com.ewheelers.ewheelers.KeyboardUtils;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -125,7 +118,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                     //password.setError("Enter Password");
                 }
                 else {
-                    loginJson();
+                    loginJson(v);
                 }
                 break;
             case R.id.forget_password:
@@ -177,7 +170,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
         alertDialog.show();
     }
 
-    private void loginJson() {
+    private void loginJson(final View v) {
         try {
             imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -213,7 +206,8 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                                 reponseMessage = jsonObject.getString("msg");
                                 username.setText("");
                                 password.setText("");
-                                new Alertdialogs().showFailedAlert(LoginScreenActivity.this, reponseMessage);
+                                Snackbar.make(v, reponseMessage, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

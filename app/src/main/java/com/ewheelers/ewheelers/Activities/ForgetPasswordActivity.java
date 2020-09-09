@@ -3,6 +3,7 @@ package com.ewheelers.ewheelers.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,7 +19,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.ewheelers.ewheelers.Alertdialogs;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
@@ -75,7 +75,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     snackbar.show();
                     //forget_email.setError("Enter your User Name");
                 } else {
-                    forgetJson();
+                    forgetJson(v);
                 }
 
             }
@@ -83,7 +83,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     }
 
-    private void forgetJson() {
+    private void forgetJson(final View v) {
         try {
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -103,10 +103,14 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             String smsg = jsonObject.getString("msg");
                             if (getStatus != 0) {
                                 forget_email.setText("");
-                                new Alertdialogs().showSuccessAlert(ForgetPasswordActivity.this, smsg);
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                                Intent i = new Intent(ForgetPasswordActivity.this, LoginScreenActivity.class);
+                                startActivity(i);
                             } else {
                                 forget_email.setText("");
-                                new Alertdialogs().showFailedAlert(ForgetPasswordActivity.this, smsg);
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

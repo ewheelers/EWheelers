@@ -20,8 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.signup_three"></activity>
-        <activity android:name=".Activities.signup_two" />
+        <activity android:name=".Activities.BankAccountDetails"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".Activities.SetupAccount"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".Activities.signup_three"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".Activities.signup_two"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".Activities.SplashScreenActivity"
             android:theme="@style/NoActionBar">
@@ -33,14 +39,15 @@
         </activity>
         <activity
             android:name=".Activities.UserRegistrationActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".Activities.ForgetPasswordActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activities.LoginScreenActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

@@ -17,7 +17,6 @@ import com.android.volley.toolbox.Volley;
 public class VolleySingleton {
 
 
-
     private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
@@ -27,19 +26,19 @@ public class VolleySingleton {
         mRequestQueue = getRequestQueue();
 
         imageLoader = new ImageLoader(mRequestQueue,new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap>
-                    cache = new LruCache<String, Bitmap>(20);
+                    private final LruCache<String, Bitmap>
+                            cache = new LruCache<String, Bitmap>(20);
 
-            @Override
-            public Bitmap getBitmap(String url) {
-                return cache.get(url);
-            }
+                    @Override
+                    public Bitmap getBitmap(String url) {
+                        return cache.get(url);
+                    }
 
-            @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                cache.put(url, bitmap);
-            }
-        });
+                    @Override
+                    public void putBitmap(String url, Bitmap bitmap) {
+                        cache.put(url, bitmap);
+                    }
+                });
     }
 
 
@@ -65,6 +64,15 @@ public class VolleySingleton {
     public ImageLoader getImageLoader() {
         return imageLoader;
     }
+
+   /* public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+        }
+        return mRequestQueue;
+    }*/
 
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
