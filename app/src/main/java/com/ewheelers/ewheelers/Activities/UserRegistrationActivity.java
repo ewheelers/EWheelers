@@ -59,16 +59,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
     String schec, snews;
 
     ProgressDialog progressDialog;
-    private String[] permissions = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"};
-    int requestCode = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_registration);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(permissions, requestCode);
-        }
 
         String userid = new SessionPreference().getStrings(this,SessionPreference.userid);
 
@@ -76,9 +71,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
             Intent i = new Intent(this,signup_two.class);
             startActivity(i);
             finish();
-        }else {
-            Intent i = new Intent(this,UserRegistrationActivity.class);
-            startActivity(i);
         }
 
         progressDialog = new ProgressDialog(UserRegistrationActivity.this);
@@ -238,7 +230,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     private void custom(final View v) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        //String url ="http://myserveraddress";
         String url = API.register2;
         progressDialog.show();
         StringRequest strRequest = new StringRequest(Request.Method.POST, url,
@@ -309,7 +300,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 data3.put("agree", schec);
                 data3.put("user_id", sid);
                 //data3.put("user_newsletter_signup", snews);
-
                 return data3;
 
             }

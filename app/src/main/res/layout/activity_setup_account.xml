@@ -79,6 +79,7 @@
             android:drawablePadding="15dp"
             android:hint="Enter Mobile Number"
             android:inputType="phone"
+            android:maxLength="10"
             android:selectAllOnFocus="true"
             android:singleLine="true"></EditText>
 
@@ -109,9 +110,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/edit_bgs"
-                    android:drawableLeft="@mipmap/username"
-                    android:drawablePadding="15dp"
-                    android:hint="31.01.94"
+                    android:hint="dd/mm/yyyy"
+                    android:drawableLeft="@drawable/date"
+                    android:drawablePadding="5dp"
+                    android:padding="10dp"
                     android:inputType="phone"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"></EditText>
@@ -133,18 +135,10 @@
                     android:textColor="#992b1e"
                     android:textStyle="normal" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/contry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/edit_bgs"
-                    android:drawableLeft="@mipmap/city"
-                    android:drawablePadding="15dp"
-                    android:hint="India"
-                    android:inputType="phone"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"></EditText>
+                    style="@style/spinner_style"></Spinner>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -170,18 +164,10 @@
                     android:textColor="#992b1e"
                     android:textStyle="normal" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/state"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/edit_bgs"
-                    android:drawableLeft="@mipmap/city"
-                    android:drawablePadding="15dp"
-                    android:hint="Telangana"
-                    android:inputType="phone"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"></EditText>
+                    style="@style/spinner_style"></Spinner>
+
             </LinearLayout>
 
             <LinearLayout
@@ -200,22 +186,27 @@
                     android:textColor="#992b1e"
                     android:textStyle="normal" />
 
-                <EditText
+                <Spinner
+                    android:visibility="visible"
                     android:id="@+id/city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/edit_bgs"
-                    android:drawableLeft="@mipmap/city"
-                    android:drawablePadding="15dp"
-                    android:hint="Hyderabad"
-                    android:inputType="phone"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"></EditText>
+                    style="@style/spinner_style"></Spinner>
             </LinearLayout>
-
         </LinearLayout>
 
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/citytext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_bgs"
+            android:hint="Enter city"
+            android:drawableLeft="@drawable/city"
+            android:drawablePadding="5dp"
+            android:padding="10dp"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"></EditText>
 
         <TextView
             android:layout_width="wrap_content"

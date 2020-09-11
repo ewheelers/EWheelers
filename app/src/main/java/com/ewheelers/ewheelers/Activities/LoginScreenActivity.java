@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,18 +44,23 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     TextView forget_password;
     String susername, spass;
     SharedPreferences sharedPreferences;
-    String token, userName, userImage, reponseMessage;
-    int getStatus, userId;
+    String token, userName, userImage, reponseMessage,tokenno;
+    String getStatus;
+    int userId;
     ProgressDialog progressDialog;
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     //TabLayout tabs;
     //AutoScrollViewPager viewPager;
     InputMethodManager imm;
+    private String[] permissions = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"};
+    int requestCode = 200;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, requestCode);
+        }
         progressDialog = new ProgressDialog(LoginScreenActivity.this);
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Login...");
@@ -67,6 +73,10 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
 
 
         sharedPreferences = getApplicationContext().getSharedPreferences("pref", MODE_PRIVATE);
+
+        tokenno = new SessionPreference().getStrings(this,SessionPreference.tokenvalue);
+
+
 
        /* AutoScrollPagerAdapter autoScrollPagerAdapter = new AutoScrollPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
@@ -132,12 +142,12 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                 startActivity(forget_act);
                 break;
             case R.id.createNewAccout:
-                try {
+               /* try {
                     imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
                     // TODO: handle exception
-                }
+                }*/
                 Intent j = new Intent(getApplicationContext(), UserRegistrationActivity.class);
                 startActivity(j);
                 break;
@@ -188,20 +198,20 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            getStatus = jsonObject.getInt("status");
+                            getStatus = jsonObject.getString("status");
 
-                            if (getStatus != 0) {
-                                token = jsonObject.getString("token");
-                                userName = jsonObject.getString("user_name");
-                                userId = jsonObject.getInt("user_id");
-                                userImage = jsonObject.getString("user_image");
+                            if (getStatus.equals("1")) {
+                                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                                token = jsonObject1.getString("token");
+                                userName = jsonObject1.getString("user_name");
+                                userId = jsonObject1.getInt("user_id");
+                                userImage = jsonObject1.getString("user_image");
                                 Log.i("TokenId", token);
                                 SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.tokenvalue,token);
                                 SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.username,userName);
-                                Toast.makeText(LoginScreenActivity.this, "Login Successful, Home page not developed!", Toast.LENGTH_SHORT).show();
-                                /* Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                Intent i = new Intent(getApplicationContext(), SetupAccount.class);
                                 startActivity(i);
-                                finish();*/
+                                finish();
                             } else {
                                 reponseMessage = jsonObject.getString("msg");
                                 username.setText("");
@@ -231,7 +241,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                 Map<String, String> data3 = new HashMap<String, String>();
                 data3.put("username", susername);
                 data3.put("password", spass);
-
+                data3.put("userType","2");
                 return data3;
 
             }

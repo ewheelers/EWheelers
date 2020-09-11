@@ -99,15 +99,16 @@ public class signup_three extends AppCompatActivity implements OnMapReadyCallbac
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             int getStatus = Integer.parseInt(jsonObject.getString("status"));
+                            String smsg = jsonObject.getString("msg");
                             if (getStatus!=0) {
-
-                            } else {
-                                String smsg = jsonObject.getString("msg");
-                                Snackbar.make(v, "Not really Registered : "+smsg, Snackbar.LENGTH_LONG)
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
-                                Intent i = new Intent(signup_three.this,SetupAccount.class);
+                                Intent i = new Intent(signup_three.this,LoginScreenActivity.class);
                                 startActivity(i);
                                 finish();
+                            } else {
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
