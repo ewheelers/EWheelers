@@ -58,6 +58,7 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.Ho
                 }
             }
         });
+
     }
 
     @Override

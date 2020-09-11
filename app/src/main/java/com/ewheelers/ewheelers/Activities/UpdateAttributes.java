@@ -74,6 +74,57 @@ public class UpdateAttributes extends AppCompatActivity {
                 setUpAccount(v);
             }
         });
+       //getProfile();
+    }
+
+    private void getProfile() {
+        final RequestQueue queue = Volley.newRequestQueue(this);
+        String serverurl = API.getProfileinfo;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, serverurl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    String msg = jsonObject.getString("msg");
+                    if (status.equals("1")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject("sellerProfileAttributes");
+                        JSONArray jsonArray = jsonObject1.getJSONArray("selectedOptionsArr");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Main", "Error: " + error.getMessage());
+                Log.d("Main", "" + error.getMessage() + "," + error.toString());
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("X-TOKEN", tokenvalue);
+                return params;
+            }
+
+
+            @Override
+            public Map<String, String> getParams() {
+                return null;
+            }
+
+        };
+        // Add the realibility on the connection.
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1.0f));
+        queue.add(stringRequest);
+
     }
 
     private void getListOfAttributes() {

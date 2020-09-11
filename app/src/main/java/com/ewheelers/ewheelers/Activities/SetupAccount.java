@@ -156,10 +156,10 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                 String dobs = dob.getText().toString();
                 String organise = organization.getText().toString();
                 String profileIs = profile.getText().toString();
-                if(name.isEmpty()||mobile_no.isEmpty()||dobs.isEmpty()||organise.isEmpty()||profileIs.isEmpty()){
+                if (name.isEmpty() || mobile_no.isEmpty() || dobs.isEmpty() || organise.isEmpty() || profileIs.isEmpty()) {
                     Snackbar.make(v, "Please! Fill all details to update and set account", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                }else {
+                } else {
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.name, name);
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.mobile_no, mobile_no);
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.dobs, dobs);
@@ -169,7 +169,7 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.stateid, splitString(stateString));
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.cityname, city_text.getText().toString());
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.cityid, splitString(cityString));
-                    SessionPreference.saveString(SetupAccount.this,SessionPreference.accountsetup,"yes");
+                    SessionPreference.saveString(SetupAccount.this, SessionPreference.accountsetup, "yes");
                     Intent i = new Intent(SetupAccount.this, UpdateAttributes.class);
                     startActivity(i);
                     finish();
@@ -189,13 +189,19 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
-                    if(status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        JSONObject jsonObject2 = jsonObject1.getJSONObject("sellerProfileAttributes");
-                        JSONArray jsonArray = jsonObject1.getJSONArray("selectedOptionsArr");
                         JSONObject jsonObject3 = jsonObject1.getJSONObject("personalInfo");
-                        String fulname = jsonObject3.getString("user_name");
-
+                        String ful_name = jsonObject3.getString("user_name");
+                        fulname.setText(ful_name);
+                        String phone = jsonObject3.getString("user_phone");
+                        mobileno.setText(phone);
+                        /*String dob_is = jsonObject3.getString("user_dob");
+                        dob.setText(dob_is);*/
+                        String organiz = jsonObject3.getString("user_company");
+                        organization.setText(organiz);
+                        String briefpof = jsonObject3.getString("user_profile_info");
+                        profile.setText(briefpof);
                     }
 
                 } catch (JSONException e) {

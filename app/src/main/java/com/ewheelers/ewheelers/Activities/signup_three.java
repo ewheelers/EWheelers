@@ -8,6 +8,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class signup_three extends AppCompatActivity implements OnMapReadyCallbac
     Button regapproval;
     String user_id,b_name,p_name,p_contact,b_address1,b_address2,b_state,b_city,b_pincode;
     ProgressDialog progressDialog;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,12 @@ public class signup_three extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void registerApproval(final View v,final String user_id, final String b_name, final String p_name, final String p_contact, final String b_address1, final String b_address2, final String b_state, final String b_city, final String b_pincode) {
+        try {
+            imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = API.businesssetup;
         progressDialog.show();

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -59,6 +60,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     String schec, snews;
 
     ProgressDialog progressDialog;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,6 +231,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
 
     private void custom(final View v) {
+        try {
+            imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = API.register2;
         progressDialog.show();

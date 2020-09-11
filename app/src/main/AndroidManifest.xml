@@ -20,10 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.UpdateAttributes"
+        <activity android:name=".Activities.eStoreSettings"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".Activities.Home"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".Activities.UpdateAttributes"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".Activities.Home"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activities.BankAccountDetails"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
