@@ -12,14 +12,6 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/Reg_select_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="320dp"
-            android:layout_marginTop="70dp"
-            android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
-            android:visibility="gone"></TextView>
 
         <TextView
             android:layout_width="match_parent"

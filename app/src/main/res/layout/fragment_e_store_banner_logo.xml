@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scrol_view"
     tools:context=".Fragments.eStoreBannerLogoFragment">
 
     <LinearLayout
@@ -45,6 +46,7 @@
             android:layout_marginStart="10dp" />
 
         <Spinner
+            android:id="@+id/lang_spinner"
             style="@style/spinner_style"/>
 
         <TextView
@@ -59,6 +61,7 @@
             android:layout_marginStart="10dp" />
 
         <Spinner
+            android:id="@+id/display_for"
             style="@style/spinner_style"/>
 
         <TextView
@@ -77,12 +80,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="24dp"
-            android:id="@+id/next_three"
+            android:id="@+id/uploadbanner"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_click_grad"
             android:text="Upload Banner"
             android:textColor="@color/colorWhite"></Button>
+
+        <ImageView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/banner_image"/>
+
     </LinearLayout>
 
 </ScrollView>

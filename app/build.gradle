@@ -7,7 +7,7 @@ android {
         applicationId "com.ewheelers.ewheelers"
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 1
+        versionCode 4
         versionName "1.0.1"
         ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -19,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {

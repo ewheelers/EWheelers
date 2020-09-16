@@ -27,7 +27,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                 String setattributes = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.partnerattributes);
 
                 if(token!=null){
-                    if(setupstate!=null){
+                    Intent i = new Intent(SplashScreenActivity.this, Home.class);
+                    startActivity(i);
+                    finish();
+                    /*if(setupstate!=null){
                         Intent i = new Intent(SplashScreenActivity.this, UpdateAttributes.class);
                         startActivity(i);
                         finish();
@@ -45,7 +48,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         Intent i = new Intent(SplashScreenActivity.this, SetupAccount.class);
                         startActivity(i);
                         finish();
-                    }
+                    }*/
                 }else {
                     Intent i = new Intent(SplashScreenActivity.this, LoginScreenActivity.class);
                     startActivity(i);

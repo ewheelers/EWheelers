@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <!--<item
+            android:id="@+id/home_icon"
+            android:title="Home" />-->
+        <item
+            android:id="@+id/accountsettings"
+            android:title="Account Settings"
+            android:icon="@android:drawable/btn_radio" />
+        <item
+            android:id="@+id/banksettings"
+            android:icon="@android:drawable/btn_radio"
+            android:title="Bank Settings" />
+        <item
+            android:id="@+id/estoresettings"
+            android:icon="@android:drawable/btn_radio"
+            android:title="eStore Settings" />
+
+        <item
+            android:id="@+id/parkingaddress"
+            android:title="Parking Addresses"
+            android:icon="@android:drawable/btn_radio" />
+        <item
+            android:id="@+id/chargingaddress"
+            android:title="Charging Addresses"
+            android:icon="@android:drawable/btn_radio" />
+
+    </group>
+</menu>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scrolIs"
     tools:context=".Fragments.eStoreSubEnglishFragment">
     <LinearLayout
         android:layout_marginTop="16dp"
@@ -12,7 +13,6 @@
         android:padding="10dp">
 
         <TextView
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_marginStart="10dp" />
 
         <EditText
-            android:id="@+id/businessname"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -48,17 +48,18 @@
             android:layout_marginStart="10dp" />
 
         <EditText
-            android:id="@+id/address1"
+            android:id="@+id/address_one"
+            android:layout_margin="@dimen/padding_10"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:drawablePadding="15dp"
-            android:inputType="textPostalAddress"
-            android:selectAllOnFocus="true"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:padding="@dimen/padding_10"
+            android:minLines="6"
             android:background="@drawable/edit_bgs"
-            android:singleLine="true">
+            android:scrollbars="vertical"></EditText>
 
-        </EditText>
         <TextView
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
@@ -70,21 +71,23 @@
             android:text="Address 2"
             android:layout_marginStart="10dp" />
         <EditText
-            android:background="@drawable/edit_bgs"
-            android:id="@+id/address2"
+            android:id="@+id/address_two"
+            android:layout_margin="@dimen/padding_10"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
-            android:drawablePadding="15dp"
-            android:inputType="textPostalAddress"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"></EditText>
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:padding="@dimen/padding_10"
+            android:minLines="6"
+            android:background="@drawable/edit_bgs"
+            android:scrollbars="vertical"></EditText>
 
         <Button
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="24dp"
-            android:id="@+id/next_three"
+            android:id="@+id/save_return_lang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

@@ -29,6 +29,10 @@ public class SessionPreference {
     public static String accountsetup = "SetupSubmited";
     public static String partnerattributes = "AttributesSubmited";
 
+    public static String shopid = "shopid";
+    public static String langid = "langid";
+
+
     public static void saveString(Context context, String key, String value) {
         SharedPreferences sharedPref = context.getSharedPreferences("Pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();

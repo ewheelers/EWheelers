@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -32,6 +33,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.ewheelers.ewheelers.Activities.Home.drawer;
 
 public class BankAccountDetails extends AppCompatActivity {
 EditText bankname,holdername,accno,ifsccode,bankaddress;
@@ -162,9 +165,14 @@ ProgressDialog progressDialog;
                                         .setAction("Action", null).show();
                                 SessionPreference.clearString(BankAccountDetails.this,SessionPreference.partnerattributes);
                                 SessionPreference.saveString(BankAccountDetails.this,SessionPreference.bankstatus,"yes");
-                                Intent i = new Intent(BankAccountDetails.this,Home.class);
+                                /*Intent i = new Intent(BankAccountDetails.this,Home.class);
                                 startActivity(i);
+                                finish();*/
+                                /*Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();*/
                                 finish();
+                                drawer.openDrawer(Gravity.LEFT);
+
                             } else {
                                 progressDialog.dismiss();
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
@@ -205,6 +213,12 @@ ProgressDialog progressDialog;
 
         queue.add(strRequest);
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        drawer.openDrawer(Gravity.LEFT);
     }
 
 }

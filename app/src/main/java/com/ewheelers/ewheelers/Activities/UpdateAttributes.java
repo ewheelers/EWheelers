@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.ewheelers.ewheelers.Activities.Home.drawer;
 
 public class UpdateAttributes extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -219,9 +222,11 @@ public class UpdateAttributes extends AppCompatActivity {
                                         .setAction("Action", null).show();*/
                                 SessionPreference.clearString(UpdateAttributes.this,SessionPreference.accountsetup);
                                 SessionPreference.saveString(UpdateAttributes.this,SessionPreference.partnerattributes,"yes");
-                                Intent i = new Intent(UpdateAttributes.this,BankAccountDetails.class);
-                                startActivity(i);
+                                /*Intent i = new Intent(UpdateAttributes.this,Home.class);
+                                i.putExtra("fromsetup","1");
+                                startActivity(i);*/
                                 finish();
+                                drawer.openDrawer(Gravity.LEFT);
                             } else {
                                 progressDialog.dismiss();
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
@@ -272,6 +277,13 @@ public class UpdateAttributes extends AppCompatActivity {
 
         queue.add(strRequest);
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(getApplicationContext(),SetupAccount.class);
+        startActivity(i);
+        finish();
     }
 
 }

@@ -54,7 +54,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     Button reg;
-    TextView select_image, id_pass;
+    TextView  id_pass;
     EditText reg_full_name, reg_user_name, reg_email, reg_mob, reg_pswd, reg_conf_pswd, reg_id;
     String sname, suserName, smob, semail, spass, scpass, simage, sid;
     String schec, snews;
@@ -93,7 +93,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         reg_conf_pswd = findViewById(R.id.Reg_conf_password);
         //reg_conf_pswd.setText("ramesh@123");
         reg_id = findViewById(R.id.Reg_id);
-        select_image = findViewById(R.id.Reg_select_image);
+        //select_image = findViewById(R.id.Reg_select_image);
         reg = findViewById(R.id.register_but);
         id_pass = findViewById(R.id.id_pass);
         news = findViewById(R.id.news);
@@ -103,14 +103,14 @@ public class UserRegistrationActivity extends AppCompatActivity {
         id_pass.setText(sid);
 
 
-        select_image.setOnClickListener(new View.OnClickListener() {
+       /* select_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v == select_image) {
                     selectImage();
                 }
             }
-        });
+        });*/
 
         checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

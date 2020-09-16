@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ewheelers.ewheelers.ActivityModels.Stateslist;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
@@ -46,14 +48,15 @@ import java.util.Map;
 import java.util.Set;
 
 import static android.view.View.GONE;
+import static com.ewheelers.ewheelers.Activities.Home.drawer;
 
 public class SetupAccount extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText fulname, mobileno, dob, organization, profile, city_text;
     Button nextthree;
     Spinner country, state, city;
-    ArrayList<String> countrieslist = new ArrayList<>();
-    ArrayList<String> statelist = new ArrayList<>();
-    ArrayList<String> citieslist = new ArrayList<>();
+    ArrayList<Stateslist> countrieslist = new ArrayList<>();
+    ArrayList<Stateslist> statelist = new ArrayList<>();
+    ArrayList<Stateslist> citieslist = new ArrayList<>();
     String tokenValue, countryString, stateString, cityString;
 
     @Override
@@ -165,10 +168,10 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.dobs, dobs);
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.organise, organise);
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.profileIs, profileIs);
-                    SessionPreference.saveString(SetupAccount.this, SessionPreference.contryid, splitString(countryString));
-                    SessionPreference.saveString(SetupAccount.this, SessionPreference.stateid, splitString(stateString));
+                    SessionPreference.saveString(SetupAccount.this, SessionPreference.contryid, countryString);
+                    SessionPreference.saveString(SetupAccount.this, SessionPreference.stateid, stateString);
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.cityname, city_text.getText().toString());
-                    SessionPreference.saveString(SetupAccount.this, SessionPreference.cityid, splitString(cityString));
+                    SessionPreference.saveString(SetupAccount.this, SessionPreference.cityid, cityString);
                     SessionPreference.saveString(SetupAccount.this, SessionPreference.accountsetup, "yes");
                     Intent i = new Intent(SetupAccount.this, UpdateAttributes.class);
                     startActivity(i);
@@ -288,10 +291,12 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                         JSONObject jsonObjectcountry = jsonArrayCountries.getJSONObject(i);
                         String countryid = jsonObjectcountry.getString("id");
                         String countryname = jsonObjectcountry.getString("name");
-                        countrieslist.add(countryid + " - " + countryname);
+                        Stateslist stateslist = new Stateslist(countryid,countryname);
+                        //countrieslist.add(countryid + " - " + countryname);
+                        countrieslist.add(stateslist);
                     }
 
-                    country.setAdapter(new ArrayAdapter<String>(SetupAccount.this, android.R.layout.simple_spinner_dropdown_item, countrieslist));
+                    country.setAdapter(new ArrayAdapter<Stateslist>(SetupAccount.this, android.R.layout.simple_spinner_dropdown_item, countrieslist));
 
 
                 } catch (JSONException e) {
@@ -330,8 +335,10 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        countryString = country.getSelectedItem().toString();
-        getStatesNames(splitString(countryString));
+        Stateslist stateslist = (Stateslist) country.getSelectedItem();
+        countryString = stateslist.getStatename();
+        //countryString = country.getSelectedItem().toString();
+        getStatesNames(stateslist.getStateid());
     }
 
     @Override
@@ -339,7 +346,7 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private void getStatesNames(String splitString) {
+    private void getStatesNames(final String splitString) {
         statelist.clear();
         String url_link = API.states + splitString;
         final RequestQueue queue = Volley.newRequestQueue(SetupAccount.this);
@@ -362,18 +369,21 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                         String stateid = countryname.getString("state_id");
                         String state_code = countryname.getString("state_code");
                         String state_name = countryname.getString("state_name");
-
-                        statelist.add(stateid + " - " + state_name);
+                        Stateslist stateslist = new Stateslist(stateid,state_name);
+                        //statelist.add(stateid + " - " + state_name);
+                        statelist.add(stateslist);
                     }
 
-                    state.setAdapter(new ArrayAdapter<String>(SetupAccount.this, android.R.layout.simple_spinner_dropdown_item, statelist));
+                    state.setAdapter(new ArrayAdapter<Stateslist>(SetupAccount.this, android.R.layout.simple_spinner_dropdown_item, statelist));
                     state.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            stateString = state.getSelectedItem().toString();
+                            Stateslist stateslist = (Stateslist) state.getSelectedItem();
+                            stateString = stateslist.getStatename();
+                            //stateString = state.getSelectedItem().toString();
                             //Toast.makeText(SetupBillingAddressActivity.this, splitString(stateString), Toast.LENGTH_SHORT).show();
-                            getCityNames(splitString(countryString), splitString(stateString));
+                            getCityNames(splitString, stateslist.getStateid());
 
                         }
 
@@ -436,16 +446,19 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                             JSONObject jsonObjectcountry = jsonArrayCountries.getJSONObject(i);
                             String cityid = jsonObjectcountry.getString("id");
                             String cityname = jsonObjectcountry.getString("name");
-
-                            citieslist.add(cityid + " - " + cityname);
+                            Stateslist stateslist = new Stateslist(cityid,cityname);
+                            //citieslist.add(cityid + " - " + cityname);
+                            citieslist.add(stateslist);
                         }
-                        city.setAdapter(new ArrayAdapter<String>(SetupAccount.this, android.R.layout.simple_spinner_dropdown_item, citieslist));
+                        city.setAdapter(new ArrayAdapter<Stateslist>(SetupAccount.this, android.R.layout.simple_spinner_dropdown_item, citieslist));
                         city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                cityString = city.getSelectedItem().toString();
+                                Stateslist stateslist = (Stateslist) city.getSelectedItem();
+                                cityString = stateslist.getStatename();
+                                //cityString = city.getSelectedItem().toString();
                                 //Toast.makeText(SetupAccount.this, cityString, Toast.LENGTH_SHORT).show();
-                                if (cityString.equalsIgnoreCase("-1 - Other")) {
+                                if (cityString.equalsIgnoreCase("Other")) {
                                     city_text.setVisibility(View.VISIBLE);
                                 } else {
                                     city_text.setVisibility(GONE);
@@ -493,6 +506,12 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
         // Add the realibility on the connection.
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1.0f));
         queue.add(stringRequest);
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        drawer.openDrawer(Gravity.LEFT);
     }
 
 }

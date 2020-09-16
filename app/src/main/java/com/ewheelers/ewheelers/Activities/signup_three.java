@@ -37,10 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class signup_three extends AppCompatActivity implements OnMapReadyCallback {
-    SupportMapFragment mapFragment;
-    GoogleMap mMap;
-    GoogleMap.OnCameraIdleListener onCameraIdleListener;
+public class signup_three extends AppCompatActivity{
     EditText city,state,pincode;
     Button regapproval;
     String user_id,b_name,p_name,p_contact,b_address1,b_address2,b_state,b_city,b_pincode;
@@ -55,11 +52,6 @@ public class signup_three extends AppCompatActivity implements OnMapReadyCallbac
         state = findViewById(R.id.state);
         pincode = findViewById(R.id.pincode);
         regapproval = findViewById(R.id.next_form);
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
-        configureCameraIdle();
         progressDialog = new ProgressDialog(signup_three.this);
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Business SetUP...");
@@ -78,7 +70,7 @@ public class signup_three extends AppCompatActivity implements OnMapReadyCallbac
                 b_pincode = pincode.getText().toString();
                 if(b_city.isEmpty()||b_state.isEmpty()||b_pincode.isEmpty()){
                     Snackbar snackbar = Snackbar
-                            .make(v, "Drag the map to set fields or enter manually (if map not works due to network issue)", Snackbar.LENGTH_LONG);
+                            .make(v, "Please enter all fields", Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }else {
                     registerApproval(v,user_id,b_name,p_name,p_contact,b_address1,b_address2,b_state,b_city,b_pincode);
@@ -158,48 +150,6 @@ public class signup_three extends AppCompatActivity implements OnMapReadyCallbac
 
         queue.add(strRequest);
 
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setOnCameraIdleListener(onCameraIdleListener);
-       /* mMap.setMinZoomPreference(6.0f);
-        mMap.setMaxZoomPreference(14.0f);*/
-        mMap.setMyLocationEnabled(true);
-    }
-
-    private void configureCameraIdle() {
-        onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-
-                LatLng latLng = mMap.getCameraPosition().target;
-                Geocoder geocoder = new Geocoder(signup_three.this);
-                /*lat.setText(String.valueOf(latLng.latitude));
-                lang.setText(String.valueOf(latLng.longitude));*/
-                try {
-                    List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    if (addressList != null && addressList.size() > 0) {
-                        String locality = addressList.get(0).getAddressLine(0);
-                        String country = addressList.get(0).getCountryName();
-                        String zip = addressList.get(0).getPostalCode();
-                        String stat = addressList.get(0).getAdminArea();
-                        String citi = addressList.get(0).getLocality();
-                        city.setText(citi);
-                        state.setText(stat);
-                        pincode.setText(zip);
-                        /*if (!locality.isEmpty() && !country.isEmpty())
-                            city.setText(citi);
-                        postalcode.setText(zip);*/
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
     }
 
 }

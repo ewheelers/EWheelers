@@ -52,7 +52,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     //TabLayout tabs;
     //AutoScrollViewPager viewPager;
     InputMethodManager imm;
-    private String[] permissions = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"};
+    private String[] permissions = {"android.permission.CAMERA","android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION","android.permission.CALL_PHONE","com.example.mapdemo.permission.MAPS_RECEIVE","android.permission.ACCESS_NETWORK_STATE","android.permission.READ_EXTERNAL_STORAGE","android.permission.WRITE_EXTERNAL_STORAGE","android.permission.INTERNET"};
     int requestCode = 200;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,7 +209,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                                 Log.i("TokenId", token);
                                 SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.tokenvalue,token);
                                 SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.username,userName);
-                                Intent i = new Intent(getApplicationContext(), SetupAccount.class);
+                                Intent i = new Intent(getApplicationContext(), Home.class);
                                 startActivity(i);
                                 finish();
                             } else {

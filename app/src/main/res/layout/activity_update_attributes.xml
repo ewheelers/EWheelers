@@ -5,33 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.UpdateAttributes">
-    <TextView
-        android:layout_alignParentTop="true"
+
+    <LinearLayout
         android:id="@+id/titile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_margin="10dp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="#992b1e"
-        android:gravity="center_horizontal"
-        android:text="Partner Type" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@+id/titile"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Partner Type"
+            android:textColor="#992b1e"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attributes_list"
-        android:layout_margin="10dp"
-        android:layout_above="@+id/save_attributes"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/save_attributes"
+        android:layout_below="@+id/titile"
+        android:layout_margin="10dp" />
+
     <Button
         android:id="@+id/save_attributes"
-        android:layout_alignParentBottom="true"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_margin="12dp"
+        android:background="@drawable/button_click_grad"
         android:text="Save"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/button_click_grad"/>
+        android:textColor="@color/colorWhite" />
 </RelativeLayout>
