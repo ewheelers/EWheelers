@@ -1,5 +1,4 @@
 <resources>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCY-1U70L2JlBXFOMiC9kP0Kljn1RR9e4c</string>
     <string name="app_name">eWheelers Partners</string>
     <string name="title_home">eWheelers partner</string>
     <string name="tit_home">Home</string>
@@ -47,4 +46,6 @@
     <string name="page_text_1">Cycles</string>
     <string name="page_text_2">Electric Scooters</string>
     <string name="page_text_3">Scooters</string>
+    <string name="set_location"><u>Set Location</u></string>
+    <string name="title_activity_maps">Map</string>
 </resources>

@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main_layout">
-
-    <RelativeLayout
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:id="@+id/relay"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true">
-
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/edit_bgs" />
-
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/pindrop" />
-    </RelativeLayout>
+    android:layout_height="match_parent">
 
     <ScrollView xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/scrol"
-        android:layout_below="@+id/relay"
-        android:layout_above="@id/next_three"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/next_three"
+        android:layout_below="@+id/relay"
+        android:layout_alignParentTop="true"
         tools:context=".Fragments.eStoreGeneralFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:orientation="vertical"
             android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/setLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_10"
+                    android:text="@string/set_location"
+                    android:textColor="@color/colorNavy"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/goMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginLeft="@dimen/padding_10"
+                    android:background="@drawable/button_click_grad"
+                    android:text="Go to Map"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,6 +88,7 @@
                 android:background="@drawable/edit_bgs"
                 android:drawableLeft="@mipmap/username"
                 android:drawablePadding="15dp"
+                android:enabled="false"
                 android:inputType="textUri"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"></EditText>
@@ -116,11 +117,11 @@
                 android:singleLine="true"></EditText>
 
             <TextView
-                android:layout_marginTop="@dimen/padding_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/padding_10"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
                 android:text="Postalcode"
@@ -194,7 +195,7 @@
 
             <Spinner
                 android:id="@+id/contry"
-                style="@style/spinner_style"/>
+                style="@style/spinner_style" />
 
             <!--<EditText
                 android:layout_width="match_parent"
@@ -219,21 +220,21 @@
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
-             <Spinner
-                 android:id="@+id/state"
-                 style="@style/spinner_style"/>
+            <Spinner
+                android:id="@+id/state"
+                style="@style/spinner_style" />
 
-           <!-- <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edit_bgs"
-                android:drawableLeft="@mipmap/address"
-                android:drawablePadding="15dp"
-                android:inputType="text"
-                android:maxLength="10"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"></EditText>-->
+            <!-- <EditText
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="10dp"
+                 android:background="@drawable/edit_bgs"
+                 android:drawableLeft="@mipmap/address"
+                 android:drawablePadding="15dp"
+                 android:inputType="text"
+                 android:maxLength="10"
+                 android:selectAllOnFocus="true"
+                 android:singleLine="true"></EditText>-->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -248,18 +249,18 @@
 
             <Spinner
                 android:id="@+id/city_name"
-                style="@style/spinner_style"/>
-           <!-- <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edit_bgs"
-                android:drawableLeft="@mipmap/address"
-                android:drawablePadding="15dp"
-                android:inputType="text"
-                android:maxLength="10"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"></EditText>-->
+                style="@style/spinner_style" />
+            <!-- <EditText
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="10dp"
+                 android:background="@drawable/edit_bgs"
+                 android:drawableLeft="@mipmap/address"
+                 android:drawablePadding="15dp"
+                 android:inputType="text"
+                 android:maxLength="10"
+                 android:selectAllOnFocus="true"
+                 android:singleLine="true"></EditText>-->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -396,10 +397,10 @@
     </ScrollView>
 
     <Button
-        android:layout_alignParentBottom="true"
         android:id="@+id/next_three"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"

@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.se.omapi.Session;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +37,13 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ewheelers.ewheelers.Activities.BankAccountDetails;
+import com.ewheelers.ewheelers.Activities.MapsActivity;
 import com.ewheelers.ewheelers.Activities.SetupAccount;
 import com.ewheelers.ewheelers.Activities.UpdateAttributes;
 import com.ewheelers.ewheelers.ActivityModels.Stateslist;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
+import com.ewheelers.ewheelers.Utils.NewGPSTracker;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,28 +62,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 import static android.view.View.GONE;
 import static com.ewheelers.ewheelers.Utils.SessionPreference.cityname;
 
-public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallback , AdapterView.OnItemSelectedListener {
-    SupportMapFragment mapFragment;
-    GoogleMap mMap;
-    GoogleMap.OnCameraIdleListener onCameraIdleListener;
-    EditText identifier,shopuri,shopaddress,postalcode,mobileno,free_shippingon,maxradious,maxRent,latitude,longitude;
-    Spinner country_list,state_list,city_list, display_state;
+public class eStoreGeneralFragment extends Fragment implements AdapterView.OnItemSelectedListener, TextWatcher {
+    EditText identifier, shopuri, shopaddress, postalcode, mobileno, free_shippingon, maxradious, maxRent, latitude, longitude;
+    Spinner country_list, state_list, city_list, display_state;
     Button save_changes;
     ArrayList<Stateslist> countrieslist = new ArrayList<>();
     ArrayList<Stateslist> statelist = new ArrayList<>();
     ArrayList<Stateslist> citieslist = new ArrayList<>();
-    String tokenValue, countryString,contryid, stateString,stateid, cityString, cityid;
+    String tokenValue, countryString, contryid, stateString, stateid, cityString, cityid;
     RelativeLayout mainlayout;
     private ProgressDialog progressDialog;
-    String[] status_list = {"On","Off"};
-    String sdisp,shopid;
-    RelativeLayout relativeLayout;
+    String[] status_list = {"On", "Off"};
+    String sdisp, shopid;
+    NewGPSTracker newgps;
+    private Context mContext;
+    private double latitud;
+    private double longitud;
+    Button buttonMap;
+    String lat,longi;
     public eStoreGeneralFragment() {
         // Required empty public constructor
     }
@@ -95,17 +102,15 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_e_store_general, container, false);
-        tokenValue = new SessionPreference().getStrings(getActivity(),SessionPreference.tokenvalue);
-        mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+        mContext = getActivity();
+        tokenValue = new SessionPreference().getStrings(getActivity(), SessionPreference.tokenvalue);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("General SetUp ....");
         progressDialog.setCancelable(false);
-        configureCameraIdle();
         identifier = v.findViewById(R.id.identifier);
+        buttonMap = v.findViewById(R.id.goMap);
+        identifier.addTextChangedListener(this);
         shopuri = v.findViewById(R.id.seourl);
         shopaddress = v.findViewById(R.id.shopaddress);
         postalcode = v.findViewById(R.id.postalcode);
@@ -121,7 +126,6 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
         longitude = v.findViewById(R.id.logitude);
         save_changes = v.findViewById(R.id.next_three);
         mainlayout = v.findViewById(R.id.main_layout);
-        relativeLayout = v.findViewById(R.id.relay);
         country_list.setOnItemSelectedListener(this);
         state_list.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -140,11 +144,24 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
             }
         });
         getProfile();
+        getCurrentLocation();
         getCountries();
         save_changes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveChanges();
+            }
+        });
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(latitude!=null&&longitude!=null){
+                    Intent i = new Intent(getActivity(), MapsActivity.class);
+                    i.putExtra("latit",lat);
+                    i.putExtra("longi",longi);
+                    startActivity(i);
+                }
+
             }
         });
         return v;
@@ -163,11 +180,11 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         JSONObject jsonObject3 = jsonObject1.getJSONObject("shopDetails");
-                        if(jsonObject3.length()==0){
+                        if (jsonObject3.length() == 0) {
 
-                        }else {
+                        } else {
                             shopid = jsonObject3.getString("shop_id");
-                            SessionPreference.saveString(getActivity(),SessionPreference.shopid,shopid);
+                            SessionPreference.saveString(getActivity(), SessionPreference.shopid, shopid);
                             String shop_user_id = jsonObject3.getString("shop_user_id");
                             String identy = jsonObject3.getString("shop_identifier");
                             identifier.setText(identy);
@@ -177,10 +194,10 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                             shopuri.setText(uri_is);
                             String autoComplete = jsonObject3.getString("shop_auto_complete");
                             shopaddress.setText(autoComplete);
-                            String latitud = jsonObject3.getString("shop_latitude");
-                            latitude.setText(latitud);
-                            String longitud = jsonObject3.getString("shop_longitude");
-                            longitude.setText(longitud);
+                            lat = jsonObject3.getString("shop_latitude");
+                            latitude.setText(lat);
+                            longi = jsonObject3.getString("shop_longitude");
+                            longitude.setText(longi);
                             String maxsell = jsonObject3.getString("shop_max_sell_radius");
                             maxradious.setText(maxsell);
                             String maxrent = jsonObject3.getString("shop_max_rent_radius");
@@ -198,9 +215,7 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                             stateid = stated;
                             cityid = cityd;
                         }
-                    }
-
-                    else {
+                    } else {
                         Snackbar.make(mainlayout, msg, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
@@ -294,11 +309,11 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                 data3.put("shop_postalcode", postalcode.getText().toString());
                 data3.put("shop_phone", mobileno.getText().toString());
                 data3.put("shop_country_id", countryString);
-                data3.put("shop_state",  stateString);
+                data3.put("shop_state", stateString);
                 data3.put("shop_city_id", cityString);
-                if(sdisp.equals("On")){
+                if (sdisp.equals("On")) {
                     data3.put("shop_supplier_display_status", "0");
-                }else {
+                } else {
                     data3.put("shop_supplier_display_status", "1");
                 }
                 data3.put("shop_free_ship_upto", free_shippingon.getText().toString());
@@ -306,9 +321,9 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                 data3.put("shop_max_rent_radius", maxRent.getText().toString());
                 data3.put("shop_latitude", latitude.getText().toString());
                 data3.put("shop_longitude", longitude.getText().toString());
-                if(shopid==null){
+                if (shopid == null) {
                     data3.put("shop_id", "");
-                }else {
+                } else {
                     data3.put("shop_id", shopid);
                 }
                 return data3;
@@ -320,78 +335,15 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
 
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setOnCameraIdleListener(onCameraIdleListener);
-        /*mMap.setMinZoomPreference(6.0f);
-        mMap.setMaxZoomPreference(14.0f);*/
-        mMap.setMyLocationEnabled(true);
-    }
-
-    private void configureCameraIdle() {
-        onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-
-                LatLng latLng = mMap.getCameraPosition().target;
-                Geocoder geocoder = new Geocoder(getActivity());
-                latitude.setText(String.valueOf(latLng.latitude));
-                longitude.setText(String.valueOf(latLng.longitude));
-                try {
-                    List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    if (addressList != null && addressList.size() > 0) {
-                        String locality = addressList.get(0).getAddressLine(0);
-                        String country = addressList.get(0).getCountryName();
-                        String zip = addressList.get(0).getPostalCode();
-                        String stat = addressList.get(0).getAdminArea();
-                        String citi = addressList.get(0).getLocality();
-                        shopaddress.setText(locality);
-                        postalcode.setText(zip);
-                        /*city.setText(citi);
-                        state.setText(stat);
-                        pincode.setText(zip);*/
-
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String splitString(String str) {
-        StringBuffer alpha = new StringBuffer(),
-                num = new StringBuffer(), special = new StringBuffer();
-
-        for (int i = 0; i < str.length(); i++) {
-            if (Character.isDigit(str.charAt(i)))
-                num.append(str.charAt(i));
-            else if (Character.isAlphabetic(str.charAt(i)))
-                alpha.append(str.charAt(i));
-            else
-                special.append(str.charAt(i));
+    private void getCurrentLocation() {
+        //mMap = googleMap;
+        newgps = new NewGPSTracker(mContext, getActivity());
+        if (newgps.canGetLocation()) {
+            latitud = newgps.getLatitude();
+            longitud = newgps.getLongitude();
+            latitude.setText(String.valueOf(latitud));
+            longitude.setText(String.valueOf(longitud));
         }
-        return String.valueOf(num);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String splitStringAlpha(String str) {
-        StringBuffer alpha = new StringBuffer(),
-                num = new StringBuffer(), special = new StringBuffer();
-
-        for (int i = 0; i < str.length(); i++) {
-            if (Character.isDigit(str.charAt(i)))
-                num.append(str.charAt(i));
-            else if (Character.isAlphabetic(str.charAt(i)))
-                alpha.append(str.charAt(i));
-            else
-                special.append(str.charAt(i));
-        }
-        return String.valueOf(alpha);
     }
 
     private void getCountries() {
@@ -412,7 +364,7 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                         JSONObject jsonObjectcountry = jsonArrayCountries.getJSONObject(i);
                         String countryid = jsonObjectcountry.getString("id");
                         String countryname = jsonObjectcountry.getString("name");
-                        Stateslist stateslist = new Stateslist(countryid,countryname);
+                        Stateslist stateslist = new Stateslist(countryid, countryname);
                         //countrieslist.add(countryid + " - " + countryname);
                         countrieslist.add(stateslist);
                     }
@@ -451,7 +403,6 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1.0f));
         queue.add(stringRequest);
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -493,7 +444,7 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                         String stateid = countryname.getString("state_id");
                         String state_code = countryname.getString("state_code");
                         String state_name = countryname.getString("state_name");
-                        Stateslist stateslistAre = new Stateslist(stateid,state_name);
+                        Stateslist stateslistAre = new Stateslist(stateid, state_name);
                         //statelist.add(stateid + " - " + state_name);
                         statelist.add(stateslistAre);
                     }
@@ -509,7 +460,7 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                             //Toast.makeText(SetupBillingAddressActivity.this, splitString(stateString), Toast.LENGTH_SHORT).show();
                             //getCityNames(splitString(countryString), splitString(stateString));
                             stateid = state.getStateid();
-                            getCityNames(splitString,stateid);
+                            getCityNames(splitString, stateid);
 
                         }
 
@@ -573,7 +524,7 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
                             JSONObject jsonObjectcountry = jsonArrayCountries.getJSONObject(i);
                             String cityid = jsonObjectcountry.getString("id");
                             String cityname = jsonObjectcountry.getString("name");
-                            Stateslist stateslist = new Stateslist(cityid,cityname);
+                            Stateslist stateslist = new Stateslist(cityid, cityname);
                             //citieslist.add(cityid + " - " + cityname);
                             citieslist.add(stateslist);
                         }
@@ -631,4 +582,21 @@ public class eStoreGeneralFragment extends Fragment implements OnMapReadyCallbac
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        String textchaned = s.toString();
+        if (textchaned.equals(identifier.getEditableText().toString())) {
+            shopuri.setText(textchaned);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
 }
