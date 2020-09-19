@@ -46,7 +46,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     SharedPreferences sharedPreferences;
     String token, userName, userImage, reponseMessage,tokenno;
     String getStatus;
-    int userId;
+    String userId;
     ProgressDialog progressDialog;
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     //TabLayout tabs;
@@ -142,7 +142,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                 startActivity(forget_act);
                 break;
             case R.id.createNewAccout:
-               /* try {
+                /*try {
                     imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
@@ -204,9 +204,10 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                                 token = jsonObject1.getString("token");
                                 userName = jsonObject1.getString("user_name");
-                                userId = jsonObject1.getInt("user_id");
+                                userId = jsonObject1.getString("user_id");
                                 userImage = jsonObject1.getString("user_image");
                                 Log.i("TokenId", token);
+                                SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.userid,userId);
                                 SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.tokenvalue,token);
                                 SessionPreference.saveString(LoginScreenActivity.this,SessionPreference.username,userName);
                                 Intent i = new Intent(getApplicationContext(), Home.class);

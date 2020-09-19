@@ -1,5 +1,6 @@
 package com.ewheelers.ewheelers.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import com.ewheelers.ewheelers.Fragments.eStoreMediaFragment;
 import com.ewheelers.ewheelers.Fragments.eStoreReturnAddressFragment;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.ProductViewPagerAdapter;
+import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -54,6 +56,12 @@ public class eStoreSettings extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        /*Intent i = new Intent(eStoreSettings.this,Home.class);
+        startActivity(i);*/
+        SessionPreference.clearString(eStoreSettings.this,SessionPreference.shopaddress);
+        SessionPreference.clearString(eStoreSettings.this,SessionPreference.zipcode);
+        SessionPreference.clearString(eStoreSettings.this,SessionPreference.latitude);
+        SessionPreference.clearString(eStoreSettings.this,SessionPreference.logitude);
         finish();
         drawer.openDrawer(Gravity.LEFT);
     }

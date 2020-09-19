@@ -3,12 +3,8 @@ package com.ewheelers.ewheelers.Fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.se.omapi.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,13 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -36,38 +32,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.ewheelers.ewheelers.Activities.BankAccountDetails;
 import com.ewheelers.ewheelers.Activities.MapsActivity;
-import com.ewheelers.ewheelers.Activities.SetupAccount;
-import com.ewheelers.ewheelers.Activities.UpdateAttributes;
 import com.ewheelers.ewheelers.ActivityModels.Stateslist;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.NewGPSTracker;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-
-import static android.view.View.GONE;
-import static com.ewheelers.ewheelers.Utils.SessionPreference.cityname;
 
 public class eStoreGeneralFragment extends Fragment implements AdapterView.OnItemSelectedListener, TextWatcher {
     EditText identifier, shopuri, shopaddress, postalcode, mobileno, free_shippingon, maxradious, maxRent, latitude, longitude;
@@ -86,7 +65,8 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
     private double latitud;
     private double longitud;
     Button buttonMap;
-    String lat,longi;
+    String lat, longi, shopaddre, zipcode, u_latitude, u_longitude;
+
     public eStoreGeneralFragment() {
         // Required empty public constructor
     }
@@ -127,7 +107,8 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
         save_changes = v.findViewById(R.id.next_three);
         mainlayout = v.findViewById(R.id.main_layout);
         country_list.setOnItemSelectedListener(this);
-        state_list.setOnItemSelectedListener(this);
+        //state_list.setOnItemSelectedListener(this);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, status_list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,7 +125,16 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
             }
         });
         getProfile();
-        getCurrentLocation();
+        //getCurrentLocation();
+        shopaddre = new SessionPreference().getStrings(getActivity(), SessionPreference.shopaddress);
+        zipcode = new SessionPreference().getStrings(getActivity(), SessionPreference.zipcode);
+        u_latitude = new SessionPreference().getStrings(getActivity(), SessionPreference.latitude);
+        u_longitude = new SessionPreference().getStrings(getActivity(), SessionPreference.logitude);
+
+       /* if (u_latitude != null && u_longitude != null) {
+            latitude.setText(u_latitude);
+            longitude.setText(u_longitude);
+        }*/
         getCountries();
         save_changes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,15 +145,14 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(latitude!=null&&longitude!=null){
-                    Intent i = new Intent(getActivity(), MapsActivity.class);
-                    i.putExtra("latit",lat);
-                    i.putExtra("longi",longi);
-                    startActivity(i);
-                }
-
+                Intent i = new Intent(getActivity(), MapsActivity.class);
+                i.putExtra("latit", latitude.getText().toString());
+                i.putExtra("longi", longitude.getText().toString());
+                startActivity(i);
+                getActivity().finish();
             }
         });
+
         return v;
     }
 
@@ -189,15 +178,33 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             String identy = jsonObject3.getString("shop_identifier");
                             identifier.setText(identy);
                             String pincode = jsonObject3.getString("shop_postalcode");
-                            postalcode.setText(pincode);
+                            if(zipcode!=null){
+                                postalcode.setText(zipcode);
+                            }else {
+                                postalcode.setText(pincode);
+                            }
                             String uri_is = jsonObject3.getString("urlrewrite_custom");
                             shopuri.setText(uri_is);
                             String autoComplete = jsonObject3.getString("shop_auto_complete");
-                            shopaddress.setText(autoComplete);
+                            if(shopaddre!=null){
+                                shopaddress.setText(shopaddre);
+                            }else {
+                                shopaddress.setText(autoComplete);
+                            }
                             lat = jsonObject3.getString("shop_latitude");
-                            latitude.setText(lat);
+                            //SessionPreference.clearString(getActivity(),SessionPreference.latitude);
+                            if(u_latitude!=null){
+                                latitude.setText(u_latitude);
+                            }else {
+                                latitude.setText(lat);
+                            }
                             longi = jsonObject3.getString("shop_longitude");
-                            longitude.setText(longi);
+                            //SessionPreference.clearString(getActivity(),SessionPreference.logitude);
+                            if(u_longitude!=null){
+                                longitude.setText(u_longitude);
+                            }else {
+                                longitude.setText(longi);
+                            }
                             String maxsell = jsonObject3.getString("shop_max_sell_radius");
                             maxradious.setText(maxsell);
                             String maxrent = jsonObject3.getString("shop_max_rent_radius");
@@ -211,9 +218,23 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             String countryd = jsonObject3.getString("shop_country_id");
                             String stated = jsonObject3.getString("shop_state_id");
                             String cityd = jsonObject3.getString("shop_city_id");
-                            contryid = countryd;
-                            stateid = stated;
-                            cityid = cityd;
+                            for(int i=0;i<countrieslist.size();i++){
+                                if(countrieslist.get(i).getStateid().equals(countryd)){
+                                    country_list.setSelection(i);
+                                }
+                            }
+                            for(int i=0;i<statelist.size();i++){
+                                if(statelist.get(i).getStateid().equals(stated)){
+                                    state_list.setSelection(i);
+                                }
+                            }
+                            for(int i=0;i<citieslist.size();i++){
+                                if(citieslist.get(i).getStateid().equals(cityd)){
+                                    city_list.setSelection(i);
+                                }
+                            }
+                            //stateid = stated;
+                            //cityid = cityd;
                         }
                     } else {
                         Snackbar.make(mainlayout, msg, Snackbar.LENGTH_LONG)
@@ -347,6 +368,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
     }
 
     private void getCountries() {
+        progressDialog.show();
         String url_link = API.countries;
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_link, new com.android.volley.Response.Listener<String>() {
@@ -423,6 +445,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
 
     private void getStatesNames(final String splitString) {
         statelist.clear();
+        //progressDialog.show();
         String url_link = API.states + splitString;
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_link, new com.android.volley.Response.Listener<String>() {
@@ -448,8 +471,9 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                         //statelist.add(stateid + " - " + state_name);
                         statelist.add(stateslistAre);
                     }
-
-                    state_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, statelist));
+                    if (statelist != null) {
+                        state_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, statelist));
+                    }
                     state_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                         @Override
@@ -517,37 +541,40 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                     String msg = jsonObject.getString("msg");
                     JSONObject jsonObjectData = jsonObject.getJSONObject("data");
                     String cartItemsCount = jsonObjectData.getString("cartItemsCount");
+                    if (status.equals("1")) {
+                        progressDialog.dismiss();
+                        JSONArray jsonArrayCountries = jsonObjectData.getJSONArray("cities");
+                        if (jsonArrayCountries != null) {
+                            for (int i = 0; i < jsonArrayCountries.length(); i++) {
+                                JSONObject jsonObjectcountry = jsonArrayCountries.getJSONObject(i);
+                                String cityid = jsonObjectcountry.getString("id");
+                                String cityname = jsonObjectcountry.getString("name");
+                                Stateslist stateslist = new Stateslist(cityid, cityname);
+                                //citieslist.add(cityid + " - " + cityname);
+                                citieslist.add(stateslist);
+                            }
+                            if (city_list != null) {
+                                city_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, citieslist));
+                            }
+                            city_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    Stateslist stateslist = (Stateslist) city_list.getSelectedItem();
+                                    //cityString = city_list.getSelectedItem().toString();
+                                    cityString = stateslist.getStatename();
 
-                    JSONArray jsonArrayCountries = jsonObjectData.getJSONArray("cities");
-                    if (jsonArrayCountries != null) {
-                        for (int i = 0; i < jsonArrayCountries.length(); i++) {
-                            JSONObject jsonObjectcountry = jsonArrayCountries.getJSONObject(i);
-                            String cityid = jsonObjectcountry.getString("id");
-                            String cityname = jsonObjectcountry.getString("name");
-                            Stateslist stateslist = new Stateslist(cityid, cityname);
-                            //citieslist.add(cityid + " - " + cityname);
-                            citieslist.add(stateslist);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(getActivity(), "No cities are added to show", Toast.LENGTH_SHORT).show();
                         }
-                        city_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, citieslist));
-                        city_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                Stateslist stateslist = (Stateslist) city_list.getSelectedItem();
-                                //cityString = city_list.getSelectedItem().toString();
-                                cityString = stateslist.getStatename();
-
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                    } else {
-                        Toast.makeText(getActivity(), "No cities are added to show", Toast.LENGTH_SHORT).show();
                     }
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -599,4 +626,5 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
     public void afterTextChanged(Editable s) {
 
     }
+
 }

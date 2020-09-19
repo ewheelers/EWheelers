@@ -2,29 +2,35 @@ package com.ewheelers.ewheelers.Activities;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ewheelers.ewheelers.R;
+import com.ewheelers.ewheelers.Utils.NewGPSTracker;
+import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
+    Button updateBtn;
     private GoogleMap mMap;
+    SupportMapFragment mapFragment;
     GoogleMap.OnCameraIdleListener onCameraIdleListener;
-    String latitude, longitude;
-    private Geocoder geocoder;
-
+    String latitudeIs,longitudeIs;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +38,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
-        latitude = getIntent().getStringExtra("latit");
-        longitude = getIntent().getStringExtra("longi");
         configureCameraIdle();
+        latitudeIs = getIntent().getStringExtra("latit");
+        longitudeIs = getIntent().getStringExtra("longi");
+        updateBtn = findViewById(R.id.update_btn);
+        textView = findViewById(R.id.address_fetch);
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),eStoreSettings.class);
+                startActivity(i);
+                finish();
+            }
+        });
+    }
+
+    private void configureCameraIdle() {
+        onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                LatLng latLng = mMap.getCameraPosition().target;
+                Geocoder geocoder = new Geocoder(MapsActivity.this);
+                /*lat.setText(String.valueOf(latLng.latitude));
+                lang.setText(String.valueOf(latLng.longitude));*/
+                //Toast.makeText(MapsActivity.this, "latitude: "+latLng.latitude+", longitude: "+latLng.longitude, Toast.LENGTH_SHORT).show();
+                try {
+                    List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    if (addressList != null && addressList.size() > 0) {
+                        String locality = addressList.get(0).getAddressLine(0);
+                        String country = addressList.get(0).getCountryName();
+                        String zip = addressList.get(0).getPostalCode();
+                        SessionPreference.clearString(MapsActivity.this,SessionPreference.shopaddress);
+                        SessionPreference.saveString(MapsActivity.this,SessionPreference.shopaddress,locality);
+                        SessionPreference.clearString(MapsActivity.this,SessionPreference.zipcode);
+                        SessionPreference.saveString(MapsActivity.this,SessionPreference.zipcode,zip);
+                        SessionPreference.clearString(MapsActivity.this,SessionPreference.latitude);
+                        SessionPreference.saveString(MapsActivity.this,SessionPreference.latitude, String.valueOf(latLng.latitude));
+                        SessionPreference.clearString(MapsActivity.this,SessionPreference.logitude);
+                        SessionPreference.saveString(MapsActivity.this,SessionPreference.logitude, String.valueOf(latLng.longitude));
+                        textView.setText(locality+" - "+zip);
+                        //Toast.makeText(MapsActivity.this, locality, Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
 
@@ -54,55 +107,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnCameraIdleListener(onCameraIdleListener);
         mMap.setMyLocationEnabled(true);
         // Add a marker in Sydney and move the camera
-       /* LatLng sydney = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-        mMap.addMarker(new MarkerOptions().position(sydney).title(address(latitude, longitude))).showInfoWindow();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,11));*/
-    }
-
-    private String address(String latitude, String longitude) {
-        String addressIs="";
-        geocoder = new Geocoder(getApplicationContext());
-        try {
-            List<Address> addressList = geocoder.getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
-            if (addressList != null && addressList.size() > 0) {
-                addressIs = addressList.get(0).getAddressLine(0);
-                String country = addressList.get(0).getCountryName();
-                String zip = addressList.get(0).getPostalCode();
-                String stat = addressList.get(0).getAdminArea();
-                String citi = addressList.get(0).getLocality();
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(!latitudeIs.isEmpty()&&!longitudeIs.isEmpty()) {
+            LatLng sydney = new LatLng(Double.parseDouble(latitudeIs), Double.parseDouble(longitudeIs));
+            //mMap.addMarker(new MarkerOptions().position(sydney).title(locality)).showInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
         }
-        return addressIs;
-    }
-
-    private void configureCameraIdle() {
-        onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                LatLng latLng = mMap.getCameraPosition().target;
-                Geocoder geocoder = new Geocoder(getApplicationContext());
-                try {
-                    List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    if (addressList != null && addressList.size() > 0) {
-                        String address = addressList.get(0).getAddressLine(0);
-                        String country = addressList.get(0).getCountryName();
-                        String zip = addressList.get(0).getPostalCode();
-                        String stat = addressList.get(0).getAdminArea();
-                        String citi = addressList.get(0).getLocality();
-
-                        new MarkerOptions().position(latLng).title(address);
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
     }
 
 }

@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,6 +42,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ewheelers.ewheelers.Activities.Home.drawer;
+
 public class UserRegistrationActivity extends AppCompatActivity {
 
     private int REQUEST_CAMERA = 0;
@@ -54,26 +58,29 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     Button reg;
-    TextView  id_pass;
+    TextView id_pass;
     EditText reg_full_name, reg_user_name, reg_email, reg_mob, reg_pswd, reg_conf_pswd, reg_id;
-    String sname, suserName, smob, semail, spass, scpass, simage, sid;
+    String sname, suserName, smob, semail, spass, scpass, sid;
     String schec, snews;
+
+    EditText business_name, person_name, mobile_no, address_one, address_two, city, state, pincode;
+    String userid;
 
     ProgressDialog progressDialog;
     private InputMethodManager imm;
 
+    //String userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_registration);
 
-        String userid = new SessionPreference().getStrings(this,SessionPreference.userid);
+        //userid = new SessionPreference().getStrings(this,SessionPreference.userid);
 
-        if(userid!=null){
+        /*if(userid!=null){
             Intent i = new Intent(this,signup_two.class);
             startActivity(i);
-            finish();
-        }
+        }*/
 
         progressDialog = new ProgressDialog(UserRegistrationActivity.this);
         progressDialog.setTitle("Ewheelers");
@@ -81,36 +88,26 @@ public class UserRegistrationActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
         reg_full_name = findViewById(R.id.Reg_full_name);
-        // reg_full_name.setText("Ramesh");
         reg_user_name = findViewById(R.id.Reg_user_name);
-        //reg_user_name.setText("Ramesh Poshala");
         reg_email = findViewById(R.id.Reg_email);
-        // reg_email.setText("ramesh@gamil.com");
         reg_mob = findViewById(R.id.Reg_mobile);
-        // reg_mob.setText("9876786778");
         reg_pswd = findViewById(R.id.Reg_password);
-        //reg_pswd.setText("ramesh@123");
         reg_conf_pswd = findViewById(R.id.Reg_conf_password);
-        //reg_conf_pswd.setText("ramesh@123");
-        reg_id = findViewById(R.id.Reg_id);
-        //select_image = findViewById(R.id.Reg_select_image);
         reg = findViewById(R.id.register_but);
         id_pass = findViewById(R.id.id_pass);
         news = findViewById(R.id.news);
         checkBox1 = findViewById(R.id.agree_conditions);
         reg.setVisibility(View.GONE);
-        sid = reg_id.getText().toString();
-        id_pass.setText(sid);
 
+        business_name = findViewById(R.id.businessname);
+        person_name = findViewById(R.id.personname);
+        mobile_no = findViewById(R.id.personno);
+        address_one = findViewById(R.id.address1);
+        address_two = findViewById(R.id.address2);
+        city = findViewById(R.id.city);
+        state = findViewById(R.id.state);
+        pincode = findViewById(R.id.pincode);
 
-       /* select_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v == select_image) {
-                    selectImage();
-                }
-            }
-        });*/
 
         checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -138,8 +135,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     else if (!emailid.matches(emailPattern)) {
                         reg_email.setError("Enter valid Email Id");
                         checkBox1.setChecked(false);
-                    }
-                    else {
+                    } else {
                         checkBox1.setChecked(true);
                         reg.setVisibility(View.VISIBLE);
                     }
@@ -151,77 +147,26 @@ public class UserRegistrationActivity extends AppCompatActivity {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                custom(v);
-            }
-        });
-
-    }
-
-    private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library",
-                "Cancel"};
-
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UserRegistrationActivity.this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result = true;
-
-                if (items[item].equals("Take Photo")) {
-                    userChoosenTask = "Take Photo";
-                    if (result)
-                        cameraIntent();
-                } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask = "Choose from Library";
-                    if (result)
-                        showFileChooser();
-
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
+                String businessname = business_name.getText().toString();
+                String personname = person_name.getText().toString();
+                String mobileno = mobile_no.getText().toString();
+                String addressone = address_one.getText().toString();
+                String addresstwo = address_two.getText().toString();
+                String city_is = city.getText().toString();
+                String state_is = state.getText().toString();
+                String pincode_is = pincode.getText().toString();
+                if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty() || addressone.isEmpty() || addresstwo.isEmpty() || city_is.isEmpty() || state_is.isEmpty() || pincode_is.isEmpty()) {
+                    Snackbar snackbar = Snackbar
+                            .make(v, "Please! Fill all details.", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    custom(v,businessname,personname,mobileno,addressone,addresstwo,city_is,state_is,pincode_is);
                 }
             }
         });
-        builder.show();
-    }
-
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-    private void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            filePath = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                //user_image.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CAMERA) {
-
-            //onCaptureImageResult(data);
-            bitmap = (Bitmap) data.getExtras().get("data");
-            //storeImage(bm);
-            //user_image.setImageBitmap(bitmap);
-
-        }
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -230,9 +175,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
 
-    private void custom(final View v) {
+    private void custom(final View v, final String businessname, final String personname, final String mobileno, final String addressone, final String addresstwo, final String city_is, final String state_is, final String pincode_is) {
         try {
-            imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
             // TODO: handle exception
@@ -251,12 +196,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             String getStatus = jsonObject.getString("status");
                             if (getStatus.equals("1")) {
                                 int user_id = jsonObject.getInt("user_id");
-                                SessionPreference.saveString(UserRegistrationActivity.this,SessionPreference.userid, String.valueOf(user_id));
-                                Intent i = new Intent(getApplicationContext(),signup_two.class);
+                                SessionPreference.saveString(UserRegistrationActivity.this, SessionPreference.userid, String.valueOf(user_id));
+                               /* Intent i = new Intent(getApplicationContext(),signup_two.class);
                                 startActivity(i);
-                                finish();
-                                /*String smsg = jsonObject.getString("msg");
-                                new Alertdialogs().showSuccessAlert(UserRegistrationActivity.this,smsg);*/
+                                finish();*/
+                                registerApproval(v,user_id,businessname,personname,mobileno,addressone,addresstwo,state_is,city_is,pincode_is);
+
                             } else {
                                 String smsg = jsonObject.getString("msg");
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
@@ -295,7 +240,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 //smob = reg_mob.getText().toString();
                 schec = String.valueOf(checkBox1.isChecked());
                 snews = String.valueOf(news.isChecked());
-                sid = reg_id.getText().toString();
 
 
                 Map<String, String> data3 = new HashMap<String, String>();
@@ -306,7 +250,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 data3.put("user_password", spass);
                 data3.put("password1", scpass);
                 data3.put("agree", schec);
-                data3.put("user_id", sid);
+                data3.put("user_id", "0");
                 //data3.put("user_newsletter_signup", snews);
                 return data3;
 
@@ -316,12 +260,79 @@ public class UserRegistrationActivity extends AppCompatActivity {
         queue.add(strRequest);
     }
 
-    private String getStringImage(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imagebytes = baos.toByteArray();
-        String encodeImage = Base64.encodeToString(imagebytes, Base64.DEFAULT);
-        return encodeImage;
+    private void registerApproval(final View v,final int user_id ,final String b_name, final String p_name, final String p_contact, final String b_address1, final String b_address2, final String b_state, final String b_city, final String b_pincode) {
+        try {
+            imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = API.businesssetup;
+        progressDialog.show();
+        StringRequest strRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            int getStatus = Integer.parseInt(jsonObject.getString("status"));
+                            String smsg = jsonObject.getString("msg");
+                            if (getStatus!=0) {
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                                 Intent i = new Intent(getApplicationContext(),LoginScreenActivity.class);
+                                startActivity(i);
+                                finish();
+                               /* finish();
+                                drawer.openDrawer(Gravity.LEFT);*/
+                            } else {
+                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("X-TOKEN", new SessionPreference().getStrings(UserRegistrationActivity.this,SessionPreference.tokenvalue));
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> data3 = new HashMap<String, String>();
+                data3.put("sformfield_1", b_name);
+                data3.put("sformfield_2", p_name);
+                data3.put("sformfield_3", p_contact);
+                data3.put("sformfield_11", b_address1);
+                data3.put("sformfield_12", b_address2);
+                data3.put("sformfield_13", b_state);
+                data3.put("sformfield_14", b_city);
+                data3.put("sformfield_15", b_pincode);
+                data3.put("id", String.valueOf(user_id));
+
+                return data3;
+
+            }
+        };
+
+        queue.add(strRequest);
+
     }
+
 
 }

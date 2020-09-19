@@ -4,4 +4,41 @@
     android:layout_height="match_parent"
     android:layout_marginTop="25dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_margin="@dimen/padding_10"
+            android:src="@drawable/partnerlogo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/padding_10"
+            android:orientation="vertical">
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/userIs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"/>
+
+            <TextView
+                android:id="@+id/viewAccount"
+                android:layout_marginTop="@dimen/padding_10"
+                android:layout_gravity="end"
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Account"
+                android:background="@drawable/edit_bgs"
+                android:textColor="@color/colorPrimary"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

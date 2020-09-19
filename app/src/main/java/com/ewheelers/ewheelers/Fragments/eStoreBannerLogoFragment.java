@@ -209,6 +209,8 @@ public class eStoreBannerLogoFragment extends Fragment{
     }
 
     private void getmedia() {
+        displayforno.clear();
+        languages.clear();
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
         String serverurl = API.getShopmedia;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, serverurl, new com.android.volley.Response.Listener<String>() {
@@ -318,9 +320,10 @@ public class eStoreBannerLogoFragment extends Fragment{
                     if (status.equals("1")) {
                         progressDialog.dismiss();
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        String imageurl = jsonObject1.getString("imageUrl");
-                        if(!imageurl.isEmpty()) {
-                            Picasso.get().load(imageurl).fit().into(bannerImageIs);
+                        JSONArray imageurl = jsonObject1.getJSONArray("imageUrl");
+                        if(imageurl.length()!=0) {
+                            String imgurl = imageurl.getString(0);
+                            Picasso.get().load(imgurl).fit().into(bannerImageIs);
                         }
                     } else {
                         progressDialog.dismiss();

@@ -12,6 +12,9 @@ public class SessionPreference {
     public static String mobileno = "mobileno";
     public static String addressone = "addressone";
     public static String addresstwo = "addresstwo";
+    public static String cityIs = "cityIs";
+    public static String stateIs = "stateIs";
+    public static String pincodeis = "pinIs";
 
     //account setup
     public static String name = "fullname";
@@ -31,6 +34,10 @@ public class SessionPreference {
 
     public static String shopid = "shopid";
     public static String langid = "langid";
+    public static String shopaddress = "shopaddress";
+    public static String zipcode = "zipcode";
+    public static String latitude = "latitude";
+    public static String logitude = "longitude";
 
 
     public static void saveString(Context context, String key, String value) {
