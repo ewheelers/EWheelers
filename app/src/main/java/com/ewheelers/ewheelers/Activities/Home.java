@@ -1,8 +1,13 @@
 package com.ewheelers.ewheelers.Activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,22 +19,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.ewheelers.ewheelers.BuildConfig;
 import com.ewheelers.ewheelers.Fragments.HomeFragment;
 import com.ewheelers.ewheelers.Fragments.WalletFragment;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.OnSuccessListener;
 import com.nineoldandroids.animation.AnimatorInflater;
 import com.nineoldandroids.animation.AnimatorSet;
 
 import static java.lang.System.exit;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnSuccessListener<AppUpdateInfo> {
     NavigationView navigationView;
     View mHeaderView;
     public static DrawerLayout drawer;
@@ -38,7 +53,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     ImageView imageView_logout, menu_icon;
     TextView user_name, user_Is, view_account;
     Button scan_qr;
-
+    private AppUpdateManager appUpdateManager;
+    private boolean mNeedsFlexibleUpdate;
+    public static final int REQUEST_CODE = 1234;
+    private int RC_APP_UPDATE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +84,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             FragmentTras();
         }
 
-
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this);
+        mNeedsFlexibleUpdate = false;
         /*AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(), R.anim.property_animator);
         set.setTarget(scan_qr);
         set.start();*/
@@ -146,6 +165,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             Intent i = new Intent(Home.this, eStoreSettings.class);
             startActivity(i);
         }
+        if(id == R.id.share){
+            try {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                String shareMessage = "\nLargest eBike Digital Store\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "choose one"));
+            } catch (Exception e) {
+                //e.toString();
+            }
+        }
         if (id == R.id.parkingaddress) {
 
         }
@@ -164,8 +196,106 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
-   /* @Override
-    public void onBackPressed(){
-        finish();
-    }*/
+    @Override
+    public void onStart() {
+        super.onStart();
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        appUpdateManager = AppUpdateManagerFactory.create(context);
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_APP_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                Log.e("AppUpdate", "onActivityResult: app download failed");
+            }
+        }
+    }
+
+    @Override
+    public void onSuccess(AppUpdateInfo appUpdateInfo) {
+        Log.e("abc", "abc");
+
+
+        if (appUpdateInfo.updateAvailability()
+                == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+            // If an in-app update is already running, resume the update.
+            startUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE);
+            Log.e("abc1", "abc1");
+
+        } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+            // If the update is downloaded but not installed,
+            // notify the user to complete the update.
+            popupSnackbarForCompleteUpdate();
+            Log.e("abc2", "abc2");
+
+        } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+            if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                startUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE);
+                Log.e("abc3", "abc3");
+
+            } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                mNeedsFlexibleUpdate = true;
+                showFlexibleUpdateNotification();
+                Log.e("abc4", "abc4");
+
+            }
+        }
+
+    }
+
+
+    private void startUpdate(final AppUpdateInfo appUpdateInfo, final int appUpdateType) {
+        final Activity activity = this;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo,
+                            appUpdateType,
+                            activity,
+                            REQUEST_CODE);
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /* Displays the snackbar notification and call to action. */
+    private void popupSnackbarForCompleteUpdate() {
+        Snackbar snackbar =
+                Snackbar.make(findViewById(R.id.frame5),
+                        "An update has just been downloaded.", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("RESTART", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appUpdateManager.completeUpdate();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.show();
+    }
+
+    private void showFlexibleUpdateNotification() {
+        Snackbar snackbar =
+                Snackbar.make(
+                        findViewById(R.id.frame5),
+                        "An update is available and accessible in More.",
+                        Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
 }

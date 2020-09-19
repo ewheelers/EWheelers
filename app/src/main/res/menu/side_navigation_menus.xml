@@ -29,6 +29,10 @@
             android:title="Charging Addresses"
             android:icon="@android:drawable/btn_radio" />
         <item
+            android:id="@+id/share"
+            android:title="Share"
+            android:icon="@android:drawable/btn_radio" />
+        <item
             android:id="@+id/logout"
             android:title="Log out"
             android:icon="@drawable/logout" />
