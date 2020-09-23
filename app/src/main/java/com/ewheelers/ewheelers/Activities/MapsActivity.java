@@ -43,6 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         configureCameraIdle();
         latitudeIs = getIntent().getStringExtra("latit");
         longitudeIs = getIntent().getStringExtra("longi");
+        //Toast.makeText(this, "lat: "+latitudeIs+" lngi: "+longitudeIs, Toast.LENGTH_SHORT).show();
         updateBtn = findViewById(R.id.update_btn);
         textView = findViewById(R.id.address_fetch);
         updateBtn.setOnClickListener(new View.OnClickListener() {

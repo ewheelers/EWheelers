@@ -58,6 +58,10 @@ public class eStoreSettings extends AppCompatActivity {
     public void onBackPressed(){
         /*Intent i = new Intent(eStoreSettings.this,Home.class);
         startActivity(i);*/
+        /*String shopaddress = new SessionPreference().getStrings(eStoreSettings.this,SessionPreference.shopaddress);
+        String zipcode = new SessionPreference().getStrings(eStoreSettings.this,SessionPreference.zipcode);
+        String latitude = new SessionPreference().getStrings(eStoreSettings.this,SessionPreference.latitude);
+        String longtitude = new SessionPreference().getStrings(eStoreSettings.this,SessionPreference.logitude);*/
         SessionPreference.clearString(eStoreSettings.this,SessionPreference.shopaddress);
         SessionPreference.clearString(eStoreSettings.this,SessionPreference.zipcode);
         SessionPreference.clearString(eStoreSettings.this,SessionPreference.latitude);

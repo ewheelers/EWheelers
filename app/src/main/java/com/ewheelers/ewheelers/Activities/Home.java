@@ -75,6 +75,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         view_account = mHeaderView.findViewById(R.id.viewAccount);
         user_Is.setText(username);
         scan_qr = findViewById(R.id.scanQR);
+        scan_qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i= new Intent(getApplicationContext(),ScanQRCode.class);
+                startActivity(i);
+                //finish();
+            }
+        });
         menu_icon = findViewById(R.id.menuicon);
         radioGroup = findViewById(R.id.bottomLayout);
         imageView_logout = findViewById(R.id.logout);
@@ -185,6 +193,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         }
         if(id == R.id.logout){
+            SessionPreference.clearString(Home.this, SessionPreference.shopid);
             SessionPreference.clearString(Home.this, SessionPreference.userid);
             SessionPreference.clearString(Home.this, SessionPreference.tokenvalue);
             Intent i = new Intent(getApplicationContext(), LoginScreenActivity.class);

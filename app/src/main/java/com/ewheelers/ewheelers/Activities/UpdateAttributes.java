@@ -77,7 +77,7 @@ public class UpdateAttributes extends AppCompatActivity {
                 setUpAccount(v);
             }
         });
-       //getProfile();
+        getProfile();
     }
 
     private void getProfile() {
@@ -93,7 +93,9 @@ public class UpdateAttributes extends AppCompatActivity {
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("sellerProfileAttributes");
-                        JSONArray jsonArray = jsonObject1.getJSONArray("selectedOptionsArr");
+                        JSONObject jsonObject3 = jsonObject1.getJSONObject("selectedOptionsArr");
+                        //Toast.makeText(UpdateAttributes.this, "array: "+jsonArray, Toast.LENGTH_SHORT).show();
+                        //new AttributesAdapter(UpdateAttributes.this,jsonArray);
                     }
 
                 } catch (JSONException e) {

@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center_horizontal"
-                    android:text="Still not connected?"
+                    android:text="Still not Registered?"
                     android:textColor="#898989"
                     android:textStyle="normal" />
 
@@ -145,7 +145,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center_horizontal"
-                    android:text=" Sign up"
+                    android:text=" Register"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="normal" />
             </LinearLayout>

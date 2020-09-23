@@ -10,6 +10,10 @@ public class Stateslist {
         this.statename = statename;
     }
 
+    public Stateslist(String stateid) {
+        this.stateid = stateid;
+    }
+
     public String getStateid() {
         return stateid;
     }

@@ -17,6 +17,8 @@ import com.ewheelers.ewheelers.Activities.UpdateAttributes;
 import com.ewheelers.ewheelers.ActivityModels.Attributes;
 import com.ewheelers.ewheelers.R;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;

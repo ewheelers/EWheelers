@@ -24,6 +24,7 @@ public class API {
     public static String getShopmedia = "https://ewheelers.in/app-api/2.0/seller/shop-media-form"; //20
     public static String setupShopmedia = "https://ewheelers.in/app-api/2.0/seller/upload-shop-images"; //21
     public static String getImages = "https://ewheelers.in/app-api/2.0/seller/shop-images/"; //22
+    public static String getOrders = "https://ewheelers.in/app-api/2.0/seller/view-order/"; //23
 
     public  static String forget_password ="https://www.ewheelers.in/mobile-app-api/forgot_password";
     public  static String orderslist ="https://www.ewheelers.in/mobile-app-api/member/seller_orders";

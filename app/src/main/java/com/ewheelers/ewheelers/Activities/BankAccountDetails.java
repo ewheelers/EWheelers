@@ -89,7 +89,7 @@ ProgressDialog progressDialog;
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("bankInfo");
-                        if(jsonObject2==null||jsonObject2.equals("{}")){
+                        if(jsonObject2.length()==0){
 
                         }else {
                             String banknam = jsonObject2.getString("ub_bank_name");

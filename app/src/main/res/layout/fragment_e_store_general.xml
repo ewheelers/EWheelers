@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/next_three"
-        android:layout_below="@+id/relay"
         android:layout_alignParentTop="true"
         tools:context=".Fragments.eStoreGeneralFragment">
 
@@ -20,31 +19,6 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:id="@+id/setLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"
-                    android:text="@string/set_location"
-                    android:textColor="@color/colorNavy"
-                    android:textSize="18sp" />
-
-                <Button
-                    android:id="@+id/goMap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginLeft="@dimen/padding_10"
-                    android:background="@drawable/button_click_grad"
-                    android:text="Go to Map"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,56 +74,6 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Shop Address"
-                android:textColor="#992b1e"
-                android:textStyle="normal" />
-
-            <EditText
-                android:id="@+id/shopaddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edit_bgs"
-                android:drawableLeft="@mipmap/mobileno"
-                android:drawablePadding="15dp"
-                android:inputType="textPostalAddress"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"></EditText>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="@dimen/padding_10"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="Postalcode"
-                android:textColor="#992b1e"
-                android:textStyle="normal" />
-
-            <EditText
-                android:id="@+id/postalcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edit_bgs"
-                android:drawableLeft="@mipmap/address"
-                android:drawablePadding="15dp"
-                android:inputType="number"
-                android:maxLength="6"
-                android:selectAllOnFocus="true"
-                android:singleLine="true">
-
-            </EditText>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
                 android:text="Phone"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
@@ -167,101 +91,6 @@
                 android:selectAllOnFocus="true"
                 android:singleLine="true"></EditText>
 
-            <!--
-                    <TextView
-                        android:id="@+id/cons_txt"
-                        android:layout_above="@+id/relay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_horizontal"
-                        android:text="Please set location on map"
-                        android:textColor="#992b1e"
-                        android:textStyle="normal" />
-            -->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="Country"
-                android:textColor="#992b1e"
-                android:textStyle="normal" />
-
-            <Spinner
-                android:id="@+id/contry"
-                style="@style/spinner_style" />
-
-            <!--<EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edit_bgs"
-                android:drawableLeft="@mipmap/address"
-                android:drawablePadding="15dp"
-                android:inputType="text"
-                android:maxLength="10"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"></EditText>-->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="State"
-                android:textColor="#992b1e"
-                android:textStyle="normal" />
-
-            <Spinner
-                android:id="@+id/state"
-                style="@style/spinner_style" />
-
-            <!-- <EditText
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_margin="10dp"
-                 android:background="@drawable/edit_bgs"
-                 android:drawableLeft="@mipmap/address"
-                 android:drawablePadding="15dp"
-                 android:inputType="text"
-                 android:maxLength="10"
-                 android:selectAllOnFocus="true"
-                 android:singleLine="true"></EditText>-->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="City"
-                android:textColor="#992b1e"
-                android:textStyle="normal" />
-
-            <Spinner
-                android:id="@+id/city_name"
-                style="@style/spinner_style" />
-            <!-- <EditText
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_margin="10dp"
-                 android:background="@drawable/edit_bgs"
-                 android:drawableLeft="@mipmap/address"
-                 android:drawablePadding="15dp"
-                 android:inputType="text"
-                 android:maxLength="10"
-                 android:selectAllOnFocus="true"
-                 android:singleLine="true"></EditText>-->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -276,7 +105,6 @@
             <Spinner
                 android:id="@+id/display_status"
                 style="@style/spinner_style" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -345,6 +173,115 @@
                 android:inputType="number"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"></EditText>
+
+            <Button
+                android:paddingLeft="@dimen/padding_10"
+                android:paddingRight="@dimen/padding_10"
+                android:id="@+id/goMap"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginLeft="@dimen/padding_10"
+                android:background="@drawable/button_click_grad"
+                android:text="Set Location Go to Map"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:layout_marginTop="@dimen/padding_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="Shop Address"
+                android:textColor="#992b1e"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/shopaddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/edit_bgs"
+                android:drawableLeft="@mipmap/mobileno"
+                android:drawablePadding="15dp"
+                android:inputType="textPostalAddress"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"></EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="Country"
+                android:textColor="#992b1e"
+                android:textStyle="normal" />
+
+            <Spinner
+                android:id="@+id/contry"
+                style="@style/spinner_style" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="State"
+                android:textColor="#992b1e"
+                android:textStyle="normal" />
+
+            <Spinner
+                android:id="@+id/state"
+                style="@style/spinner_style" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="City"
+                android:textColor="#992b1e"
+                android:textStyle="normal" />
+
+            <Spinner
+                android:id="@+id/city_name"
+                style="@style/spinner_style" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/padding_10"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="Postalcode"
+                android:textColor="#992b1e"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/postalcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/edit_bgs"
+                android:drawableLeft="@mipmap/address"
+                android:drawablePadding="15dp"
+                android:inputType="number"
+                android:maxLength="6"
+                android:selectAllOnFocus="true"
+                android:singleLine="true">
+
+            </EditText>
+
 
             <TextView
                 android:layout_width="wrap_content"

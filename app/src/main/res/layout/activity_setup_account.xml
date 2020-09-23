@@ -104,19 +104,19 @@
                     android:textColor="#992b1e"
                     android:textStyle="normal" />
 
-                <EditText
+                <TextView
                     android:id="@+id/dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/edit_bgs"
-                    android:hint="dd/mm/yyyy"
+                    android:hint="YYYY/MM/DD"
                     android:drawableLeft="@drawable/date"
                     android:drawablePadding="5dp"
                     android:padding="10dp"
-                    android:inputType="phone"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"></EditText>
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"></TextView>
             </LinearLayout>
 
             <LinearLayout

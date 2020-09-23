@@ -64,6 +64,7 @@ public class eStoreEnglishFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_e_store_english, container, false);
         tokenValue = new SessionPreference().getStrings(getActivity(), SessionPreference.tokenvalue);
         shopid = new SessionPreference().getStrings(getActivity(), SessionPreference.shopid);
+        //Toast.makeText(getActivity(), "shopid: "+shopid, Toast.LENGTH_SHORT).show();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("English SetUp ....");
@@ -89,6 +90,7 @@ public class eStoreEnglishFragment extends Fragment {
     }
 
     private void getHomeLang() {
+        //progressDialog.show();
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String serverurl = API.gethomelanguage;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, serverurl, new com.android.volley.Response.Listener<String>() {
@@ -101,11 +103,16 @@ public class eStoreEnglishFragment extends Fragment {
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         JSONArray jsonArray = jsonObject1.getJSONArray("languages");
-                        JSONObject jsonObject2 = jsonArray.getJSONObject(0);
-                        language_id = jsonObject2.getString("language_id");
+                        for(int i=0;i<jsonArray.length();i++) {
+                            JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                            language_id = jsonObject2.getString("language_id");
+                        }
                         //Log.e("langid",language_id);
-                        getLanguageForm(shopid,language_id);
+                        if(shopid!=null) {
+                            getLanguageForm(shopid, language_id);
+                        }
                     } else {
+                        //progressDialog.dismiss();
                         Snackbar.make(scrollView, msg, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
@@ -118,6 +125,7 @@ public class eStoreEnglishFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //progressDialog.dismiss();
                 VolleyLog.d("Main", "Error: " + error.getMessage());
                 Log.d("Main", "" + error.getMessage() + "," + error.toString());
 
@@ -147,7 +155,7 @@ public class eStoreEnglishFragment extends Fragment {
     private void getLanguageForm(String shopid,String langid) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String serverurl = API.getshoplangaugeform + shopid + "/" + langid;
-        Log.e("getlanguri",serverurl);
+        //Log.e("getlanguri",serverurl);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, serverurl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -156,11 +164,12 @@ public class eStoreEnglishFragment extends Fragment {
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
                     if (status.equals("1")) {
+                        //progressDialog.dismiss();
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        JSONObject jsonObject3 = jsonObject1.getJSONObject("shopDetails");
+                        //JSONObject jsonObject3 = jsonObject1.getJSONObject("shopDetails");
                         JSONObject jsonObject4 = jsonObject1.getJSONObject("langData");
                         if (jsonObject4.length() == 0) {
-                            Toast.makeText(getActivity(), "No data to show", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "No data to show", Toast.LENGTH_SHORT).show();
                         } else {
                             String shop_id = jsonObject4.getString("shoplang_shop_id");
                             String lang_id = jsonObject4.getString("shoplang_lang_id");
@@ -186,6 +195,7 @@ public class eStoreEnglishFragment extends Fragment {
                         }
 
                     } else {
+                       // progressDialog.dismiss();
                         Snackbar.make(scrollView, msg, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
@@ -198,6 +208,7 @@ public class eStoreEnglishFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //progressDialog.dismiss();
                 VolleyLog.d("Main", "Error: " + error.getMessage());
                 Log.d("Main", "" + error.getMessage() + "," + error.toString());
 
