@@ -152,8 +152,8 @@ public class eStoreLogoSetupFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             filePath = data.getData();
-            fileSelctedPath = getPath(filePath);
-            if (fileSelctedPath != null) {
+            //fileSelctedPath = getPath(filePath);
+            //if (fileSelctedPath != null) {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                     uploadLogo(bitmap);
@@ -161,9 +161,9 @@ public class eStoreLogoSetupFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
+           /* } else {
                 Toast.makeText(getActivity(), "no image selected", Toast.LENGTH_LONG).show();
-            }
+            }*/
 
         }
 
@@ -396,7 +396,7 @@ public class eStoreLogoSetupFragment extends Fragment {
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
                 long imagename = System.currentTimeMillis();
-                params.put("file", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                params.put("file", new DataPart(imagename + ".jpg", getFileDataFromDrawable(bitmap)));
                 return params;
             }
         };

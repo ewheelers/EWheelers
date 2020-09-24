@@ -38,7 +38,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.GetOrder"></activity>
         <activity android:name=".Activities.ScanQRCode" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
