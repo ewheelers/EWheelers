@@ -13,187 +13,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:id="@+id/shop_banner"
+                android:src="@drawable/mb4"
+                android:scaleType="fitXY"
+                android:layout_margin="@dimen/padding_10"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"/>
+                android:layout_height="wrap_content"/>
 
-            <LinearLayout
+            <ImageView
+                android:src="@drawable/mb1"
+                android:scaleType="fitXY"
+                android:layout_margin="@dimen/padding_10"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:id="@+id/ad_banner"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_list_hub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/edit_bgs">
+                android:layout_marginBottom="10dp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Parking Hubs"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:padding="10dp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:background="@color/colordarkGrey"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:elevation="10dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/edit_bgs">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Charging Stations"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:padding="10dp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:background="@color/colordarkGrey"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:elevation="10dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/edit_bgs">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="eStore Settings"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:padding="10dp"/>
-                <TextView
-                    android:id="@+id/estoresetting"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:background="@drawable/button_click_grad"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:elevation="10dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/edit_bgs">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Inventory Updates"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:padding="10dp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:background="@color/colordarkGrey"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:elevation="10dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/edit_bgs">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Products (Marketplace)"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:padding="10dp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:background="@color/colordarkGrey"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:elevation="10dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/edit_bgs">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="eStore Inventory"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:padding="10dp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Manage"
-                    android:background="@color/colordarkGrey"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:elevation="10dp"/>
-            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

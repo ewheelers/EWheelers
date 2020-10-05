@@ -48,4 +48,6 @@
     <string name="page_text_3">Scooters</string>
     <string name="set_location"><u>Set Location</u></string>
     <string name="title_activity_maps">Map</string>
+    <string name="orders_view"><u>View</u></string>
+    <string name="view_all"><u>View All</u></string>
 </resources>

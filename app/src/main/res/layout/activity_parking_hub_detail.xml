@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ParkingHubDetailActivity">
+
+    <LinearLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/homeBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:src="@drawable/ic_home_black_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/hub_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_10"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/action_bar" />
+
+    <LinearLayout
+        android:id="@+id/recent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recycler_list">
+
+        <TextView
+            android:id="@+id/recent_orders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:text="Recent Orders"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/view_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:text="@string/view_all"
+            android:textColor="@color/colorNavy"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/scan_park_pass"
+        android:layout_below="@+id/recent_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/edit_bgs"
+            android:elevation="10dp"
+            android:padding="20dp"
+            android:text="Under development"
+            android:textColor="#000" />
+    </RelativeLayout>
+    <!-- <androidx.recyclerview.widget.RecyclerView
+         android:layout_below="@+id/recent_orders"
+         android:id="@+id/recent_order"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"/>-->
+    <Button
+        android:id="@+id/scan_park_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/padding_10"
+        android:background="@drawable/edit_bgs"
+        android:text="Locations | Scan Parking Pass" />
+
+
+</RelativeLayout>
