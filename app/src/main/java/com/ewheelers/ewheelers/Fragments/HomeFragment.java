@@ -1,5 +1,6 @@
 package com.ewheelers.ewheelers.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
@@ -21,6 +24,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ewheelers.ewheelers.Activities.BankAccountDetails;
@@ -31,9 +36,12 @@ import com.ewheelers.ewheelers.ActivtiesAdapters.AttributesAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.DashBoardSettingsAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.HomeRecyclerAdapter;
 import com.ewheelers.ewheelers.Network.API;
+import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,13 +51,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView,recyclerview_hub;
     HomeRecyclerAdapter homeRecyclerAdapter;
     DashBoardSettingsAdapter hubRecyclerAdapter;
     List<Attributes> attributesList = new ArrayList<>();
     String completedSales,inprocessSales,amount,creditEarnedToday,completedOrders,pendingOrders,refundedOrders,refundedAmount,cancelledOrders,cancelledAmount;
-
+    ProgressDialog progresDialog;
+    NetworkImageView imageViewTopBannner,adBanner;
+    ImageView logoViewImg;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -68,11 +80,18 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = v.findViewById(R.id.recycler_list);
         recyclerview_hub = v.findViewById(R.id.recycler_list_hub);
+        imageViewTopBannner = v.findViewById(R.id.shop_banner);
+        logoViewImg = v.findViewById(R.id.logoView);
+        adBanner = v.findViewById(R.id.ad_banner);
+        progresDialog = new ProgressDialog(getActivity());
+        progresDialog.setTitle("Loading...");
+        progresDialog.setCancelable(false);
         getList();
         return v;
     }
 
     private void getList() {
+        progresDialog.show();
         attributesList.clear();
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String serverurl = API.dashboard;
@@ -85,6 +104,26 @@ public class HomeFragment extends Fragment {
                     String msg = jsonObject.getString("msg");
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        JSONObject jsonObjectBann = jsonObject1.getJSONObject("banners");
+                        JSONObject jsonObjectSub = jsonObjectBann.getJSONObject("Partner_App_Homepage_Top_Banner");
+                        JSONArray jsonArray = jsonObjectSub.getJSONArray("banners");
+                        JSONObject jsonObjectFromArra = jsonArray.getJSONObject(0);
+                        String imageUrl = jsonObjectFromArra.getString("banner_image_url");
+                        ImageLoader imageLoaderBann = VolleySingleton.getInstance(getActivity()).getImageLoader();
+                        imageLoaderBann.get(imageUrl, ImageLoader.getImageListener(adBanner, R.drawable.mb2, R.drawable.mb2));
+                        adBanner.setImageUrl(imageUrl, imageLoaderBann);
+                        JSONObject jsonObjectShopImages = jsonObject1.getJSONObject("shopImages");
+                        if(jsonObjectShopImages.length()!=0) {
+                            String shopLogo = jsonObjectShopImages.getString("shop_logo");
+                            String shopBanner = jsonObjectShopImages.getString("shop_banner");
+                            ImageLoader imageLoader = VolleySingleton.getInstance(getActivity()).getImageLoader();
+                            imageLoader.get(shopBanner, ImageLoader.getImageListener(imageViewTopBannner, R.drawable.mb1, R.drawable.mb1));
+                            imageViewTopBannner.setImageUrl(shopBanner, imageLoader);
+                            Picasso.get()
+                                    .load(shopLogo) //extract as User instance method
+                                    .transform(new CropCircleTransformation())
+                                    .into(logoViewImg);
+                        }
                         String currency = jsonObject1.getString("currencySymbol");
                         amount = currency+jsonObject1.getString("userBalance");
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("ordersStats");
@@ -119,7 +158,10 @@ public class HomeFragment extends Fragment {
                         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
                         recyclerview_hub.setLayoutManager(linearLayoutManager2);
                         recyclerview_hub.setAdapter(hubRecyclerAdapter);
-
+                        progresDialog.dismiss();
+                    }else {
+                        progresDialog.dismiss();
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -130,6 +172,7 @@ public class HomeFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progresDialog.dismiss();
                 VolleyLog.d("Main", "Error: " + error.getMessage());
                 Log.d("Main", "" + error.getMessage() + "," + error.toString());
 

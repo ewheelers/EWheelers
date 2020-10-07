@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +24,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ewheelers.ewheelers.ActivityModels.Attributes;
 import com.ewheelers.ewheelers.ActivityModels.HubOrdersModel;
+import com.ewheelers.ewheelers.ActivityModels.OrdersModel;
 import com.ewheelers.ewheelers.ActivtiesAdapters.DashBoardSettingsAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.HomeRecyclerAdapter;
+import com.ewheelers.ewheelers.ActivtiesAdapters.OrdersAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.ParkingHubOrdersAdapter;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,29 +44,45 @@ import java.util.List;
 import java.util.Map;
 
 public class ParkingHubDetailActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,recentOrdersList;
     TextView textView;
     String title,titleId,completedOrders,completedAmount,inprocessOrder,inprocessAmoount,pendingOrder,pendingAmount,totalOrder,totalAmount;
     List<HubOrdersModel> hubOrdersModels = new ArrayList<>();
     ParkingHubOrdersAdapter parkingHubOrdersAdapter;
     Button scan_park_pass;TextView viewall;
-
+    List<OrdersModel> ordersModels = new ArrayList<>();
+    OrdersAdapter ordersAdapter;
+    ImageView goback;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking_hub_detail);
+        progressDialog = new ProgressDialog(this);
+        //progressDialog.setCancelable(false);
+        progressDialog.setTitle("Loading...");
         recyclerView = findViewById(R.id.recycler_list);
+        recentOrdersList = findViewById(R.id.recent_order);
         textView = findViewById(R.id.hub_title);
         scan_park_pass = findViewById(R.id.scan_park_pass);
         viewall = findViewById(R.id.view_all);
+        goback = findViewById(R.id.homeBack);
         titleId = getIntent().getStringExtra("hubid");
         title = getIntent().getStringExtra("hubname");
         textView.setText(title);
         getOrdersList();
+        goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         viewall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),ViewParkOrders.class);
+                i.putExtra("titleid",titleId);
+                i.putExtra("title",title);
                 startActivity(i);
             }
         });
@@ -75,6 +96,8 @@ public class ParkingHubDetailActivity extends AppCompatActivity {
     }
 
     private void getOrdersList() {
+        progressDialog.show();
+        ordersModels.clear();
         RequestQueue queue = Volley.newRequestQueue(ParkingHubDetailActivity.this);
         String serverurl = API.hub_orders;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, serverurl, new com.android.volley.Response.Listener<String>() {
@@ -86,6 +109,29 @@ public class ParkingHubDetailActivity extends AppCompatActivity {
                     String msg = jsonObject.getString("msg");
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        JSONArray jsonArray = jsonObject1.getJSONArray("orders");
+                        if(jsonArray.length()!=0) {
+                            for (int i = 0; i < 2; i++) {
+                                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                                String orderid = jsonObject2.getString("order_id");
+                                String invoiceno = jsonObject2.getString("op_invoice_number");
+                                String productname = jsonObject2.getString("op_product_name");
+                                String netamount = jsonObject2.getString("order_net_amount");
+                                String statusname = jsonObject2.getString("orderstatus_name");
+                                String orderDate = jsonObject2.getString("order_date_added");
+                                String prod_options = jsonObject2.getString("op_selprod_options");
+                                OrdersModel ordersModel = new OrdersModel(orderid, invoiceno, productname, prod_options, netamount, orderDate, statusname);
+                                ordersModels.add(ordersModel);
+                            }
+                            ordersAdapter = new OrdersAdapter(ParkingHubDetailActivity.this, ordersModels);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ParkingHubDetailActivity.this,RecyclerView.VERTICAL,false);
+                            recentOrdersList.setLayoutManager(linearLayoutManager);
+                            recentOrdersList.setAdapter(ordersAdapter);
+                            progressDialog.dismiss();
+                        }else {
+                            progressDialog.dismiss();
+                            Toast.makeText(ParkingHubDetailActivity.this, "No Recent Orders" , Toast.LENGTH_SHORT).show();
+                        }
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("stats");
                         completedOrders = jsonObject2.getString("completedOrderCount");
                         completedAmount = jsonObject2.getString("completedOrderAmount");
@@ -101,7 +147,9 @@ public class ParkingHubDetailActivity extends AppCompatActivity {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ParkingHubDetailActivity.this,RecyclerView.HORIZONTAL,false);
                         recyclerView.setLayoutManager(linearLayoutManager);
                         recyclerView.setAdapter(parkingHubOrdersAdapter);
+                        progressDialog.dismiss();
                     }else {
+                        progressDialog.dismiss();
                         Toast.makeText(ParkingHubDetailActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -113,6 +161,7 @@ public class ParkingHubDetailActivity extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 VolleyLog.d("Main", "Error: " + error.getMessage());
                 Log.d("Main", "" + error.getMessage() + "," + error.toString());
 

@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/orders_view"
+            android:visibility="gone"
             android:textColor="@color/colorNavy"
             android:textStyle="bold" />
         </LinearLayout>

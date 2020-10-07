@@ -13,26 +13,39 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:id="@+id/shop_banner"
-                android:src="@drawable/mb4"
-                android:scaleType="fitXY"
-                android:layout_margin="@dimen/padding_10"/>
+                android:layout_height="140dp">
+
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/shop_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_margin="@dimen/padding_10"
+                    android:scaleType="fitXY"/>
+
+                <ImageView
+                    android:id="@+id/logoView"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:background="@drawable/circle_bg"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
-            <ImageView
-                android:src="@drawable/mb1"
-                android:scaleType="fitXY"
-                android:layout_margin="@dimen/padding_10"
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/ad_banner"
                 android:layout_width="match_parent"
                 android:layout_height="125dp"
-                android:id="@+id/ad_banner"/>
+                android:layout_margin="@dimen/padding_10"
+                android:scaleType="fitXY"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_list_hub"
