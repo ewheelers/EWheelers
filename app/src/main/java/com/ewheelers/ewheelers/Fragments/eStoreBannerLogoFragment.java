@@ -43,6 +43,8 @@ import com.ewheelers.ewheelers.Network.VolleyMultipartRequest;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -323,7 +325,8 @@ public class eStoreBannerLogoFragment extends Fragment{
                         JSONArray imageurl = jsonObject1.getJSONArray("imageUrl");
                         if(imageurl.length()!=0) {
                             String imgurl = imageurl.getString(0);
-                            Picasso.get().load(imgurl).fit().into(bannerImageIs);
+                            Picasso.get().load(imgurl).fit().memoryPolicy(MemoryPolicy.NO_CACHE)
+                                    .networkPolicy(NetworkPolicy.NO_CACHE).into(bannerImageIs);
                         }
                     } else {
                         progressDialog.dismiss();

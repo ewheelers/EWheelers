@@ -86,6 +86,7 @@ public class ParkingHubDetailActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        scan_park_pass.setText("");
         scan_park_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

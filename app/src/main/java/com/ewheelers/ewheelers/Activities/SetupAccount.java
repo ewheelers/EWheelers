@@ -248,11 +248,11 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
                         String state_id = jsonObject3.getString("user_state_id");
                         String city_id = jsonObject3.getString("user_city_id");
                         if(state_id.equals("0")){
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             getStatesNames(countryid, "","");
 
                         }else {
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             getStatesNames(contry_id, state_id,city_id);
                         }
 
@@ -353,6 +353,7 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
 
                             }
                         });
+                        progressDialog.dismiss();
                     }else {
                         //progressDialog.dismiss();
                         Toast.makeText(SetupAccount.this, msg, Toast.LENGTH_SHORT).show();

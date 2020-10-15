@@ -219,9 +219,10 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             //countrieslist.add(countryid + " - " + countryname);
                             countrieslist.add(stateslist);
                         }
-
-                        contryAdapter = new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countrieslist);
-                        country_list.setAdapter(contryAdapter);
+                        if(countrieslist.size()!=0) {
+                            contryAdapter = new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countrieslist);
+                            country_list.setAdapter(contryAdapter);
+                        }
                     } else {
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }

@@ -3,6 +3,7 @@ package com.ewheelers.ewheelers.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -155,13 +156,19 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 String city_is = city.getText().toString();
                 String state_is = state.getText().toString();
                 String pincode_is = pincode.getText().toString();
-                if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty() || addressone.isEmpty() || addresstwo.isEmpty() || city_is.isEmpty() || state_is.isEmpty() || pincode_is.isEmpty()) {
+                if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty()) {
+                    Snackbar snackbar = Snackbar
+                            .make(v, "Please! Fill all details.", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    custom(v,businessname,personname,mobileno);
+                }               /* if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty() || addressone.isEmpty() || addresstwo.isEmpty() || city_is.isEmpty() || state_is.isEmpty() || pincode_is.isEmpty()) {
                     Snackbar snackbar = Snackbar
                             .make(v, "Please! Fill all details.", Snackbar.LENGTH_LONG);
                     snackbar.show();
                 } else {
                     custom(v,businessname,personname,mobileno,addressone,addresstwo,city_is,state_is,pincode_is);
-                }
+                }*/
             }
         });
 
@@ -175,7 +182,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
 
-    private void custom(final View v, final String businessname, final String personname, final String mobileno, final String addressone, final String addresstwo, final String city_is, final String state_is, final String pincode_is) {
+    private void custom(final View v, final String businessname, final String personname, final String mobileno) {
         try {
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -194,16 +201,20 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String getStatus = jsonObject.getString("status");
+                            String smsg = jsonObject.getString("msg");
                             if (getStatus.equals("1")) {
                                 int user_id = jsonObject.getInt("user_id");
                                 SessionPreference.saveString(UserRegistrationActivity.this, SessionPreference.userid, String.valueOf(user_id));
                                /* Intent i = new Intent(getApplicationContext(),signup_two.class);
                                 startActivity(i);
                                 finish();*/
-                                registerApproval(v,user_id,businessname,personname,mobileno,addressone,addresstwo,state_is,city_is,pincode_is);
+                               /* Intent i = new Intent(getApplicationContext(),LoginScreenActivity.class);
+                                startActivity(i);
+                                finish();*/
+                                //registerApproval(v,user_id,businessname,personname,mobileno,addressone,addresstwo,state_is,city_is,pincode_is);
+                                registerApproval(v,user_id,businessname,personname,mobileno);
 
                             } else {
-                                String smsg = jsonObject.getString("msg");
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
                                 //new Alertdialogs().showFailedAlert(UserRegistrationActivity.this,smsg);
@@ -260,7 +271,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         queue.add(strRequest);
     }
 
-    private void registerApproval(final View v,final int user_id ,final String b_name, final String p_name, final String p_contact, final String b_address1, final String b_address2, final String b_state, final String b_city, final String b_pincode) {
+    private void registerApproval(final View v, final int user_id, final String b_name, final String p_name, final String p_contact) {
         try {
             imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -281,11 +292,23 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             int getStatus = Integer.parseInt(jsonObject.getString("status"));
                             String smsg = jsonObject.getString("msg");
                             if (getStatus!=0) {
-                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
-                                 Intent i = new Intent(getApplicationContext(),LoginScreenActivity.class);
-                                startActivity(i);
-                                finish();
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(UserRegistrationActivity.this);
+                                builder.create();
+                                builder.setIcon(R.drawable.partnerlogo);
+                                builder.setTitle("Successfully Registered");
+                                builder.setMessage("Please Sign In");
+                                builder.setCancelable(false);
+                                builder.setPositiveButton("Sign In", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent i = new Intent(getApplicationContext(),LoginScreenActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                        dialog.cancel();
+                                    }
+                                });
+                                builder.show();
+                                //Snackbar.make(v, smsg, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                /* finish();
                                 drawer.openDrawer(Gravity.LEFT);*/
                             } else {
@@ -318,11 +341,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 data3.put("sformfield_1", b_name);
                 data3.put("sformfield_2", p_name);
                 data3.put("sformfield_3", p_contact);
-                data3.put("sformfield_11", b_address1);
+               /* data3.put("sformfield_11", b_address1);
                 data3.put("sformfield_12", b_address2);
                 data3.put("sformfield_13", b_state);
                 data3.put("sformfield_14", b_city);
-                data3.put("sformfield_15", b_pincode);
+                data3.put("sformfield_15", b_pincode);*/
                 data3.put("id", String.valueOf(user_id));
 
                 return data3;

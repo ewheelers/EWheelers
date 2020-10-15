@@ -27,6 +27,7 @@ public class API {
     public static String getOrders = "https://ewheelers.in/app-api/2.0/seller/view-order/"; //23
     public static String dashboard = "https://ewheelers.in/app-api/2.0/seller"; //24
     public static String hub_orders = "https://ewheelers.in/app-api/2.0/seller/order-product-search-listing"; //25
+    public static String get_aproval_form = "https://ewheelers.in/app-api/2.0/account/supplierApprovalForm"; //26
 
     public  static String forget_password ="https://www.ewheelers.in/mobile-app-api/forgot_password";
     public  static String orderslist ="https://www.ewheelers.in/mobile-app-api/member/seller_orders";

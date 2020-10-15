@@ -38,7 +38,7 @@ import static java.lang.String.*;
 
 public class signup_two extends AppCompatActivity {
     Button next;
-    EditText business_name, person_name, mobile_no, address_one, address_two,city,state,pincode;
+    EditText userName,business_name, person_name, mobile_no, address_one, address_two,city,state,pincode;
     private InputMethodManager imm;
     ProgressDialog progressDialog;
     String userid;
@@ -46,6 +46,7 @@ public class signup_two extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_two);
+        userName = findViewById(R.id.user_name);
         business_name = findViewById(R.id.businessname);
         person_name = findViewById(R.id.personname);
         mobile_no = findViewById(R.id.personno);
@@ -55,6 +56,8 @@ public class signup_two extends AppCompatActivity {
         state = findViewById(R.id.state);
         pincode = findViewById(R.id.pincode);
         next = findViewById(R.id.next_three);
+        String username = new SessionPreference().getStrings(this,SessionPreference.username);
+        userName.setText(username);
         progressDialog = new ProgressDialog(signup_two.this);
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Business SetUP...");
@@ -74,8 +77,18 @@ public class signup_two extends AppCompatActivity {
                 String city_is = city.getText().toString();
                 String state_is = state.getText().toString();
                 String pincode_is = pincode.getText().toString();
+                if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty()){
+                    Snackbar snackbar = Snackbar
+                            .make(v, "Please! Fill all details.", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }else{
+                    SessionPreference.saveString(signup_two.this, SessionPreference.businessname, businessname);
+                    SessionPreference.saveString(signup_two.this, SessionPreference.personname, personname);
+                    SessionPreference.saveString(signup_two.this, SessionPreference.mobileno, mobileno);
+                    registerApproval(v,businessname,personname,mobileno);
 
-                if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty() || addressone.isEmpty() || addresstwo.isEmpty()||city_is.isEmpty()||state_is.isEmpty()||pincode_is.isEmpty()) {
+                }
+               /* if (businessname.isEmpty() || personname.isEmpty() || mobileno.isEmpty() || addressone.isEmpty() || addresstwo.isEmpty()||city_is.isEmpty()||state_is.isEmpty()||pincode_is.isEmpty()) {
                     Snackbar snackbar = Snackbar
                             .make(v, "Please! Fill all details.", Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -89,12 +102,12 @@ public class signup_two extends AppCompatActivity {
                     SessionPreference.saveString(signup_two.this, SessionPreference.stateIs, state_is);
                     SessionPreference.saveString(signup_two.this, SessionPreference.pincodeis, pincode_is);
                     registerApproval(v,businessname,personname,mobileno,addressone,addresstwo,state_is,city_is,pincode_is);
-                }
+                }*/
             }
         });
     }
 
-    private void registerApproval(final View v, final String b_name, final String p_name, final String p_contact, final String b_address1, final String b_address2, final String b_state, final String b_city, final String b_pincode) {
+    private void registerApproval(final View v, final String b_name, final String p_name, final String p_contact) {
         try {
             imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -146,14 +159,14 @@ public class signup_two extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> data3 = new HashMap<String, String>();
-                data3.put("sformfield_1", b_name);
-                data3.put("sformfield_2", p_name);
-                data3.put("sformfield_3", p_contact);
-                data3.put("sformfield_11", b_address1);
+                data3.put("Business Name", b_name);
+                data3.put("Contact Person", p_name);
+                data3.put("Contact Number", p_contact);
+                /*data3.put("sformfield_11", b_address1);
                 data3.put("sformfield_12", b_address2);
                 data3.put("sformfield_13", b_state);
                 data3.put("sformfield_14", b_city);
-                data3.put("sformfield_15", b_pincode);
+                data3.put("sformfield_15", b_pincode);*/
                 data3.put("id", userid);
 
                 return data3;
@@ -166,10 +179,10 @@ public class signup_two extends AppCompatActivity {
     }
 
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         finish();
         drawer.openDrawer(Gravity.LEFT);
-    }
+    }*/
 
 }

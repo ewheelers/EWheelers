@@ -113,9 +113,9 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
                         //countrieslist.add(countryid + " - " + countryname);
                         countrieslist.add(stateslist);
                     }
-
-                    country_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countrieslist));
-
+                    if(countrieslist.size()!=0) {
+                        country_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countrieslist));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -193,7 +193,7 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
                                 //statelist.add(stateid + " - " + state_name);
                                 statelist.add(stateslist);
                             }
-                            if(statelist!=null) {
+                            if(statelist.size()!=0) {
                                 state_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, statelist));
                                 if (!stat_id.isEmpty()) {
                                     for (int j = 0; j < statelist.size(); j++) {
@@ -285,7 +285,7 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
                                 //citieslist.add(cityid + " - " + cityname);
                                 citieslist.add(stateslist);
                             }
-                            if(citieslist!=null) {
+                            if(citieslist.size()!=0) {
                                 city_list.setAdapter(new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, citieslist));
                                 if(!cityId.isEmpty()){
                                     for (int j = 0; j < citieslist.size(); j++) {

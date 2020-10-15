@@ -244,7 +244,6 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                 data3.put("password", spass);
                 data3.put("userType","2");
                 return data3;
-
             }
         };
         VolleySingleton.getInstance(this).addToRequestQueue(strRequest);

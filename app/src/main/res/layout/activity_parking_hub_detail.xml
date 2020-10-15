@@ -78,8 +78,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/padding_10"
-        android:background="@drawable/edit_bgs"
-        android:text="Locations | Scan Parking Pass" />
+        android:background="@drawable/edit_bgs"/>
 
 
 </RelativeLayout>

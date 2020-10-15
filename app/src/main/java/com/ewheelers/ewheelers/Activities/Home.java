@@ -1,10 +1,14 @@
 package com.ewheelers.ewheelers.Activities;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,8 +24,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -51,7 +55,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     RadioGroup radioGroup;
     RadioButton radioButton, radioButto;
     ImageView imageView_logout, menu_icon;
-    TextView user_name, user_Is, view_account;
+    TextView user_name, user_Is, view_account, helpbutton;
     Button scan_qr;
     private AppUpdateManager appUpdateManager;
     private boolean mNeedsFlexibleUpdate;
@@ -70,11 +74,61 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView = findViewById(R.id.nav_drawer);
         navigationView.setNavigationItemSelectedListener(this);
         mHeaderView = navigationView.getHeaderView(0);
-
+        helpbutton=findViewById(R.id.help_button);
         user_Is = mHeaderView.findViewById(R.id.userIs);
         view_account = mHeaderView.findViewById(R.id.viewAccount);
         user_Is.setText(username);
         scan_qr = findViewById(R.id.scanQR);
+        helpbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+                builder.create();
+                builder.setIcon(R.drawable.partnerlogo);
+                builder.setTitle("Phone No : +91 9010500076");
+                builder.setMessage("eMail : info@ewheelers.in");
+                builder.setCancelable(false);
+                builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setPositiveButton("Dial", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:9010500076"));
+
+                        if (ActivityCompat.checkSelfPermission(Home.this,
+                                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        startActivity(callIntent);
+                        //dialog.cancel();
+                    }
+                });
+                builder.setNegativeButton("Write Mail", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String userName = new SessionPreference().getStrings(Home.this,SessionPreference.username);
+                        String userId = new SessionPreference().getStrings(Home.this,SessionPreference.userid);
+
+                        Intent email = new Intent(Intent.ACTION_SEND);
+                        email.putExtra(Intent.EXTRA_EMAIL, new String[]{ "info@ewheelers.in"});
+                        email.putExtra(Intent.EXTRA_SUBJECT, "Partner App - From - "+userName+", User ID is - "+userId);
+                        //email.putExtra(Intent.EXTRA_TEXT, message);
+
+                        //need this to prompts email client only
+                        email.setType("message/rfc822");
+
+                        startActivity(Intent.createChooser(email, "Choose an Email client :"));
+                        //dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
         scan_qr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

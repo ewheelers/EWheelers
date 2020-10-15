@@ -1,60 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+            <TextView
+                android:visibility="gone"
+                android:background="@color/colorGrey"
+                android:id="@+id/upload_Banner"
+                android:textColor="@color/colorNavy"
+                android:clickable="true"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:text="@string/upload_banner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true">
 
-        <LinearLayout
+            </TextView>
+        <ImageView
+            android:id="@+id/shop_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/logoView"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_margin="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:elevation="@dimen/padding_10" />
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/ad_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_margin="@dimen/padding_10" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="140dp">
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_bgs">
 
-
-                <com.android.volley.toolbox.NetworkImageView
-                    android:id="@+id/shop_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:layout_margin="@dimen/padding_10"
-                    android:scaleType="fitXY"/>
-
-                <ImageView
-                    android:id="@+id/logoView"
-                    android:layout_width="68dp"
-                    android:layout_height="68dp"
-                    android:background="@drawable/circle_bg"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"/>
-
-            </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/ad_banner"
-                android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:layout_margin="@dimen/padding_10"
-                android:scaleType="fitXY"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_list_hub"
-                android:layout_width="match_parent"
+            <TextView
+                android:text="Charging"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp" />
-
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+            <TextView
+                android:id="@+id/charge_manage"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:text="Manage"
+                android:background="@drawable/button_click_grad"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:elevation="10dp"/>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edit_bgs">
+
+            <TextView
+                android:text="eBikes"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+            <TextView
+                android:id="@+id/ebike_manage"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:text="Manage"
+                android:background="@drawable/button_click_grad"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:elevation="10dp"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_list_hub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
 
-</FrameLayout>
