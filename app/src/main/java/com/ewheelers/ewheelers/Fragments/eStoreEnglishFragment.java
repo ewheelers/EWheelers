@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -45,7 +47,7 @@ public class eStoreEnglishFragment extends Fragment {
     String tokenValue, shopid, language_id;
     ScrollView scrollView;
     private ProgressDialog progressDialog;
-
+    Switch edit_Mode;
     public eStoreEnglishFragment() {
         // Required empty public constructor
     }
@@ -69,6 +71,7 @@ public class eStoreEnglishFragment extends Fragment {
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("English SetUp ....");
         progressDialog.setCancelable(false);
+        edit_Mode = v.findViewById(R.id.editMode);
         shopname = v.findViewById(R.id.shopname);
         contact_person = v.findViewById(R.id.contactperson);
         descript = v.findViewById(R.id.description);
@@ -84,6 +87,47 @@ public class eStoreEnglishFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveLanguage();
+            }
+        });
+        edit_Mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+                    shopname.setEnabled(true);
+                    shopname.setTextColor(getResources().getColor(R.color.colorBlack));
+                    contact_person.setEnabled(true);
+                    contact_person.setTextColor(getResources().getColor(R.color.colorBlack));
+                    descript.setEnabled(true);
+                    descript.setTextColor(getResources().getColor(R.color.colorBlack));
+                    payment_pol.setEnabled(true);
+                    payment_pol.setTextColor(getResources().getColor(R.color.colorBlack));
+                    delivery_pol.setEnabled(true);
+                    delivery_pol.setTextColor(getResources().getColor(R.color.colorBlack));
+                    refund_poly.setEnabled(true);
+                    refund_poly.setTextColor(getResources().getColor(R.color.colorBlack));
+                    add_info.setEnabled(true);
+                    add_info.setTextColor(getResources().getColor(R.color.colorBlack));
+                    seller_info.setEnabled(true);
+                    seller_info.setTextColor(getResources().getColor(R.color.colorBlack));
+                }else{
+                    shopname.setEnabled(false);
+                    shopname.setTextColor(getResources().getColor(R.color.colorNavy));
+                    contact_person.setEnabled(false);
+                    contact_person.setTextColor(getResources().getColor(R.color.colorNavy));
+                    descript.setEnabled(false);
+                    descript.setTextColor(getResources().getColor(R.color.colorNavy));
+                    payment_pol.setEnabled(false);
+                    payment_pol.setTextColor(getResources().getColor(R.color.colorNavy));
+                    delivery_pol.setEnabled(false);
+                    delivery_pol.setTextColor(getResources().getColor(R.color.colorNavy));
+                    refund_poly.setEnabled(false);
+                    refund_poly.setTextColor(getResources().getColor(R.color.colorNavy));
+                    add_info.setEnabled(false);
+                    add_info.setTextColor(getResources().getColor(R.color.colorNavy));
+                    seller_info.setEnabled(false);
+                    seller_info.setTextColor(getResources().getColor(R.color.colorNavy));
+
+                }
             }
         });
         return v;

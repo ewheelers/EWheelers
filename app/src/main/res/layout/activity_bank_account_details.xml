@@ -33,12 +33,32 @@
             android:textSize="12sp"
             android:textStyle="normal" />
 
+        <Switch
+            android:id="@+id/editMode"
+            android:layout_marginTop="@dimen/padding_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Edit"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:checked="false"
+            android:switchPadding="@dimen/padding_10"
+            android:drawablePadding="@dimen/padding_10"
+            android:drawableStart="@drawable/edit_mode"
+            android:padding="@dimen/padding_10"
+            android:layout_marginRight="25dp"
+            android:drawableLeft="@drawable/edit_bgs"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:text="Bannk Name"
@@ -55,7 +75,8 @@
             android:drawablePadding="15dp"
             android:hint="Enter Name"
             android:inputType="textPersonName"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/colorNavy"
+            android:enabled="false"
             android:singleLine="true"></EditText>
 
         <TextView
@@ -79,7 +100,8 @@
             android:drawablePadding="15dp"
             android:hint="Enter Holder Name"
             android:inputType="textPersonName"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/colorNavy"
+            android:enabled="false"
             android:singleLine="true"></EditText>
 
 
@@ -104,7 +126,8 @@
             android:drawablePadding="15dp"
             android:hint="eg: xxxxxxxxx12"
             android:inputType="text|number"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/colorNavy"
+            android:enabled="false"
             android:singleLine="true">
 
         </EditText>
@@ -130,7 +153,8 @@
             android:drawablePadding="15dp"
             android:hint="eg:ICIC00xxx8"
             android:inputType="text"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/colorNavy"
+            android:enabled="false"
             android:singleLine="true"></EditText>
         <TextView
             android:layout_width="wrap_content"
@@ -153,7 +177,8 @@
             android:drawablePadding="15dp"
             android:hint="Enter Branch address"
             android:inputType="textPostalAddress"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/colorNavy"
+            android:enabled="false"
             android:singleLine="true"></EditText>
         <Button
             android:id="@+id/submit_bankdetails"

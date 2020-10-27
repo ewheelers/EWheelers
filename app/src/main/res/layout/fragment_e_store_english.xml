@@ -4,6 +4,7 @@
     android:id="@+id/scrol"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     tools:context=".Fragments.eStoreEnglishFragment">
 
     <LinearLayout
@@ -12,6 +13,26 @@
         android:layout_marginTop="16dp"
         android:orientation="vertical"
         android:padding="10dp">
+
+        <Switch
+            android:id="@+id/editMode"
+            android:layout_marginTop="@dimen/padding_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Edit"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:checked="false"
+            android:switchPadding="@dimen/padding_10"
+            android:drawablePadding="@dimen/padding_10"
+            android:drawableStart="@drawable/edit_mode"
+            android:padding="@dimen/padding_10"
+            android:layout_marginRight="25dp"
+            android:drawableLeft="@drawable/edit_bgs"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,7 +54,8 @@
             android:drawableLeft="@mipmap/bussiness"
             android:drawablePadding="15dp"
             android:inputType="text"
-            android:selectAllOnFocus="true"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:singleLine="true"></EditText>
 
         <TextView
@@ -56,7 +78,8 @@
             android:drawableLeft="@mipmap/username"
             android:drawablePadding="15dp"
             android:inputType="textPersonName"
-            android:selectAllOnFocus="true"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:singleLine="true"></EditText>
 
         <TextView
@@ -81,6 +104,8 @@
             android:minLines="6"
             android:background="@drawable/edit_bgs"
             android:scrollbars="vertical"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:padding="@dimen/padding_10"/>
 
         <TextView
@@ -105,6 +130,8 @@
             android:padding="@dimen/padding_10"
             android:minLines="6"
             android:background="@drawable/edit_bgs"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:scrollbars="vertical">
 
         </EditText>
@@ -130,6 +157,8 @@
             android:lines="8"
             android:minLines="6"
             android:padding="@dimen/padding_10"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:background="@drawable/edit_bgs"
             android:scrollbars="vertical"></EditText>
 
@@ -154,6 +183,8 @@
             android:lines="8"
             android:padding="@dimen/padding_10"
             android:minLines="6"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:background="@drawable/edit_bgs"
             android:scrollbars="vertical"></EditText>
 
@@ -178,6 +209,8 @@
             android:lines="8"
             android:padding="@dimen/padding_10"
             android:minLines="6"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:background="@drawable/edit_bgs"
             android:scrollbars="vertical"></EditText>
 
@@ -202,6 +235,8 @@
             android:lines="8"
             android:minLines="6"
             android:padding="@dimen/padding_10"
+            android:enabled="false"
+            android:textColor="@color/colorNavy"
             android:background="@drawable/edit_bgs"
             android:scrollbars="vertical"></EditText>
 
@@ -212,6 +247,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="@dimen/padding_10"
             android:layout_marginRight="10dp"
             android:background="@drawable/button_click_grad"
             android:text="Save Changes"

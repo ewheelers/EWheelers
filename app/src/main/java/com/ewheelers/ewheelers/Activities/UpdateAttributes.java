@@ -2,11 +2,13 @@ package com.ewheelers.ewheelers.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -220,15 +222,24 @@ public class UpdateAttributes extends AppCompatActivity {
                             String smsg = jsonObject.getString("msg");
                             if (getStatus.equals("1")) {
                                 progressDialog.dismiss();
-                              /*  Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();*/
                                 SessionPreference.clearString(UpdateAttributes.this,SessionPreference.accountsetup);
                                 SessionPreference.saveString(UpdateAttributes.this,SessionPreference.partnerattributes,"yes");
                                 /*Intent i = new Intent(UpdateAttributes.this,Home.class);
                                 i.putExtra("fromsetup","1");
                                 startActivity(i);*/
-                                finish();
-                                drawer.openDrawer(Gravity.LEFT);
+                                Snackbar snack = Snackbar.make(v, "Account Setup Successful", Snackbar.LENGTH_LONG);
+                                View view = snack.getView();
+                                TextView tv = (TextView) view.findViewById(R.id.snackbar_text);
+                                tv.setTextColor(Color.BLACK);
+                                snack.setBackgroundTint(Color.WHITE);
+                                snack.setAction("OK", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finish();
+                                        drawer.openDrawer(Gravity.LEFT);
+                                    }
+                                }).show();
+
                             } else {
                                 progressDialog.dismiss();
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)

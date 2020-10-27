@@ -39,6 +39,15 @@ public class SessionPreference {
     public static String latitude = "latitude";
     public static String logitude = "longitude";
 
+    //shop details
+    public static String identifier = "identifier";
+    public static String seourl = "seourl";
+    public static String phone = "phone";
+    public static String freeship = "freeship";
+    public static String maxsell = "maxsell";
+    public static String maxrent = "maxrent";
+
+
 
     public static void saveString(Context context, String key, String value) {
         SharedPreferences sharedPref = context.getSharedPreferences("Pref", Context.MODE_PRIVATE);

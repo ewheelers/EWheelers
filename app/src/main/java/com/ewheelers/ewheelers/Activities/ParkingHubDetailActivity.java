@@ -86,7 +86,12 @@ public class ParkingHubDetailActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        scan_park_pass.setText("");
+        if(title.equals("Parking")) {
+            scan_park_pass.setText("Scan Parking Pass QR Code");
+            scan_park_pass.setVisibility(View.VISIBLE);
+        }else {
+            scan_park_pass.setVisibility(View.GONE);
+        }
         scan_park_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

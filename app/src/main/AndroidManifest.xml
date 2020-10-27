@@ -38,8 +38,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.ViewParkOrders"
+        <activity android:name=".Activities.WebViewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.ViewParkOrders"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activities.ParkingHubDetailActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

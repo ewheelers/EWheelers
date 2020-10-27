@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,9 +16,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,11 +70,12 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<Stateslist> citieslist = new ArrayList<>();
     String tokenValue, countryString, countryid, stateString, stateid, cityString, cityid;
     private ProgressDialog progressDialog;
-
+    Switch edit_mode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_account);
+        edit_mode = findViewById(R.id.editMode);
         city_text = findViewById(R.id.citytext);
         fulname = findViewById(R.id.fullname);
         mobileno = findViewById(R.id.phoneno);
@@ -88,6 +92,48 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
         progressDialog.setCancelable(false);
         country.setOnItemSelectedListener(this);
         state.setOnItemSelectedListener(this);
+        country.setEnabled(false);
+        state.setEnabled(false);
+        city.setEnabled(false);
+        edit_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+                    city_text.setEnabled(true);
+                    city_text.setTextColor(getResources().getColor(R.color.colorBlack));
+                    fulname.setEnabled(true);
+                    fulname.setTextColor(getResources().getColor(R.color.colorBlack));
+                    mobileno.setEnabled(true);
+                    mobileno.setTextColor(getResources().getColor(R.color.colorBlack));
+                    dob.setEnabled(true);
+                    dob.setTextColor(getResources().getColor(R.color.colorBlack));
+                    organization.setEnabled(true);
+                    organization.setTextColor(getResources().getColor(R.color.colorBlack));
+                    profile.setEnabled(true);
+                    profile.setTextColor(getResources().getColor(R.color.colorBlack));
+                    country.setEnabled(true);
+                    state.setEnabled(true);
+                    city.setEnabled(true);
+                }else {
+                    city_text.setEnabled(false);
+                    city_text.setTextColor(getResources().getColor(R.color.colorNavy));
+                    fulname.setEnabled(false);
+                    fulname.setTextColor(getResources().getColor(R.color.colorNavy));
+                    mobileno.setEnabled(false);
+                    mobileno.setTextColor(getResources().getColor(R.color.colorNavy));
+                    dob.setEnabled(false);
+                    dob.setTextColor(getResources().getColor(R.color.colorNavy));
+                    organization.setEnabled(false);
+                    organization.setTextColor(getResources().getColor(R.color.colorNavy));
+                    profile.setEnabled(false);
+                    profile.setTextColor(getResources().getColor(R.color.colorNavy));
+                    country.setEnabled(false);
+                    state.setEnabled(false);
+                    city.setEnabled(false);
+                }
+            }
+        });
+
         dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

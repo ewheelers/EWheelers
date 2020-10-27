@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -53,6 +55,7 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
     String tokenValue,countryString,countryid, stateString,stateid, cityString,cityid;
     Button saveaddress;
     private ProgressDialog progressDialog;
+    Switch edit_Mode;
     public eStoreSubGeneralFragment() {
         // Required empty public constructor
     }
@@ -68,6 +71,7 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_e_store_sub_general, container, false);
         tokenValue = new SessionPreference().getStrings(getActivity(),SessionPreference.tokenvalue);
+        edit_Mode = v.findViewById(R.id.editMode);
         country_list = v.findViewById(R.id.contry);
         state_list = v.findViewById(R.id.state);
         city_list = v.findViewById(R.id.city_name);
@@ -86,6 +90,25 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
             @Override
             public void onClick(View v) {
                 saveReturnAddress();
+            }
+        });
+        country_list.setEnabled(false);
+        state_list.setEnabled(false);
+        city_list.setEnabled(false);
+        edit_Mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+                    pincode.setEnabled(true);
+                    pincode.setTextColor(getResources().getColor(R.color.colorBlack));
+                    mobileno.setEnabled(true);
+                    mobileno.setTextColor(getResources().getColor(R.color.colorBlack));
+                }else {
+                    pincode.setEnabled(false);
+                    pincode.setTextColor(getResources().getColor(R.color.colorNavy));
+                    mobileno.setEnabled(false);
+                    mobileno.setTextColor(getResources().getColor(R.color.colorNavy));
+                }
             }
         });
         return v;

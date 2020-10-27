@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -75,6 +77,8 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
     private double longitud;
     Button buttonMap;
     String lat, longi, shopaddre, zipcode, u_latitude, u_longitude;
+    Switch edit_mode;
+    String str_identifier, str_shopuri, str_mobileno, str_freeship, str_maxrad, str_maxrent;
 
     public eStoreGeneralFragment() {
         // Required empty public constructor
@@ -97,6 +101,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("General SetUp ....");
         progressDialog.setCancelable(false);
+        edit_mode = v.findViewById(R.id.editMode);
         identifier = v.findViewById(R.id.identifier);
         buttonMap = v.findViewById(R.id.goMap);
         identifier.addTextChangedListener(this);
@@ -117,6 +122,72 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
         mainlayout = v.findViewById(R.id.main_layout);
         country_list.setOnItemSelectedListener(this);
         //state_list.setOnItemSelectedListener(this);
+        country_list.setEnabled(false);
+        state_list.setEnabled(false);
+        city_list.setEnabled(false);
+        display_state.setEnabled(false);
+        edit_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    identifier.setEnabled(true);
+                    identifier.setTextColor(getResources().getColor(R.color.colorBlack));
+                    shopuri.setEnabled(true);
+                    shopuri.setTextColor(getResources().getColor(R.color.colorBlack));
+                    shopaddress.setEnabled(true);
+                    shopaddress.setTextColor(getResources().getColor(R.color.colorBlack));
+                    postalcode.setEnabled(true);
+                    postalcode.setTextColor(getResources().getColor(R.color.colorBlack));
+                    mobileno.setEnabled(true);
+                    mobileno.setTextColor(getResources().getColor(R.color.colorBlack));
+                    free_shippingon.setEnabled(true);
+                    free_shippingon.setTextColor(getResources().getColor(R.color.colorBlack));
+                    maxradious.setEnabled(true);
+                    maxradious.setTextColor(getResources().getColor(R.color.colorBlack));
+                    maxRent.setEnabled(true);
+                    maxRent.setTextColor(getResources().getColor(R.color.colorBlack));
+                    latitude.setEnabled(true);
+                    latitude.setTextColor(getResources().getColor(R.color.colorBlack));
+                    longitude.setEnabled(true);
+                    longitude.setTextColor(getResources().getColor(R.color.colorBlack));
+                    country_list.setEnabled(true);
+                    state_list.setEnabled(true);
+                    city_list.setEnabled(true);
+                    display_state.setEnabled(true);
+                } else {
+                    identifier.setEnabled(false);
+                    identifier.setTextColor(getResources().getColor(R.color.colorNavy));
+                    shopuri.setEnabled(false);
+                    shopuri.setTextColor(getResources().getColor(R.color.colorNavy));
+                    shopaddress.setEnabled(false);
+                    shopaddress.setTextColor(getResources().getColor(R.color.colorNavy));
+                    postalcode.setEnabled(false);
+                    postalcode.setTextColor(getResources().getColor(R.color.colorNavy));
+                    mobileno.setEnabled(false);
+                    mobileno.setTextColor(getResources().getColor(R.color.colorNavy));
+                    free_shippingon.setEnabled(false);
+                    free_shippingon.setTextColor(getResources().getColor(R.color.colorNavy));
+                    maxradious.setEnabled(false);
+                    maxradious.setTextColor(getResources().getColor(R.color.colorNavy));
+                    maxRent.setEnabled(false);
+                    maxRent.setTextColor(getResources().getColor(R.color.colorNavy));
+                    latitude.setEnabled(false);
+                    latitude.setTextColor(getResources().getColor(R.color.colorNavy));
+                    longitude.setEnabled(false);
+                    longitude.setTextColor(getResources().getColor(R.color.colorNavy));
+                    country_list.setEnabled(false);
+                    state_list.setEnabled(false);
+                    city_list.setEnabled(false);
+                    display_state.setEnabled(false);
+                }
+            }
+        });
+        str_identifier = new SessionPreference().getStrings(getActivity(), SessionPreference.identifier);
+        str_shopuri = new SessionPreference().getStrings(getActivity(), SessionPreference.seourl);
+        str_mobileno = new SessionPreference().getStrings(getActivity(), SessionPreference.phone);
+        str_freeship = new SessionPreference().getStrings(getActivity(), SessionPreference.freeship);
+        str_maxrad = new SessionPreference().getStrings(getActivity(), SessionPreference.maxsell);
+        str_maxrent = new SessionPreference().getStrings(getActivity(), SessionPreference.maxrent);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, status_list);
@@ -158,6 +229,18 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), MapsActivity.class);
+                /*String str_identifier = identifier.getText().toString();
+                String str_shopuri = shopuri.getText().toString();
+                String str_mobileno = mobileno.getText().toString();
+                String str_freeship = free_shippingon.getText().toString();
+                String str_maxrad = maxradious.getText().toString();
+                String str_maxrent = maxRent.getText().toString();*/
+                SessionPreference.saveString(getActivity(), SessionPreference.identifier, identifier.getText().toString());
+                SessionPreference.saveString(getActivity(), SessionPreference.seourl, shopuri.getText().toString());
+                SessionPreference.saveString(getActivity(), SessionPreference.phone, mobileno.getText().toString());
+                SessionPreference.saveString(getActivity(), SessionPreference.freeship, free_shippingon.getText().toString());
+                SessionPreference.saveString(getActivity(), SessionPreference.maxsell, maxradious.getText().toString());
+                SessionPreference.saveString(getActivity(), SessionPreference.maxrent, maxRent.getText().toString());
                 i.putExtra("latit", latitude.getText().toString());
                 i.putExtra("longi", longitude.getText().toString());
                 startActivity(i);
@@ -219,7 +302,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             //countrieslist.add(countryid + " - " + countryname);
                             countrieslist.add(stateslist);
                         }
-                        if(countrieslist.size()!=0) {
+                        if (countrieslist.size() != 0) {
                             contryAdapter = new ArrayAdapter<Stateslist>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countrieslist);
                             country_list.setAdapter(contryAdapter);
                         }
@@ -302,7 +385,11 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             SessionPreference.saveString(getActivity(), SessionPreference.shopid, shopid);
                             String shop_user_id = jsonObj.getString("shop_user_id");
                             String identy = jsonObj.getString("shop_identifier");
-                            identifier.setText(identy);
+                            if (str_identifier != null) {
+                                identifier.setText(str_identifier);
+                            } else {
+                                identifier.setText(identy);
+                            }
                             String pincode = jsonObj.getString("shop_postalcode");
                             if (zipcode != null) {
                                 postalcode.setText(zipcode);
@@ -310,7 +397,11 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                                 postalcode.setText(pincode);
                             }
                             String uri_is = jsonObj.getString("urlrewrite_custom");
-                            shopuri.setText(uri_is);
+                            if (str_shopuri != null) {
+                                shopuri.setText(str_shopuri);
+                            } else {
+                                shopuri.setText(uri_is);
+                            }
                             String autoComplete = jsonObj.getString("shop_auto_complete");
                             if (shopaddre != null) {
                                 shopaddress.setText(shopaddre);
@@ -332,15 +423,31 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                                 longitude.setText(longi);
                             }
                             String maxsell = jsonObj.getString("shop_max_sell_radius");
-                            maxradious.setText(maxsell);
+                            if (str_maxrad != null) {
+                                maxradious.setText(str_maxrad);
+                            } else {
+                                maxradious.setText(maxsell);
+                            }
                             String maxrent = jsonObj.getString("shop_max_rent_radius");
-                            maxRent.setText(maxrent);
+                            if (str_maxrent != null) {
+                                maxRent.setText(str_maxrent);
+                            } else {
+                                maxRent.setText(maxrent);
+                            }
                             String phone = jsonObj.getString("shop_phone");
-                            mobileno.setText(phone);
+                            if (str_mobileno != null) {
+                                mobileno.setText(str_mobileno);
+                            } else {
+                                mobileno.setText(phone);
+                            }
                             String stat = jsonObj.getString("shop_supplier_display_status");
                             display_state.setSelection(Integer.parseInt(stat));
                             String freeship = jsonObj.getString("shop_free_ship_upto");
-                            free_shippingon.setText(freeship);
+                            if (str_freeship != null) {
+                                free_shippingon.setText(str_freeship);
+                            } else {
+                                free_shippingon.setText(freeship);
+                            }
                             String contrid = jsonObj.getString("shop_country_id");
                             String statid = jsonObj.getString("shop_state_id");
                             String cityid = jsonObj.getString("shop_city_id");

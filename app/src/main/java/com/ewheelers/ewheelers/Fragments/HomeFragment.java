@@ -6,18 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,13 +30,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.load.engine.Resource;
 import com.ewheelers.ewheelers.Activities.ParkingHubDetailActivity;
+import com.ewheelers.ewheelers.Activities.WebViewActivity;
 import com.ewheelers.ewheelers.Activities.eStoreSettings;
 import com.ewheelers.ewheelers.Activities.signup_two;
 import com.ewheelers.ewheelers.ActivityModels.Attributes;
@@ -43,7 +43,6 @@ import com.ewheelers.ewheelers.ActivityModels.DashboardList;
 import com.ewheelers.ewheelers.ActivtiesAdapters.DashBoardSettingsAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.HomeRecyclerAdapter;
 import com.ewheelers.ewheelers.Network.API;
-import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.squareup.picasso.MemoryPolicy;
@@ -66,6 +65,7 @@ import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
+import jp.wasabeef.picasso.transformations.CropTransformation;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView, recyclerview_hub;
@@ -77,7 +77,10 @@ public class HomeFragment extends Fragment {
     NetworkImageView adBanner;
     ImageView logoViewImg;
     ImageView imageViewTopBannner;
-    TextView uploadBan,chargingManage,ebikesManage;
+    TextView uploadBan, chargingManage, ebikesManage;
+    ViewFlipper viewFlipper;
+    ArrayList<String> topBannerImages = new ArrayList<>();
+    String bannerUrl;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -102,6 +105,7 @@ public class HomeFragment extends Fragment {
         logoViewImg = v.findViewById(R.id.logoView);
         adBanner = v.findViewById(R.id.ad_banner);
         uploadBan = v.findViewById(R.id.upload_Banner);
+        viewFlipper = v.findViewById(R.id.flipper);
         uploadBan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,8 +120,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ParkingHubDetailActivity.class);
-                i.putExtra("hubname","Charging");
-                i.putExtra("hubid","3");
+                i.putExtra("hubname", "Charging");
+                i.putExtra("hubid", "3");
                 startActivity(i);
             }
         });
@@ -125,8 +129,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ParkingHubDetailActivity.class);
-                i.putExtra("hubname","eBikes");
-                i.putExtra("hubid","2");
+                i.putExtra("hubname", "eBikes");
+                i.putExtra("hubid", "2");
                 startActivity(i);
             }
         });
@@ -157,11 +161,18 @@ public class HomeFragment extends Fragment {
                             JSONObject jsonObjectBann = jsonObject1.getJSONObject("banners");
                             JSONObject jsonObjectSub = jsonObjectBann.getJSONObject("Partner_App_Homepage_Top_Banner");
                             JSONArray jsonArray = jsonObjectSub.getJSONArray("banners");
-                            JSONObject jsonObjectFromArra = jsonArray.getJSONObject(0);
-                            String imageUrl = jsonObjectFromArra.getString("banner_image_url");
-                            ImageLoader imageLoaderBann = VolleySingleton.getInstance(getActivity()).getImageLoader();
-                            imageLoaderBann.get(imageUrl, ImageLoader.getImageListener(adBanner, 0, 0));
-                            adBanner.setImageUrl(imageUrl, imageLoaderBann);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObjectFromArra = jsonArray.getJSONObject(i);
+                                String imageUrl = jsonObjectFromArra.getString("banner_image_url");
+                                bannerUrl = jsonObjectFromArra.getString("banner_url");
+                                topBannerImages.add(imageUrl);
+                                /*ImageLoader imageLoaderBann = VolleySingleton.getInstance(getActivity()).getImageLoader();
+                                imageLoaderBann.get(imageUrl, ImageLoader.getImageListener(adBanner, 0, 0));
+                                adBanner.setImageUrl(imageUrl, imageLoaderBann);*/
+                            }
+                            for (int i = 0; i < topBannerImages.size(); i++) {
+                                setFlipperImage(topBannerImages.get(i));
+                            }
                             JSONObject jsonObjectShopImages = jsonObject1.getJSONObject("shopImages");
                             if (jsonObjectShopImages.length() != 0) {
                                 String shopLogo = jsonObjectShopImages.getString("shop_logo");
@@ -174,22 +185,19 @@ public class HomeFragment extends Fragment {
                                         .transform(new CropCircleTransformation()).memoryPolicy(MemoryPolicy.NO_CACHE)
                                         .networkPolicy(NetworkPolicy.NO_CACHE)
                                         .into(logoViewImg);
-
+                               /* StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                                StrictMode.setThreadPolicy(policy);
+                                Bitmap myImage = getBitmapFromURL(shopBanner);
+                                imageViewTopBannner.setImageBitmap(myImage);
+                                Drawable dr = new BitmapDrawable(myImage);
+                                imageViewTopBannner.setBackgroundDrawable(dr);*/
                                 Picasso.get().load(shopBanner)
+                                        .fit()
                                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                                         .networkPolicy(NetworkPolicy.NO_CACHE)
-                                        .fit().centerCrop()
-                                        .placeholder(R.drawable.button_gradient)
-                                        .error(R.drawable.button_gradient)
                                         .into(imageViewTopBannner);
-                           /* StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                            StrictMode.setThreadPolicy(policy);
-                            Bitmap myImage = getBitmapFromURL(shopBanner);
-                            imageViewTopBannner.setImageBitmap(myImage);*/
-                            /*Drawable dr = new BitmapDrawable(myImage);
-                            imageViewTopBannner.setBackgroundDrawable(dr);*/
                                 uploadBan.setVisibility(View.GONE);
-                            }else {
+                            } else {
                                 uploadBan.setVisibility(View.VISIBLE);
                             }
                             String currency = jsonObject1.getString("currencySymbol");
@@ -268,7 +276,27 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void gotoEstoreSettings(){
+    private void setFlipperImage(String res) {
+        ImageView image = new ImageView(getActivity());
+        image.setImageBitmap(getBitmapFromURL(res));
+        //image.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        image.setScaleType(ImageView.ScaleType.FIT_XY);
+        viewFlipper.addView(image);
+        viewFlipper.startFlipping();
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bannerUrl!=null) {
+                    Intent i = new Intent(getActivity(), WebViewActivity.class);
+                    i.putExtra("urlIs",bannerUrl);
+                    startActivity(i);
+                }
+            }
+        });
+    }
+
+
+    public void gotoEstoreSettings() {
         Intent i = new Intent(getActivity(), eStoreSettings.class);
         startActivity(i);
     }
@@ -279,6 +307,8 @@ public class HomeFragment extends Fragment {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
             InputStream input = connection.getInputStream();
             return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
@@ -298,4 +328,5 @@ public class HomeFragment extends Fragment {
 
         return strings;
     }
+
 }

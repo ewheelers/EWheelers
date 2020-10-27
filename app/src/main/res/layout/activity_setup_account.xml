@@ -33,12 +33,32 @@
             android:textSize="12sp"
             android:textStyle="normal" />
 
+        <Switch
+            android:id="@+id/editMode"
+            android:layout_marginTop="@dimen/padding_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Edit"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:checked="false"
+            android:switchPadding="@dimen/padding_10"
+            android:drawablePadding="@dimen/padding_10"
+            android:drawableStart="@drawable/edit_mode"
+            android:padding="@dimen/padding_10"
+            android:layout_marginRight="25dp"
+            android:drawableLeft="@drawable/edit_bgs"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:text="Full Name of business owner"
@@ -54,8 +74,9 @@
             android:drawableLeft="@mipmap/username"
             android:drawablePadding="15dp"
             android:hint="Enter Name"
+            android:textColor="@color/colorNavy"
             android:inputType="textPersonName"
-            android:selectAllOnFocus="true"
+            android:enabled="false"
             android:singleLine="true"></EditText>
 
         <TextView
@@ -80,7 +101,8 @@
             android:hint="Enter Mobile Number"
             android:inputType="phone"
             android:maxLength="10"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/colorNavy"
+            android:enabled="false"
             android:singleLine="true"></EditText>
 
         <LinearLayout
@@ -105,6 +127,7 @@
                     android:textStyle="normal" />
 
                 <TextView
+                    android:enabled="false"
                     android:id="@+id/dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -114,7 +137,7 @@
                     android:drawableLeft="@drawable/date"
                     android:drawablePadding="5dp"
                     android:padding="10dp"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorNavy"
                     android:gravity="center_vertical"
                     android:singleLine="true"></TextView>
             </LinearLayout>
@@ -185,7 +208,6 @@
                     android:text="City"
                     android:textColor="#992b1e"
                     android:textStyle="normal" />
-
                 <Spinner
                     android:visibility="visible"
                     android:id="@+id/city"
@@ -205,7 +227,7 @@
             android:drawablePadding="5dp"
             android:padding="10dp"
             android:inputType="text"
-            android:selectAllOnFocus="true"
+            android:enabled="false"
             android:singleLine="true"></EditText>
 
         <TextView
@@ -220,6 +242,7 @@
             android:textStyle="normal" />
 
         <EditText
+            android:textColor="@color/colorNavy"
             android:id="@+id/organization"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -229,7 +252,7 @@
             android:drawablePadding="15dp"
             android:hint="Enter your Organization Name"
             android:inputType="text"
-            android:selectAllOnFocus="true"
+            android:enabled="false"
             android:singleLine="true">
 
         </EditText>
@@ -246,6 +269,7 @@
             android:textStyle="normal" />
 
         <EditText
+            android:textColor="@color/colorNavy"
             android:id="@+id/briefprofile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -255,7 +279,7 @@
             android:drawablePadding="15dp"
             android:hint="Please let us know about you"
             android:inputType="text"
-            android:selectAllOnFocus="true"
+            android:enabled="false"
             android:singleLine="true"></EditText>
 
         <Button
@@ -265,6 +289,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="@dimen/padding_10"
             android:layout_marginRight="10dp"
             android:background="@drawable/button_click_grad"
             android:text="Next"

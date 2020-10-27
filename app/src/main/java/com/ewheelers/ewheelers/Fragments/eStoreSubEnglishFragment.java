@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -46,6 +48,7 @@ public class eStoreSubEnglishFragment extends Fragment {
     String tokenValue,cityIs;
     Button saveChnages;
     ProgressDialog progressDialog;
+    Switch edit_Mode;
     public eStoreSubEnglishFragment() {
         // Required empty public constructor
     }
@@ -60,6 +63,7 @@ public class eStoreSubEnglishFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_e_store_sub_english, container, false);
+        edit_Mode = v.findViewById(R.id.editMode);
         address_one = v.findViewById(R.id.address_one);
         address_two = v.findViewById(R.id.address_two);
         nameIs = v.findViewById(R.id.name);
@@ -75,6 +79,26 @@ public class eStoreSubEnglishFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveLangAddress();
+            }
+        });
+        edit_Mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+                    nameIs.setEnabled(true);
+                    nameIs.setTextColor(getResources().getColor(R.color.colorBlack));
+                    address_one.setEnabled(true);
+                    address_one.setTextColor(getResources().getColor(R.color.colorBlack));
+                    address_two.setEnabled(true);
+                    address_two.setTextColor(getResources().getColor(R.color.colorBlack));
+                }else {
+                    nameIs.setEnabled(false);
+                    nameIs.setTextColor(getResources().getColor(R.color.colorNavy));
+                    address_one.setEnabled(false);
+                    address_one.setTextColor(getResources().getColor(R.color.colorNavy));
+                    address_two.setEnabled(false);
+                    address_two.setTextColor(getResources().getColor(R.color.colorNavy));
+                }
             }
         });
         return v;

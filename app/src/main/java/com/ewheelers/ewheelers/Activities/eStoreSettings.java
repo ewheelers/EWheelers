@@ -43,6 +43,8 @@ public class eStoreSettings extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),Home.class);
+                startActivity(i);
                 finish();
             }
         });
@@ -75,6 +77,14 @@ public class eStoreSettings extends AppCompatActivity {
         SessionPreference.clearString(eStoreSettings.this,SessionPreference.zipcode);
         SessionPreference.clearString(eStoreSettings.this,SessionPreference.latitude);
         SessionPreference.clearString(eStoreSettings.this,SessionPreference.logitude);
+        SessionPreference.clearString(eStoreSettings.this, SessionPreference.identifier);
+        SessionPreference.clearString(eStoreSettings.this, SessionPreference.seourl);
+        SessionPreference.clearString(eStoreSettings.this, SessionPreference.phone);
+        SessionPreference.clearString(eStoreSettings.this, SessionPreference.freeship);
+        SessionPreference.clearString(eStoreSettings.this, SessionPreference.maxsell);
+        SessionPreference.clearString(eStoreSettings.this, SessionPreference.maxrent);
+        Intent i = new Intent(getApplicationContext(),Home.class);
+        startActivity(i);
         finish();
         drawer.openDrawer(Gravity.LEFT);
     }

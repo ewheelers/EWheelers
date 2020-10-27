@@ -224,6 +224,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             SessionPreference.clearString(Home.this,SessionPreference.zipcode);
             SessionPreference.clearString(Home.this,SessionPreference.latitude);
             SessionPreference.clearString(Home.this,SessionPreference.logitude);
+            SessionPreference.clearString(Home.this, SessionPreference.identifier);
+            SessionPreference.clearString(Home.this, SessionPreference.seourl);
+            SessionPreference.clearString(Home.this, SessionPreference.phone);
+            SessionPreference.clearString(Home.this, SessionPreference.freeship);
+            SessionPreference.clearString(Home.this, SessionPreference.maxsell);
+            SessionPreference.clearString(Home.this, SessionPreference.maxrent);
             Intent i = new Intent(Home.this, eStoreSettings.class);
             startActivity(i);
         }

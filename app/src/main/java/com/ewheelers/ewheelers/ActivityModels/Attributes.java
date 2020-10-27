@@ -9,7 +9,7 @@ public class Attributes {
     private String productname;
     private String producttype;
     private JSONArray jsonarray;
-
+    private String imageUrl;
     public Attributes(String productid, String productname, String producttype) {
         this.productid = productid;
         this.productname = productname;
@@ -22,6 +22,14 @@ public class Attributes {
 
     public Attributes() {
 
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public JSONArray getJsonarray() {

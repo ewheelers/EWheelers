@@ -8,7 +8,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,15 +39,17 @@ import java.util.Map;
 import static com.ewheelers.ewheelers.Activities.Home.drawer;
 
 public class BankAccountDetails extends AppCompatActivity {
-EditText bankname,holdername,accno,ifsccode,bankaddress;
-Button submitdetails;
-ProgressDialog progressDialog;
+    EditText bankname, holdername, accno, ifsccode, bankaddress;
+    Button submitdetails;
+    ProgressDialog progressDialog;
     private InputMethodManager imm;
+    Switch edit_mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank_account_details);
+        edit_mode = findViewById(R.id.editMode);
         bankname = findViewById(R.id.bankname);
         holdername = findViewById(R.id.holdername);
         accno = findViewById(R.id.accno);
@@ -56,6 +60,35 @@ ProgressDialog progressDialog;
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Bank Details Updating ....");
         progressDialog.setCancelable(false);
+        edit_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+                    bankname.setEnabled(true);
+                    bankname.setTextColor(getResources().getColor(R.color.colorBlack));
+                    holdername.setEnabled(true);
+                    holdername.setTextColor(getResources().getColor(R.color.colorBlack));
+                    accno.setEnabled(true);
+                    accno.setTextColor(getResources().getColor(R.color.colorBlack));
+                    ifsccode.setEnabled(true);
+                    ifsccode.setTextColor(getResources().getColor(R.color.colorBlack));
+                    bankaddress.setEnabled(true);
+                    bankaddress.setTextColor(getResources().getColor(R.color.colorBlack));
+                }else {
+                    bankname.setEnabled(false);
+                    bankname.setTextColor(getResources().getColor(R.color.colorNavy));
+                    holdername.setEnabled(false);
+                    holdername.setTextColor(getResources().getColor(R.color.colorNavy));
+                    accno.setEnabled(false);
+                    accno.setTextColor(getResources().getColor(R.color.colorNavy));
+                    ifsccode.setEnabled(false);
+                    ifsccode.setTextColor(getResources().getColor(R.color.colorNavy));
+                    bankaddress.setEnabled(false);
+                    bankaddress.setTextColor(getResources().getColor(R.color.colorNavy));
+                }
+
+            }
+        });
         submitdetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,10 +97,10 @@ ProgressDialog progressDialog;
                 String accnumber = accno.getText().toString();
                 String ifsc_code = ifsccode.getText().toString();
                 String bank_address = bankaddress.getText().toString();
-                if(banknam.isEmpty()||holdernam.isEmpty()||accnumber.isEmpty()||ifsc_code.isEmpty()||bank_address.isEmpty()){
-                    Snackbar.make(v,"Please! Fill all details.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                }else {
-                    submitBankdetails(v,banknam,holdernam,accnumber,ifsc_code,bank_address);
+                if (banknam.isEmpty() || holdernam.isEmpty() || accnumber.isEmpty() || ifsc_code.isEmpty() || bank_address.isEmpty()) {
+                    Snackbar.make(v, "Please! Fill all details.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                } else {
+                    submitBankdetails(v, banknam, holdernam, accnumber, ifsc_code, bank_address);
                 }
 
 
@@ -89,9 +122,9 @@ ProgressDialog progressDialog;
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("bankInfo");
-                        if(jsonObject2.length()==0){
+                        if (jsonObject2.length() == 0) {
 
-                        }else {
+                        } else {
                             String banknam = jsonObject2.getString("ub_bank_name");
                             String holdernam = jsonObject2.getString("ub_account_holder_name");
                             String acco = jsonObject2.getString("ub_account_number");
@@ -122,7 +155,7 @@ ProgressDialog progressDialog;
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("X-TOKEN", new SessionPreference().getStrings(BankAccountDetails.this,SessionPreference.tokenvalue));
+                params.put("X-TOKEN", new SessionPreference().getStrings(BankAccountDetails.this, SessionPreference.tokenvalue));
                 return params;
             }
 
@@ -140,9 +173,9 @@ ProgressDialog progressDialog;
     }
 
 
-    private void submitBankdetails(final View v,final String banknam, final String holdernam, final String accnumber, final String ifsc_code, final String bank_address) {
+    private void submitBankdetails(final View v, final String banknam, final String holdernam, final String accnumber, final String ifsc_code, final String bank_address) {
         try {
-            imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
             // TODO: handle exception
@@ -163,8 +196,8 @@ ProgressDialog progressDialog;
                                 progressDialog.dismiss();
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
-                                SessionPreference.clearString(BankAccountDetails.this,SessionPreference.partnerattributes);
-                                SessionPreference.saveString(BankAccountDetails.this,SessionPreference.bankstatus,"yes");
+                                SessionPreference.clearString(BankAccountDetails.this, SessionPreference.partnerattributes);
+                                SessionPreference.saveString(BankAccountDetails.this, SessionPreference.bankstatus, "yes");
                                 /*Intent i = new Intent(BankAccountDetails.this,Home.class);
                                 startActivity(i);
                                 finish();*/
@@ -194,7 +227,7 @@ ProgressDialog progressDialog;
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("X-TOKEN", new SessionPreference().getStrings(BankAccountDetails.this,SessionPreference.tokenvalue));
+                params.put("X-TOKEN", new SessionPreference().getStrings(BankAccountDetails.this, SessionPreference.tokenvalue));
                 return params;
             }
 
@@ -216,7 +249,7 @@ ProgressDialog progressDialog;
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         finish();
         drawer.openDrawer(Gravity.LEFT);
     }
