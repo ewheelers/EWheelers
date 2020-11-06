@@ -14,12 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import androidx.constraintlayout.solver.widgets.Rectangle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -43,11 +46,13 @@ import com.ewheelers.ewheelers.ActivityModels.DashboardList;
 import com.ewheelers.ewheelers.ActivtiesAdapters.DashBoardSettingsAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.HomeRecyclerAdapter;
 import com.ewheelers.ewheelers.Network.API;
+import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,11 +81,13 @@ public class HomeFragment extends Fragment {
     ProgressDialog progresDialog;
     NetworkImageView adBanner;
     ImageView logoViewImg;
-    ImageView imageViewTopBannner;
+    NetworkImageView imageViewTopBannner;
     TextView uploadBan, chargingManage, ebikesManage;
     ViewFlipper viewFlipper;
     ArrayList<String> topBannerImages = new ArrayList<>();
     String bannerUrl;
+    Button veh_market;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -177,25 +184,19 @@ public class HomeFragment extends Fragment {
                             if (jsonObjectShopImages.length() != 0) {
                                 String shopLogo = jsonObjectShopImages.getString("shop_logo");
                                 String shopBanner = jsonObjectShopImages.getString("shop_banner");
-                           /* ImageLoader imageLoader = VolleySingleton.getInstance(getActivity()).getImageLoader();
-                            imageLoader.get(shopBanner, ImageLoader.getImageListener(imageViewTopBannner, R.drawable.mb1, R.drawable.mb1));
-                            imageViewTopBannner.setImageUrl(shopBanner, imageLoader);*/
+                                ImageLoader imageLoader = VolleySingleton.getInstance(getActivity()).getImageLoader();
+                                imageLoader.get(shopBanner, ImageLoader.getImageListener(imageViewTopBannner, 0, 0));
+                                imageViewTopBannner.setImageUrl(shopBanner, imageLoader);
                                 Picasso.get()
                                         .load(shopLogo).fit().centerCrop()
                                         .transform(new CropCircleTransformation()).memoryPolicy(MemoryPolicy.NO_CACHE)
                                         .networkPolicy(NetworkPolicy.NO_CACHE)
                                         .into(logoViewImg);
-                               /* StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                                StrictMode.setThreadPolicy(policy);
-                                Bitmap myImage = getBitmapFromURL(shopBanner);
-                                imageViewTopBannner.setImageBitmap(myImage);
-                                Drawable dr = new BitmapDrawable(myImage);
-                                imageViewTopBannner.setBackgroundDrawable(dr);*/
-                                Picasso.get().load(shopBanner)
+                               /* Picasso.get().load(shopBanner)
                                         .fit()
                                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                                         .networkPolicy(NetworkPolicy.NO_CACHE)
-                                        .into(imageViewTopBannner);
+                                        .into(imageViewTopBannner);*/
                                 uploadBan.setVisibility(View.GONE);
                             } else {
                                 uploadBan.setVisibility(View.VISIBLE);
@@ -286,9 +287,9 @@ public class HomeFragment extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bannerUrl!=null) {
+                if (bannerUrl != null) {
                     Intent i = new Intent(getActivity(), WebViewActivity.class);
-                    i.putExtra("urlIs",bannerUrl);
+                    i.putExtra("urlIs", bannerUrl);
                     startActivity(i);
                 }
             }

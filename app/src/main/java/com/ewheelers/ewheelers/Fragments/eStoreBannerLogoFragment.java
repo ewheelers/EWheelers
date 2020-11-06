@@ -1,5 +1,6 @@
 package com.ewheelers.ewheelers.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
@@ -38,6 +41,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ewheelers.ewheelers.Activities.ImagePickerActivity;
 import com.ewheelers.ewheelers.Activities.UserRegistrationActivity;
 import com.ewheelers.ewheelers.ActivityModels.Stateslist;
 import com.ewheelers.ewheelers.Network.API;
@@ -45,6 +49,11 @@ import com.ewheelers.ewheelers.Network.VolleyMultipartRequest;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.snackbar.Snackbar;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -59,7 +68,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -72,7 +83,9 @@ public class eStoreBannerLogoFragment extends Fragment{
     ArrayList<Stateslist> displayforno = new ArrayList<>();
     Button buttonUploadanner;
     ProgressDialog progressDialog;
-    private int REQUEST_CAMERA = 0;
+//    private int REQUEST_CAMERA = 0;
+    private int REQUEST_CAMERA = 100;
+
     private String userChoosenTask;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
@@ -95,7 +108,7 @@ public class eStoreBannerLogoFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_e_store_banner_logo, container, false);
-        tokenValue = new SessionPreference().getStrings(getActivity(), SessionPreference.tokenvalue);
+        tokenValue = new SessionPreference().getStrings(Objects.requireNonNull(getActivity()), SessionPreference.tokenvalue);
         language = v.findViewById(R.id.lang_spinner);
         displayfor = v.findViewById(R.id.display_for);
         scrollView = v.findViewById(R.id.scrol_view);
@@ -106,12 +119,32 @@ public class eStoreBannerLogoFragment extends Fragment{
         progressDialog.setMessage("Updating Banner ....");
         progressDialog.setCancelable(false);
         //language.setOnItemSelectedListener(this);
+        ImagePickerActivity.clearCache(getActivity());
         getmedia();
         buttonUploadanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //uploadBanner();
-                selectImage();
+                //selectImage();
+                Dexter.withActivity(getActivity())
+                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .withListener(new MultiplePermissionsListener() {
+                            @Override
+                            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                                if (report.areAllPermissionsGranted()) {
+                                    showImagePickerOptions();
+                                }
+
+                                if (report.isAnyPermissionPermanentlyDenied()) {
+                                    showSettingsDialog();
+                                }
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                token.continuePermissionRequest();
+                            }
+                        }).check();
+
             }
         });
         return v;
@@ -145,16 +178,68 @@ public class eStoreBannerLogoFragment extends Fragment{
         builder.show();
     }
 
+    private void showImagePickerOptions() {
+        ImagePickerActivity.showImagePickerOptions(getActivity(), new ImagePickerActivity.PickerOptionListener() {
+            @Override
+            public void onTakeCameraSelected() {
+                cameraIntent();
+            }
+
+            @Override
+            public void onChooseGallerySelected() {
+                showFileChooser();
+            }
+        });
+    }
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.dialog_permission_title));
+        builder.setMessage(getString(R.string.dialog_permission_message));
+        builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
+            dialog.cancel();
+            openSettings();
+        });
+        builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
+        builder.show();
+
+    }
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", Objects.requireNonNull(getActivity()).getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
     private void showFileChooser() {
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);*/
+        Intent intent = new Intent(getActivity(), ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_GALLERY_IMAGE);
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
+        startActivityForResult(intent, REQUEST_CAMERA);
     }
 
     private void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        startActivityForResult(intent, REQUEST_CAMERA);*/
+        Intent intent = new Intent(getActivity(), ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_IMAGE_CAPTURE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
+
+        // setting maximum bitmap width and height
+        intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000);
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000);
+
         startActivityForResult(intent, REQUEST_CAMERA);
 
     }
@@ -162,8 +247,20 @@ public class eStoreBannerLogoFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == REQUEST_CAMERA) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri filePath = data.getParcelableExtra("path");
+                try {
+                    // You can update this bitmap to your server
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                    uploadBanner(bitmap);
+                    bannerImageIs.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+       /* if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             filePath = data.getData();
             //fileSelctedPath = getPath(filePath);
@@ -175,9 +272,9 @@ public class eStoreBannerLogoFragment extends Fragment{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-           /* } else {
+           *//* } else {
                 Toast.makeText(getActivity(), "no image selected", Toast.LENGTH_LONG).show();
-            }*/
+            }*//*
 
         }
 
@@ -188,7 +285,7 @@ public class eStoreBannerLogoFragment extends Fragment{
             uploadBanner(bitmap);
             bannerImageIs.setImageBitmap(bitmap);
 
-        }
+        }*/
     }
 
     public String getPath(Uri uri) {

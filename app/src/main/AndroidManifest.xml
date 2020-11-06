@@ -38,8 +38,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.WebViewActivity"
+        <activity
+            android:name=".Activities.Used_Veh_Market_Place"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".Activities.ImagePickerActivity" />
+        <activity
+            android:name=".Activities.WebViewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activities.ViewParkOrders"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -109,6 +114,21 @@
             android:windowSoftInputMode="stateHidden" />
 
         <service android:name=".Utils.NewGPSTracker" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

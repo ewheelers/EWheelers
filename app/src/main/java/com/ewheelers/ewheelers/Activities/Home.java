@@ -207,10 +207,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-      /*  if (id == R.id.bussinessettings) {
-            Intent i = new Intent(getApplicationContext(), signup_two.class);
+        if (id == R.id.marketplace) {
+            Intent i = new Intent(getApplicationContext(),Used_Veh_Market_Place.class);
             startActivity(i);
-        }*/
+        }
         if (id == R.id.accountsettings) {
             Intent i = new Intent(getApplicationContext(), SetupAccount.class);
             startActivity(i);

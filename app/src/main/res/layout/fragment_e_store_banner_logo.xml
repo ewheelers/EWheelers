@@ -79,6 +79,7 @@
         <Button
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="@dimen/padding_10"
             android:layout_marginTop="24dp"
             android:id="@+id/uploadbanner"
             android:layout_width="150dp"
@@ -88,9 +89,9 @@
             android:textColor="@color/colorWhite"></Button>
 
         <ImageView
-            android:layout_marginTop="12dp"
+            android:layout_margin="12dp"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:id="@+id/banner_image"/>
 
     </LinearLayout>

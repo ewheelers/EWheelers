@@ -3,14 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-       <!-- <item
-            android:id="@+id/bussinessettings"
-            android:title="Bussiness Setttings"
-            android:icon="@android:drawable/btn_radio" />-->
         <item
             android:id="@+id/accountsettings"
-            android:title="Account Settings"
-            android:icon="@android:drawable/btn_radio" />
+            android:icon="@android:drawable/btn_radio"
+            android:title="Account Settings" />
         <item
             android:id="@+id/banksettings"
             android:icon="@android:drawable/btn_radio"
@@ -19,22 +15,25 @@
             android:id="@+id/estoresettings"
             android:icon="@android:drawable/btn_radio"
             android:title="eStore Settings" />
-
+        <item
+            android:id="@+id/marketplace"
+            android:icon="@android:drawable/btn_radio"
+            android:title="Used Vehicle Market place " />
         <item
             android:id="@+id/parkingaddress"
-            android:title="Parking Addresses"
-            android:icon="@android:drawable/btn_radio" />
+            android:icon="@android:drawable/btn_radio"
+            android:title="Parking Addresses" />
         <item
             android:id="@+id/chargingaddress"
-            android:title="Charging Addresses"
-            android:icon="@android:drawable/btn_radio" />
+            android:icon="@android:drawable/btn_radio"
+            android:title="Charging Addresses" />
         <item
             android:id="@+id/share"
-            android:title="Share"
-            android:icon="@android:drawable/btn_radio" />
+            android:icon="@android:drawable/btn_radio"
+            android:title="Share" />
         <item
             android:id="@+id/logout"
-            android:title="Log out"
-            android:icon="@drawable/logout" />
+            android:icon="@drawable/logout"
+            android:title="Log out" />
     </group>
 </menu>
