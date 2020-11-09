@@ -37,7 +37,7 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.Ho
     @NonNull
     @Override
     public HolderIs onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.attributes_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_of_buying_prods, parent, false);
         return new HolderIs(v);
     }
 

@@ -38,6 +38,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.load.engine.Resource;
 import com.ewheelers.ewheelers.Activities.ParkingHubDetailActivity;
+import com.ewheelers.ewheelers.Activities.Used_Veh_Market_Place;
 import com.ewheelers.ewheelers.Activities.WebViewActivity;
 import com.ewheelers.ewheelers.Activities.eStoreSettings;
 import com.ewheelers.ewheelers.Activities.signup_two;
@@ -113,6 +114,15 @@ public class HomeFragment extends Fragment {
         adBanner = v.findViewById(R.id.ad_banner);
         uploadBan = v.findViewById(R.id.upload_Banner);
         viewFlipper = v.findViewById(R.id.flipper);
+        veh_market = v.findViewById(R.id.vehmarketplace);
+        veh_market.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), Used_Veh_Market_Place.class);
+                startActivity(i);
+            }
+        });
+
         uploadBan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
