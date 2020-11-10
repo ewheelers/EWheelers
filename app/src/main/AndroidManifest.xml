@@ -38,9 +38,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Activities.DetailItemActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity
             android:name=".Activities.Used_Veh_Market_Place"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".Activities.ImagePickerActivity" />
         <activity
             android:name=".Activities.WebViewActivity"

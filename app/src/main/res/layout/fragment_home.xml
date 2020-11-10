@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_bgs"
             android:text="Used Vehicle Market Place"
-            android:layout_margin="12dp"/>
+            android:layout_margin="12dp" />
 
         <ViewFlipper
             android:id="@+id/flipper"

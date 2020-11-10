@@ -17,7 +17,7 @@
         android:elevation="10dp"
         android:gravity="center_vertical"
         android:padding="5dp"
-        android:weightSum="2.25">
+        android:weightSum="2.75">
 
         <ImageView
             android:id="@+id/menuicon"
@@ -47,6 +47,17 @@
             android:padding="5dp"
             android:text="Help"
             android:textColor="#000" />
+
+        <ToggleButton
+            style="@style/AppTheme.AppBarOverlay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:checked="true"
+            android:id="@+id/toggle_btn"/>
 
         <ImageView
             android:id="@+id/logout"
