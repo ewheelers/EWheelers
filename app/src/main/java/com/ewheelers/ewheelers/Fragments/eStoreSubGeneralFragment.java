@@ -103,11 +103,17 @@ public class eStoreSubGeneralFragment extends Fragment implements AdapterView.On
                     pincode.setTextColor(getResources().getColor(R.color.colorBlack));
                     mobileno.setEnabled(true);
                     mobileno.setTextColor(getResources().getColor(R.color.colorBlack));
+                    country_list.setEnabled(true);
+                    state_list.setEnabled(true);
+                    city_list.setEnabled(true);
                 }else {
                     pincode.setEnabled(false);
                     pincode.setTextColor(getResources().getColor(R.color.colorNavy));
                     mobileno.setEnabled(false);
                     mobileno.setTextColor(getResources().getColor(R.color.colorNavy));
+                    country_list.setEnabled(false);
+                    state_list.setEnabled(false);
+                    city_list.setEnabled(false);
                 }
             }
         });

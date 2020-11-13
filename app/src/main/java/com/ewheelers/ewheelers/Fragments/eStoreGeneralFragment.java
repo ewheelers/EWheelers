@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class eStoreGeneralFragment extends Fragment implements AdapterView.OnItemSelectedListener, TextWatcher {
     EditText identifier, shopuri, shopaddress, postalcode, mobileno, free_shippingon, maxradious, maxRent, latitude, longitude;
@@ -381,7 +382,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             getStatesNames(contryid, "", "");
                         } else {
                             shopid = jsonObj.getString("shop_id");
-                            SessionPreference.clearString(getActivity(), SessionPreference.shopid);
+                            SessionPreference.clearString(Objects.requireNonNull(getActivity()), SessionPreference.shopid);
                             SessionPreference.saveString(getActivity(), SessionPreference.shopid, shopid);
                             String shop_user_id = jsonObj.getString("shop_user_id");
                             String identy = jsonObj.getString("shop_identifier");

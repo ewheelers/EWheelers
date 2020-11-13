@@ -22,33 +22,14 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String token = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.tokenvalue);
-                String bank_state = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.bankstatus);
+                /*String bank_state = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.bankstatus);
                 String setupstate = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.accountsetup);
-                String setattributes = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.partnerattributes);
+                String setattributes = new SessionPreference().getStrings(SplashScreenActivity.this,SessionPreference.partnerattributes);*/
 
                 if(token!=null){
                     Intent i = new Intent(SplashScreenActivity.this, Home.class);
                     startActivity(i);
                     finish();
-                    /*if(setupstate!=null){
-                        Intent i = new Intent(SplashScreenActivity.this, UpdateAttributes.class);
-                        startActivity(i);
-                        finish();
-                    }
-                    else if(setattributes!=null){
-                        Intent i = new Intent(SplashScreenActivity.this, BankAccountDetails.class);
-                        startActivity(i);
-                        finish();
-                    }
-                    else if(bank_state!=null){
-                        Intent i = new Intent(SplashScreenActivity.this, Home.class);
-                        startActivity(i);
-                        finish();
-                    }else {
-                        Intent i = new Intent(SplashScreenActivity.this, SetupAccount.class);
-                        startActivity(i);
-                        finish();
-                    }*/
                 }else {
                     Intent i = new Intent(SplashScreenActivity.this, LoginScreenActivity.class);
                     startActivity(i);

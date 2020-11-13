@@ -34,6 +34,7 @@ import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,8 +60,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     Button reg;
-    TextView id_pass;
-    EditText reg_full_name, reg_user_name, reg_email, reg_mob, reg_pswd, reg_conf_pswd, reg_id;
+    TextView id_pass,terms;
+    EditText reg_full_name, reg_user_name, reg_email, reg_mob, reg_id;
+    TextInputEditText reg_pswd,reg_conf_pswd;
     String sname, suserName, smob, semail, spass, scpass, sid;
     String schec, snews;
 
@@ -87,7 +89,15 @@ public class UserRegistrationActivity extends AppCompatActivity {
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Registration...");
         progressDialog.setCancelable(false);
-
+        terms = findViewById(R.id.terms);
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),WebViewActivity.class);
+                i.putExtra("urlIs","https://ewheelers.in/terms-conditions");
+                startActivity(i);
+            }
+        });
         reg_full_name = findViewById(R.id.Reg_full_name);
         reg_user_name = findViewById(R.id.Reg_user_name);
         reg_email = findViewById(R.id.Reg_email);

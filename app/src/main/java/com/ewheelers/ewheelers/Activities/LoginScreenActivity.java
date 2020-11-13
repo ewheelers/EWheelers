@@ -30,6 +30,7 @@ import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginScreenActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText username, password;
+    EditText username;
+    TextInputEditText password;
     Button login;
     TextView create_accout;
     TextView forget_password;
@@ -54,6 +56,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     InputMethodManager imm;
     private String[] permissions = {"android.permission.FLASHLIGHT" , "com.google.android.providers.gsf.permission.READ_GSERVICES","android.permission.CAMERA","android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION","android.permission.CALL_PHONE","com.example.mapdemo.permission.MAPS_RECEIVE","android.permission.ACCESS_NETWORK_STATE","android.permission.READ_EXTERNAL_STORAGE","android.permission.WRITE_EXTERNAL_STORAGE","android.permission.INTERNET"};
     int requestCode = 200;
+    TextView tremsCond;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,15 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
         progressDialog.setTitle("Ewheelers");
         progressDialog.setMessage("Login...");
         progressDialog.setCancelable(false);
+        tremsCond = findViewById(R.id.terms);
+        tremsCond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),WebViewActivity.class);
+                i.putExtra("urlIs","https://ewheelers.in/terms-conditions");
+                startActivity(i);
+            }
+        });
         username = findViewById(R.id.username1);
         password = findViewById(R.id.password1);
         login = findViewById(R.id.login1);
