@@ -8,7 +8,7 @@ public class Attributes {
     private String productid;
     private String productname;
     private String producttype;
-    private JSONArray jsonarray;
+    //private JSONArray jsonarray;
     private String imageUrl;
     public Attributes(String productid, String productname, String producttype) {
         this.productid = productid;
@@ -16,9 +16,13 @@ public class Attributes {
         this.producttype = producttype;
     }
 
-    public Attributes(JSONArray jsonarray) {
-        this.jsonarray = jsonarray;
+    public Attributes(String productid) {
+        this.productid = productid;
     }
+
+   /* public Attributes(JSONArray jsonarray) {
+        this.jsonarray = jsonarray;
+    }*/
 
     public Attributes() {
 
@@ -32,13 +36,17 @@ public class Attributes {
         this.imageUrl = imageUrl;
     }
 
+/*
     public JSONArray getJsonarray() {
         return jsonarray;
     }
+*/
 
+/*
     public void setJsonarray(JSONArray jsonarray) {
         this.jsonarray = jsonarray;
     }
+*/
 
     public String getProductid() {
         return productid;

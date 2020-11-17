@@ -74,7 +74,6 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-
 public class eStoreBannerLogoFragment extends Fragment{
     Spinner language, displayfor;
     String tokenValue, lang_banner, lang_logo, displayForBanner;
@@ -538,6 +537,7 @@ public class eStoreBannerLogoFragment extends Fragment{
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
                 long imagename = System.currentTimeMillis();
+                Log.e("imagepart", String.valueOf(new DataPart(imagename + ".jpg", getFileDataFromDrawable(bitmap))));
                 params.put("file", new DataPart(imagename + ".jpg", getFileDataFromDrawable(bitmap)));
                 return params;
             }

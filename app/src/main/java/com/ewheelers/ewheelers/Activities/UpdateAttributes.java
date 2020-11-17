@@ -47,6 +47,7 @@ public class UpdateAttributes extends AppCompatActivity {
     RecyclerView recyclerView;
     AttributesAdapter attributesAdapter;
     List<Attributes> attributes = new ArrayList<>();
+    List<Attributes> optionIdsList=new ArrayList<>();
     String tokenvalue,attributes_list;
     private int mStatusCode = 0;
     ProgressDialog progressDialog;
@@ -79,10 +80,11 @@ public class UpdateAttributes extends AppCompatActivity {
                 setUpAccount(v);
             }
         });
-       // getProfile();
+        getProfile();
     }
 
     private void getProfile() {
+        optionIdsList.clear();
         final RequestQueue queue = Volley.newRequestQueue(this);
         String serverurl = API.getProfileinfo;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, serverurl, new com.android.volley.Response.Listener<String>() {
@@ -93,11 +95,22 @@ public class UpdateAttributes extends AppCompatActivity {
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
                     if (status.equals("1")) {
-                        /*JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        JSONObject jsonObject2 = jsonObject1.getJSONObject("sellerProfileAttributes");
-                        JSONObject jsonObject3 = jsonObject1.getJSONObject("selectedOptionsArr");*/
-                        //Toast.makeText(UpdateAttributes.this, "array: "+jsonArray, Toast.LENGTH_SHORT).show();
-                        //new AttributesAdapter(UpdateAttributes.this,jsonArray);
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        JSONArray jsonArray = jsonObject1.getJSONArray("selectedOptionsArr");
+                        if(jsonArray.length()!=0){
+                            for(int i=0;i<jsonArray.length();i++){
+                                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                                String optionIdIs = jsonObject2.getString("option_id");
+                                Attributes attributeList = new Attributes();
+                                attributeList.setProductid(optionIdIs);
+                                optionIdsList.add(attributeList);
+                            }
+                            /*Log.e("optionsList",optionIdsList.toString());
+                            new AttributesAdapter(UpdateAttributes.this,null,optionIdsList);*/
+
+                        }else {
+                            Toast.makeText(UpdateAttributes.this, "Not Selected yet", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -156,7 +169,7 @@ public class UpdateAttributes extends AppCompatActivity {
                         attributes.add(attributes1);
                     }
 
-                    attributesAdapter = new AttributesAdapter(UpdateAttributes.this,attributes);
+                    attributesAdapter = new AttributesAdapter(UpdateAttributes.this,attributes,optionIdsList);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UpdateAttributes.this,RecyclerView.VERTICAL,false);
                     recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.setAdapter(attributesAdapter);

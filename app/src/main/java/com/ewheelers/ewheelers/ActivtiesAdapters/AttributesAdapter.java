@@ -29,9 +29,12 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.Ho
     List<Attributes> attributesList;
     String id_is;
     List<String> strings = new ArrayList<>();
-    public AttributesAdapter(Context context, List<Attributes> attributesList) {
+    List<Attributes> optionsIds;
+    String id;
+    public AttributesAdapter(Context context, List<Attributes> attributesList,List<Attributes> optionsIds) {
         this.context = context;
         this.attributesList = attributesList;
+        this.optionsIds = optionsIds;
     }
 
     @NonNull
@@ -42,9 +45,16 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.Ho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HolderIs holder, final int position) {
+    public void onBindViewHolder(@NonNull HolderIs holder,int position) {
+        if (optionsIds!=null) {
+            for (int i = 0; i < optionsIds.size(); i++) {
+                id = optionsIds.get(i).getProductid();
+                if (attributesList.get(position).getProductid().equals(id)) {
+                    holder.checkBox.setChecked(true);
+                }
+            }
+        }
         holder.checkBox.setText(attributesList.get(position).getProductname());
-        //String id = attributesList.get(position).getProductid();
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

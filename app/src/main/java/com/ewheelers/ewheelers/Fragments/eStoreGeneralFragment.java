@@ -380,6 +380,19 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             progressDialog.dismiss();
                             //Toast.makeText(getActivity(), "ShopId not generated !", Toast.LENGTH_SHORT).show();
                             getStatesNames(contryid, "", "");
+                            if (str_identifier != null) {
+                                identifier.setText(str_identifier);
+                            }if (str_shopuri != null) {
+                                shopuri.setText(str_shopuri);
+                            }if (str_maxrad != null) {
+                                maxradious.setText(str_maxrad);
+                            }if (str_maxrent != null) {
+                                maxRent.setText(str_maxrent);
+                            }if (str_mobileno != null) {
+                                mobileno.setText(str_mobileno);
+                            }if (str_freeship != null) {
+                                free_shippingon.setText(str_freeship);
+                            }
                         } else {
                             shopid = jsonObj.getString("shop_id");
                             SessionPreference.clearString(Objects.requireNonNull(getActivity()), SessionPreference.shopid);
