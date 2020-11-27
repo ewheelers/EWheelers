@@ -78,7 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Brand"
+                android:text="City"
                 android:textColor="@color/colorBlack" />
 
             <TextView
@@ -120,10 +120,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Brand"
+                android:text="Pincode"
                 android:textColor="@color/colorBlack" />
 
             <TextView
+                android:maxLength="6"
                 android:id="@+id/pincode_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

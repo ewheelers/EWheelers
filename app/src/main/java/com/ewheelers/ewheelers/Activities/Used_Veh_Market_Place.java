@@ -38,7 +38,7 @@ public class Used_Veh_Market_Place extends AppCompatActivity {
     RecyclerView show_list;
     BuyListAdapter buyListAdapter;
     List<buyingList> buyListList = new ArrayList<>();
-    TextView empty_view;
+    TextView empty_view,back_pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,13 @@ public class Used_Veh_Market_Place extends AppCompatActivity {
         setContentView(R.layout.activity_used__veh__market__place);
         show_list = findViewById(R.id.buy_list);
         empty_view = findViewById(R.id.emptyview);
+        back_pressed = findViewById(R.id.vehIS);
+        back_pressed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         getExcelList();
     }
 

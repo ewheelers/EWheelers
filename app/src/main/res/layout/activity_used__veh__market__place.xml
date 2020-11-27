@@ -6,7 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Used_Veh_Market_Place">
 
+    <TextView
+        android:drawableLeft="@drawable/ic_keyboard_backspace_black_24dp"
+        android:drawablePadding="@dimen/padding_10"
+        android:id="@+id/vehIS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Used Vehicle Market Place"
+        android:padding="@dimen/padding_10"
+        android:textColor="@color/colorPrimary"
+        android:drawableStart="@drawable/ic_keyboard_backspace_black_24dp" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/vehIS"
         android:id="@+id/buy_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

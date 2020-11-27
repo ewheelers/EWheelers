@@ -295,7 +295,9 @@ public class UpdateAttributes extends AppCompatActivity {
                 data3.put("user_company", organisation);
                 data3.put("user_profile_info", profilebrief);
                 //data3.put("user_products_services", "");
-                data3.put("attribute_options", attributes_list);
+                if(attributes_list!=null) {
+                    data3.put("attribute_options", attributes_list);
+                }
                 return data3;
 
             }
