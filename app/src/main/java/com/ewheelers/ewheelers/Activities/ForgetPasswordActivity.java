@@ -1,8 +1,10 @@
 package com.ewheelers.ewheelers.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -102,11 +104,40 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             int getStatus = jsonObject.getInt("status");
                             String smsg = jsonObject.getString("msg");
                             if (getStatus != 0) {
-                                forget_email.setText("");
-                                Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
+                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(ForgetPasswordActivity.this);
+
+                                // Setting Dialog Title
+                                alertDialog.setTitle("Confirm ForgotPassword...");
+
+                                // Setting Dialog Message
+                                alertDialog.setMessage("Are you sure you want Send link to your mail?");
+
+                                // Setting Icon to Dialog
+                                alertDialog.setIcon(R.drawable.animatedtick);
+
+                                // Setting Positive "Yes" Button
+                                alertDialog.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int which) {
+
+                                        // Write your code here to invoke YES event
+                                        Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                                // Setting Negative "NO" Button
+                                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke NO event
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                // Showing Alert Message
+                                alertDialog.show();
+                                /*Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
                                 Intent i = new Intent(ForgetPasswordActivity.this, LoginScreenActivity.class);
-                                startActivity(i);
+                                startActivity(i);*/
                             } else {
                                 forget_email.setText("");
                                 Snackbar.make(v, smsg, Snackbar.LENGTH_LONG)

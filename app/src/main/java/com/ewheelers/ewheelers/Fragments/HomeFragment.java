@@ -39,6 +39,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.load.engine.Resource;
+import com.ewheelers.ewheelers.Activities.ClassifiedsActivity;
 import com.ewheelers.ewheelers.Activities.ParkingHubDetailActivity;
 import com.ewheelers.ewheelers.Activities.Used_Veh_Market_Place;
 import com.ewheelers.ewheelers.Activities.WebViewActivity;
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment {
     List<Attributes> attributesList = new ArrayList<>();
     String completedSales, inprocessSales, amount, creditEarnedToday, completedOrders, pendingOrders, refundedOrders, refundedAmount, cancelledOrders, cancelledAmount;
     ProgressDialog progresDialog;
-    NetworkImageView adBanner;
+    ImageView adBanner;
     ImageView logoViewImg;
     NetworkImageView imageViewTopBannner;
     TextView uploadBan, chargingManage, ebikesManage;
@@ -117,6 +118,13 @@ public class HomeFragment extends Fragment {
         uploadBan = v.findViewById(R.id.upload_Banner);
         viewFlipper = v.findViewById(R.id.flipper);
         veh_market = v.findViewById(R.id.vehmarketplace);
+        adBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), ClassifiedsActivity.class);
+                startActivity(i);
+            }
+        });
         veh_market.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,9 +207,9 @@ public class HomeFragment extends Fragment {
                                 imageLoaderBann.get(imageUrl, ImageLoader.getImageListener(adBanner, 0, 0));
                                 adBanner.setImageUrl(imageUrl, imageLoaderBann);*/
                             }
-                            for (int i = 0; i < topBannerImages.size(); i++) {
+                           /* for (int i = 0; i < topBannerImages.size(); i++) {
                                 setFlipperImage(topBannerImages.get(i));
-                            }
+                            }*/
                             JSONObject jsonObjectShopImages = jsonObject1.getJSONObject("shopImages");
                             if (jsonObjectShopImages.length() != 0) {
                                 String shopLogo = jsonObjectShopImages.getString("shop_logo");
