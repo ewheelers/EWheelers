@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ewheelers.ewheelers">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -37,8 +38,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppThemeMaterial"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.ClassifiedsActivity"></activity>
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup,android:usesCleartextTraffic">
+        <activity android:name=".Activities.ClassifiedsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity
             android:name=".Activities.DetailItemActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

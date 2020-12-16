@@ -21,6 +21,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ewheelers.ewheelers.ActivityModels.Attributes;
 import com.ewheelers.ewheelers.ActivityModels.ClassifiedModel;
+import com.ewheelers.ewheelers.ActivityModels.OrdersModel;
+import com.ewheelers.ewheelers.ActivtiesAdapters.BannerFliterAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.Classifieds_Adapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.DashBoardSettingsAdapter;
 import com.ewheelers.ewheelers.ActivtiesAdapters.HomeRecyclerAdapter;
@@ -45,7 +47,8 @@ import java.util.Map;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class ClassifiedsActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,filter_recy;
+    BannerFliterAdapter bannerFliterAdapter;
     String bannerUrl;
     Classifieds_Adapter classifieds_adapter;
     List<ClassifiedModel> classifiedModels = new ArrayList<>();
@@ -54,7 +57,24 @@ public class ClassifiedsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classifieds);
         recyclerView = findViewById(R.id.list_of_banners);
+        filter_recy = findViewById(R.id.filter_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),RecyclerView.HORIZONTAL,false);
+        bannerFliterAdapter = new BannerFliterAdapter(getApplicationContext(),filterData());
+        filter_recy.setAdapter(bannerFliterAdapter);
+        filter_recy.setLayoutManager(linearLayoutManager);
         getList();
+
+    }
+
+    private List<OrdersModel> filterData() {
+        List<OrdersModel> data = new ArrayList<>();
+        data.add(new OrdersModel("Dealership"));
+        data.add(new OrdersModel("EV Charging"));
+        data.add(new OrdersModel("EV Battery"));
+        data.add(new OrdersModel("Accessories"));
+        data.add(new OrdersModel("Spare Parts"));
+        data.add(new OrdersModel("Multi-Brand Dealerships"));
+        return data;
     }
 
     private void getList() {

@@ -19,6 +19,10 @@ public class OrdersModel {
         this.status = status;
     }
 
+    public OrdersModel(String productname) {
+        this.productname=productname;
+    }
+
     public String getOrderid() {
         return orderid;
     }
