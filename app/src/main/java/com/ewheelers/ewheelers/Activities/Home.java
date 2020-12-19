@@ -246,6 +246,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 //e.toString();
             }
         }
+        if(id==R.id.manage_prod){
+            Intent intents = new Intent(getApplicationContext(),ManageInventory.class);
+            startActivity(intents);
+        }
         if (id == R.id.parkingaddress) {
 
         }

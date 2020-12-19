@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:id="@+id/gen_detail"
+    android:layout_margin="@dimen/padding_10"
+    android:orientation="vertical">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="For Sale" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="For Rent" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable Test Drive" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="is Self Pickup (Sale)" />
+        </LinearLayout>
+    </HorizontalScrollView>
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Buy Only" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Book Only" />
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Both"/>
+    </RadioGroup>
+    <TextView
+        android:padding="@dimen/padding_10"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cost Price (\u20B9)*"/>
+    <EditText
+        android:layout_margin="@dimen/padding_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_10"
+        android:background="@drawable/grey_button"/>
+    <TextView
+        android:padding="@dimen/padding_10"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selling Price*"/>
+    <EditText
+        android:layout_margin="@dimen/padding_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_10"
+        android:background="@drawable/grey_button"/>
+    <TextView
+        android:padding="@dimen/padding_10"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Quantity*"/>
+    <EditText
+        android:layout_margin="@dimen/padding_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_10"
+        android:background="@drawable/grey_button"/>
+
+    <LinearLayout
+        android:layout_margin="@dimen/padding_10"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Changes"/>
+        <TextView
+            android:id="@+id/cancel_gen"
+            android:padding="@dimen/padding_10"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:background="@drawable/transperantborder"/>
+    </LinearLayout>
+
+</LinearLayout>

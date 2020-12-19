@@ -4,6 +4,10 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/manage_prod"
+            android:icon="@android:drawable/btn_radio"
+            android:title="Products" />
+        <item
             android:id="@+id/accountsettings"
             android:icon="@android:drawable/btn_radio"
             android:title="Account Settings" />
