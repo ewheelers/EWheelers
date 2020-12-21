@@ -144,6 +144,7 @@
                     android:text="Edit" />
 
                 <TextView
+                    android:id="@+id/clone"
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:drawableRight="@drawable/ic_clone"
@@ -172,6 +173,7 @@
                     android:text="Delete" />
 
                 <TextView
+                    android:id="@+id/add_spl_price"
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:drawableRight="@drawable/ic_rupee"
@@ -186,6 +188,7 @@
                     android:text="@string/add_special_price" />
 
                 <TextView
+                    android:id="@+id/add_vol_discount"
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:drawableRight="@drawable/ic_discount"
@@ -203,7 +206,6 @@
 
 
         <include layout="@layout/tabs_layout"/>
-
-
+        <include layout="@layout/clone_layout"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

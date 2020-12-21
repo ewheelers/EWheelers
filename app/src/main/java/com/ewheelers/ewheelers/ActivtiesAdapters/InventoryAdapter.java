@@ -1,34 +1,28 @@
 package com.ewheelers.ewheelers.ActivtiesAdapters;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTabHost;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import com.ewheelers.ewheelers.Activities.ManageInventory;
 import com.ewheelers.ewheelers.ActivityModels.InventoryModel;
-import com.ewheelers.ewheelers.Fragments.eStoreEnglishFragment;
-import com.ewheelers.ewheelers.Fragments.eStoreGeneralFragment;
 import com.ewheelers.ewheelers.R;
-import com.ewheelers.ewheelers.Utils.ProductViewPagerAdapter;
-import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
@@ -57,6 +51,10 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             @Override
             public void onClick(View v) {
                 holder.linearLayout.setVisibility(View.VISIBLE);
+                holder.cloneLayout.setVisibility(View.GONE);
+                holder.button_edit.setBackgroundResource(R.drawable.grey_color_bg);
+                holder.clonebtn.setBackgroundResource(R.drawable.grey_button);
+
             }
         });
         holder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -69,6 +67,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                         group.clearCheck();
                         holder.linearLayout.setVisibility(View.GONE);
                         holder.genLayout.setVisibility(View.GONE);
+                        holder.button_edit.setBackgroundResource(R.drawable.grey_button);
+                        holder.clonebtn.setBackgroundResource(R.drawable.grey_button);
                     }
                     if(rb.getText().toString().equals("General")){
                         holder.genLayout.setVisibility(View.VISIBLE);
@@ -102,6 +102,114 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
                 }
             }
         });
+        holder.clonebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.cloneLayout.setVisibility(View.VISIBLE);
+                holder.linearLayout.setVisibility(View.GONE);
+                holder.clonebtn.setBackgroundResource(R.drawable.grey_color_bg);
+                holder.button_edit.setBackgroundResource(R.drawable.grey_button);
+            }
+        });
+        holder.forSale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    holder.extraLayout.setVisibility(View.VISIBLE);
+                }else {
+                    holder.extraLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+        holder.forRent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                }
+            }
+        });
+       holder.textViewClose.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               holder.cloneLayout.setVisibility(View.GONE);
+               holder.clonebtn.setBackgroundResource(R.drawable.grey_button);
+           }
+       });
+       holder.addSplPrice.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openBottomSheet(v);
+           }
+       });
+       holder.addVolDis.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openBottomSheetVol(v);
+           }
+       });
+
+    }
+
+    private void openBottomSheetVol(View v) {
+        Context context=v.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View view = inflater.inflate (R.layout.vol_bottom_layout, null);
+        ImageButton imageButton = view.findViewById(R.id.close_btn);
+        RecyclerView recyclerView = view.findViewById(R.id.splPricelist);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,RecyclerView.VERTICAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        SplPriceAdapter splPriceAdapter = new SplPriceAdapter(context,getList());
+        recyclerView.setAdapter(splPriceAdapter);
+        final Dialog mBottomSheetDialog = new Dialog (context, R.style.Theme_MaterialComponents_BottomSheetDialog);
+        mBottomSheetDialog.setContentView (view);
+        mBottomSheetDialog.setCancelable (true);
+        mBottomSheetDialog.getWindow ().setLayout (LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow ().setGravity (Gravity.BOTTOM);
+        mBottomSheetDialog.show ();
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    private void openBottomSheet(View v) {
+        Context context=v.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View view = inflater.inflate (R.layout.bottom_sheet_layout, null);
+        ImageButton imageButton = view.findViewById(R.id.close_btn);
+        RecyclerView recyclerView = view.findViewById(R.id.splPricelist);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,RecyclerView.VERTICAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        SplPriceAdapter splPriceAdapter = new SplPriceAdapter(context,getList());
+        recyclerView.setAdapter(splPriceAdapter);
+        final Dialog mBottomSheetDialog = new Dialog (context, R.style.Theme_MaterialComponents_BottomSheetDialog);
+        mBottomSheetDialog.setContentView (view);
+        mBottomSheetDialog.setCancelable (true);
+        mBottomSheetDialog.getWindow ().setLayout (LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow ().setGravity (Gravity.BOTTOM);
+        mBottomSheetDialog.show ();
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    private List<InventoryModel> getList() {
+        List<InventoryModel> inventoryModels = new ArrayList<>();
+        inventoryModels.add(new InventoryModel("NEXZU Roasluck","2020-12-18","2020-12-22","\u20B9 90000.00"));
+        inventoryModels.add(new InventoryModel("NEXZU Roasluck","2020-12-18","2020-12-22","\u20B9 90000.00"));
+        inventoryModels.add(new InventoryModel("NEXZU Roasluck","2020-12-18","2020-12-22","\u20B9 90000.00"));
+        inventoryModels.add(new InventoryModel("NEXZU Roasluck","2020-12-18","2020-12-22","\u20B9 90000.00"));
+        inventoryModels.add(new InventoryModel("NEXZU Roasluck","2020-12-18","2020-12-22","\u20B9 90000.00"));
+
+        return inventoryModels;
     }
 
 
@@ -112,11 +220,22 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name,sel_Price,rent_qty,avail_qty;
-        TextView button_edit,cancelGen,cancelRen;
+        TextView button_edit,cancelGen,cancelRen,clonebtn,addSplPrice,addVolDis;
         RadioGroup radioGroup;
-        LinearLayout linearLayout,genLayout,renLayout;
+        TextView textViewClose;
+        LinearLayout linearLayout,genLayout,renLayout,cloneLayout,extraLayout;
+        CheckBox forSale,forRent;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            addVolDis = itemView.findViewById(R.id.add_vol_discount);
+            addSplPrice = itemView.findViewById(R.id.add_spl_price);
+            extraLayout = itemView.findViewById(R.id.for_sale_layout);
+            textViewClose = itemView.findViewById(R.id.closeBtn);
+            forSale = itemView.findViewById(R.id.for_sale);
+            forRent = itemView.findViewById(R.id.for_rent);
+            cloneLayout = itemView.findViewById(R.id.clone_layout);
+            clonebtn = itemView.findViewById(R.id.clone);
             cancelRen = itemView.findViewById(R.id.cancel_ren);
             cancelGen = itemView.findViewById(R.id.cancel_gen);
             name = itemView.findViewById(R.id.name);
