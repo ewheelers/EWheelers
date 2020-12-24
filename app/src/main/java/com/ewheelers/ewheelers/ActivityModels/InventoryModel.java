@@ -5,12 +5,25 @@ public class InventoryModel {
     private String sell_price;
     private String avail_qty;
     private String rental_qty;
+    private String statusOfprod;
 
     public InventoryModel(String name, String sell_price, String avail_qty, String rental_qty) {
         this.name = name;
         this.sell_price = sell_price;
         this.avail_qty = avail_qty;
         this.rental_qty = rental_qty;
+    }
+
+    public InventoryModel() {
+
+    }
+
+    public String getStatusOfprod() {
+        return statusOfprod;
+    }
+
+    public void setStatusOfprod(String statusOfprod) {
+        this.statusOfprod = statusOfprod;
     }
 
     public String getName() {

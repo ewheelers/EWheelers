@@ -9,13 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,9 +46,15 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.name.setText(inventoryModels.get(position).getName());
-        holder.sel_Price.setText(inventoryModels.get(position).getSell_price());
+        holder.sel_Price.setText("\u20B9 "+inventoryModels.get(position).getSell_price());
         holder.avail_qty.setText(inventoryModels.get(position).getAvail_qty());
         holder.rent_qty.setText(inventoryModels.get(position).getRental_qty());
+        String statusprod = inventoryModels.get(position).getStatusOfprod();
+        if(statusprod.equals("1")){
+            holder.toggleButton.setChecked(true);
+        }else {
+            holder.toggleButton.setChecked(false);
+        }
         holder.button_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +163,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         Context context=v.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View view = inflater.inflate (R.layout.vol_bottom_layout, null);
-        ImageButton imageButton = view.findViewById(R.id.close_btn);
+        ImageView imageButton = view.findViewById(R.id.close_btn);
         RecyclerView recyclerView = view.findViewById(R.id.splPricelist);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -180,7 +188,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         Context context=v.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View view = inflater.inflate (R.layout.bottom_sheet_layout, null);
-        ImageButton imageButton = view.findViewById(R.id.close_btn);
+        ImageView imageButton = view.findViewById(R.id.close_btn);
         RecyclerView recyclerView = view.findViewById(R.id.splPricelist);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -225,9 +233,10 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         TextView textViewClose;
         LinearLayout linearLayout,genLayout,renLayout,cloneLayout,extraLayout;
         CheckBox forSale,forRent;
-
+        SwitchCompat toggleButton;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            toggleButton = itemView.findViewById(R.id.toggle_btn);
             addVolDis = itemView.findViewById(R.id.add_vol_discount);
             addSplPrice = itemView.findViewById(R.id.add_spl_price);
             extraLayout = itemView.findViewById(R.id.for_sale_layout);

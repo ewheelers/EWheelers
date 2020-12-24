@@ -23,12 +23,17 @@
                 android:text="Status: "
                 android:textColor="@color/colorBlack" />
 
-            <ToggleButton
-                android:layout_width="100dp"
+            <androidx.appcompat.widget.SwitchCompat
+                android:checked="true"
+                android:id="@+id/toggle_btn"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginLeft="25dp"
+                app:track="@drawable/switch_layer"
+                android:thumb="@drawable/thumb_selector"
                 android:text="" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -129,10 +134,8 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:drawableRight="@drawable/edit_mode"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     android:id="@+id/edit"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="wrap_content"
@@ -145,10 +148,8 @@
 
                 <TextView
                     android:id="@+id/clone"
-                    android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:drawableRight="@drawable/ic_clone"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -159,10 +160,8 @@
                     android:text="Clone" />
 
                 <TextView
-                    android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:drawableRight="@drawable/ic_delete_black_24dp"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -174,10 +173,8 @@
 
                 <TextView
                     android:id="@+id/add_spl_price"
-                    android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:drawableRight="@drawable/ic_rupee"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -189,10 +186,8 @@
 
                 <TextView
                     android:id="@+id/add_vol_discount"
-                    android:drawablePadding="5dp"
                     android:gravity="center"
-                    android:drawableRight="@drawable/ic_discount"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

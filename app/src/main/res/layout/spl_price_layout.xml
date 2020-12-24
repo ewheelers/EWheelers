@@ -15,11 +15,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        android:textColor="@color/colorBlack"
         android:layout_width="0dp"
         android:layout_weight="0.5"
         android:layout_height="wrap_content"
         android:text="Name"/>
     <TextView
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -31,11 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="@color/colorBlack"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:text="Start Date"/>
         <TextView
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
             android:id="@+id/startDate"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -47,11 +53,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="@color/colorBlack"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:text="End Date"/>
         <TextView
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
             android:id="@+id/endDate"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -63,11 +72,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="@color/colorBlack"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:text="Special Price"/>
         <TextView
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
             android:id="@+id/splPrice"
             android:layout_width="0dp"
             android:layout_weight="1"
