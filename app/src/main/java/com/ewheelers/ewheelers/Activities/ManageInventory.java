@@ -49,7 +49,7 @@ import java.util.Map;
 
 import static android.view.View.GONE;
 
-public class ManageInventory extends AppCompatActivity implements TextWatcher {
+public class ManageInventory extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,TextWatcher {
     RecyclerView recyclerView;
     InventoryAdapter inventoryAdapter;
     InventoryModel inventoryModel;
@@ -72,6 +72,7 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
         swipeRefreshLayout = findViewById(R.id.swipelayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent, null));
         pagenumber = 1;
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         recyclerView = findViewById(R.id.list_of_prods);
         searchProd = findViewById(R.id.search_prod);
@@ -80,48 +81,55 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getList(searchProd.getText().toString(), pagenumber);
+                //inventoryModels.clear();
+                getList(searchProd.getText().toString(), 1,"1");
                 hideKeyboardFrom(getApplicationContext(), v);
             }
         });
-
-        getList(searchProd.getText().toString(), pagenumber);
+        //getList(searchProd.getText().toString(), pagenumber);
         if (inventoryModels != null) {
             inventoryAdapter = new InventoryAdapter(getApplicationContext(), inventoryModels);
             final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(inventoryAdapter);
-
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            swipeRefreshLayout.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //swipeRefreshLayout.setRefreshing(true);
+                                            pagenumber = 1;
+                                            loading = true;
+                                            //inventoryModels.clear();
+                                            getList(searchProd.getText().toString(), pagenumber,"1");
+                                        }
+                                    }
+            );
+           /* swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     pagenumber = 1;
                     loading = true;
                     getList(searchProd.getText().toString(), pagenumber);
                 }
-            });
+            });*/
 
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if(dy > 0)
-                    {
+                    if (dy > 0) {
                         visibleitemcount = layoutManager.getChildCount();
                         totalitemcount = layoutManager.getItemCount();
                         pastvisibleitems = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
 
 //if loading is true which means there is data to be fetched from the database
 
-                        if(loading)
-                        {
-                            if((visibleitemcount + pastvisibleitems) >= totalitemcount)
-                            {
+                        if (loading) {
+                            if ((visibleitemcount + pastvisibleitems) >= totalitemcount) {
                                 progressBar.setVisibility(View.VISIBLE);
-                                swipeRefreshLayout.setRefreshing(true);
+                                //swipeRefreshLayout.setRefreshing(true);
                                 loading = false;
                                 pagenumber += 1;
-                                getList(searchProd.getText().toString(),pagenumber);
+                                getList(searchProd.getText().toString(), pagenumber,"0");
                             }
                         }
                     }
@@ -131,14 +139,16 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
     }
 
 
-    public void getList(String s, int pagenumer) {
-        //inventoryModels.clear();
-        swipeRefreshLayout.setRefreshing(false);
+    public void getList(String s, int pagenumer,String clean) {
+        swipeRefreshLayout.setRefreshing(true);
         final RequestQueue queue = Volley.newRequestQueue(ManageInventory.this);
         String serverurl = API.sellerProducts;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, serverurl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                if(clean.equals("1")){
+                    inventoryModels.clear();
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
@@ -148,7 +158,9 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
                         JSONObject jsonData = jsonObject.getJSONObject("data");
                         JSONArray jsonArray = jsonData.getJSONArray("arrListing");
                         if (jsonArray.length() == 0) {
-
+                            loading = false;
+                            swipeRefreshLayout.setRefreshing(false);
+                            pagenumber = 0;
                         } else {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonListObj = jsonArray.getJSONObject(i);
@@ -170,12 +182,19 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
                             inventoryAdapter = new InventoryAdapter(getApplicationContext(), inventoryModels);
                             recyclerView.setAdapter(inventoryAdapter);
                             inventoryAdapter.notifyDataSetChanged();*/
-                            if (!inventoryModels.isEmpty()) {
-                                loading = true;
-                                swipeRefreshLayout.setRefreshing(false);
+                            if (s.isEmpty()) {
+                                if (!inventoryModels.isEmpty()) {
+                                    loading = true;
+                                    swipeRefreshLayout.setRefreshing(false);
+                                    //Toast.makeText(ManageInventory.this, "size:" + inventoryModels.size(), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "no more data available...", Toast.LENGTH_LONG).show();
+                                }
                             } else {
-                                Toast.makeText(getApplicationContext(), "no more data available...", Toast.LENGTH_LONG).show();
+                                loading = false;
+                                swipeRefreshLayout.setRefreshing(false);
                             }
+
                         }
 
                     } else {
@@ -208,9 +227,12 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> data3 = new HashMap<String, String>();
-                if (!s.isEmpty() || s != null) {
+                /*if (!s.isEmpty() || s != null) {
                     data3.put("keyword", s);
-                }
+                }else {
+                    data3.put("keyword", "");
+                }*/
+                data3.put("keyword", s);
                 data3.put("page", String.valueOf(pagenumer));
                 data3.put("pageCount", String.valueOf(itemcount));
                 return data3;
@@ -231,9 +253,14 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (count == 0) {
-            getList("", pagenumber);
+        s = s.toString();
+        if(s.equals(searchProd.getEditableText().toString())){
+            if(s.length()==0){
+                //inventoryModels.clear();
+                getList(searchProd.getText().toString(),1,"1");
+            }
         }
+
     }
 
     @Override
@@ -244,5 +271,11 @@ public class ManageInventory extends AppCompatActivity implements TextWatcher {
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onRefresh() {
+        //inventoryModels.clear();
+        getList(searchProd.getText().toString(), 1,"1");
     }
 }
