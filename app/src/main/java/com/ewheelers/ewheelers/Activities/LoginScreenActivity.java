@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     private String[] permissions = {"android.permission.FLASHLIGHT" , "com.google.android.providers.gsf.permission.READ_GSERVICES","android.permission.CAMERA","android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION","android.permission.CALL_PHONE","com.example.mapdemo.permission.MAPS_RECEIVE","android.permission.ACCESS_NETWORK_STATE","android.permission.READ_EXTERNAL_STORAGE","android.permission.WRITE_EXTERNAL_STORAGE","android.permission.INTERNET"};
     int requestCode = 200;
     TextView tremsCond;
+    LinearLayout passwordLayout,otpLayout;
+    TextView passwordLoginTV,otpLoginTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,10 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
         create_accout = findViewById(R.id.createNewAccout);
         forget_password = findViewById(R.id.forget_password);
 
+        otpLoginTV = findViewById(R.id.otpLoginTV);
+        passwordLoginTV = findViewById(R.id.passwordLoginTV);
+        passwordLayout = findViewById(R.id.passwordLayout);
+        otpLayout = findViewById(R.id.otpLayout);
 
         sharedPreferences = getApplicationContext().getSharedPreferences("pref", MODE_PRIVATE);
 
@@ -163,6 +170,18 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
                 Intent j = new Intent(getApplicationContext(), UserRegistrationActivity.class);
                 startActivity(j);
                 break;
+            case R.id.passwordLoginTV:
+                passwordLoginTV.setTextColor(getColor(R.color.colorPrimary));
+                otpLoginTV.setTextColor(getColor(R.color.gray_btn_bg_color));
+                passwordLayout.setVisibility(View.VISIBLE);
+                otpLayout.setVisibility(View.GONE);
+                break;
+            case R.id.otpLoginTV:
+                otpLoginTV.setTextColor(getColor(R.color.colorPrimary));
+                passwordLoginTV.setTextColor(getColor(R.color.gray_btn_bg_color));
+                otpLayout.setVisibility(View.VISIBLE);
+                passwordLayout.setVisibility(View.GONE);
+
         }
     }
 

@@ -2,6 +2,7 @@ package com.ewheelers.ewheelers.Network;
 
 public class API {
     public static String Login_post = "https://www.ewheelers.in/app-api/2.0/guest-user/login"; //1
+
     public static String register2 ="https://www.ewheelers.in/app-api/2.0/supplier/register"; //2
     public static String businesssetup = "https://www.ewheelers.in/app-api/2.0/supplier/setupSupplierApproval"; //3
     public  static String countries ="https://www.ewheelers.in/app-api/2.0/home/countries"; //4
@@ -33,5 +34,6 @@ public class API {
     public static String get_aproval_form = "https://ewheelers.in/app-api/2.0/account/supplierApprovalForm"; //26
 
     public  static String orderslist ="https://www.ewheelers.in/mobile-app-api/member/seller_orders";
-
+    public static String resendotp = "https://www.ewheelers.in/app-api/2.0/guest-user/resend-otp/";
+    public static String validateOtp = "https://www.ewheelers.in/app-api/2.0/guest-user/validate-otp";
 }
