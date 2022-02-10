@@ -274,6 +274,7 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onResponse(String response) {
                 try {
+                    Log.d("Response...",response.toString());
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
@@ -338,6 +339,7 @@ public class SetupAccount extends AppCompatActivity implements AdapterView.OnIte
         };
         // Add the realibility on the connection.
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1.0f));
+        Log.e("Request...",stringRequest.toString());
         queue.add(stringRequest);
 
     }

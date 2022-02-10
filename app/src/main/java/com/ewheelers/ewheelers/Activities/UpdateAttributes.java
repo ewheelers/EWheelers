@@ -143,6 +143,7 @@ public class UpdateAttributes extends AppCompatActivity {
         };
         // Add the realibility on the connection.
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1.0f));
+        Log.e("Request...",stringRequest.toString());
         queue.add(stringRequest);
 
     }
@@ -211,6 +212,7 @@ public class UpdateAttributes extends AppCompatActivity {
 
         };
         // Add the realibility on the connection.
+        Log.e("Request...",stringRequest.toString());
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1.0f));
         queue.add(stringRequest);
 
@@ -298,11 +300,12 @@ public class UpdateAttributes extends AppCompatActivity {
                 if(attributes_list!=null) {
                     data3.put("attribute_options", attributes_list);
                 }
+                Log.e("postData...",data3.toString());
                 return data3;
 
             }
         };
-
+        Log.e("Request...",strRequest.toString());
         queue.add(strRequest);
 
     }

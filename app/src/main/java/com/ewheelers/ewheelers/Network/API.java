@@ -36,4 +36,5 @@ public class API {
     public  static String orderslist ="https://www.ewheelers.in/mobile-app-api/member/seller_orders";
     public static String resendotp = "https://www.ewheelers.in/app-api/2.0/guest-user/resend-otp/";
     public static String validateOtp = "https://www.ewheelers.in/app-api/2.0/guest-user/validate-otp";
+    public static String sendloginOtp = "https://www.ewheelers.in/app-api/2.0/guest-user/send-login-otp";
 }

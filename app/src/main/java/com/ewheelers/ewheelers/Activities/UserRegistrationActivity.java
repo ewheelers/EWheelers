@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,6 +99,10 @@ public class UserRegistrationActivity extends AppCompatActivity {
             Intent i = new Intent(this,signup_two.class);
             startActivity(i);
         }*/
+        pDialog = new KAlertDialog(UserRegistrationActivity.this, KAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
 
         progressDialog = new ProgressDialog(UserRegistrationActivity.this);
         progressDialog.setTitle("Ewheelers");
@@ -296,7 +301,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 data3.put("user_phone", reg_mob.getText().toString().trim());
                 data3.put("user_dial_code", "+91");
                 data3.put("user_country_iso", "in");
-                data3.put("sendOtpOn", "2");
+                data3.put("sendOtpOn", "3");
                 return data3;
             }
         };
@@ -340,7 +345,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             int getStatus = Integer.parseInt(jsonObject.getString("status"));
                             String smsg = jsonObject.getString("msg");
                             if (getStatus != 0) {
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(UserRegistrationActivity.this);
+                                otpDialog(v,"otp has been sent to your registered mobile number",""+user_id);
+                                /*final AlertDialog.Builder builder = new AlertDialog.Builder(UserRegistrationActivity.this);
                                 builder.create();
                                 builder.setIcon(R.drawable.partnerlogo);
                                 builder.setTitle("Successfully Registered");
@@ -355,7 +361,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                         dialog.cancel();
                                     }
                                 });
-                                builder.show();
+                                builder.show();*/
                                 //Snackbar.make(v, smsg, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                /* finish();
                                 drawer.openDrawer(Gravity.LEFT);*/
@@ -409,7 +415,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     }
 
-    private void otpDialog(View v,String msg){
+    private void otpDialog(View v,String msg,String userID){
         ViewGroup viewGroup = v.findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(UserRegistrationActivity.this).inflate(R.layout.success_layout, viewGroup, false);
         TextView textView = dialogView.findViewById(R.id.message);
@@ -448,7 +454,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 countDown.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        resendOTP(v,countDown,usedId);
+                        resendOTP(v,countDown,userID);
                         //singWithLoginOTP(v,true);
                     }
                 });
@@ -482,7 +488,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (first != -100 && second != -100 && third != -100 && fourth != -100){
-
+                    String resultingOtp = et1.getText().toString().trim()+et2.getText().toString().trim()+et3.getText().toString().trim()+et4.getText().toString().trim();
+                    otpValidation(alertDialog,v,userID,resultingOtp,""+3);
 //                    signInBuyer(v, firetoken,true,resultingOtp,alertDialog);
 
                 }else{
@@ -497,6 +504,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         });
 
     }
+
     public class GenericTextWatcher implements TextWatcher {
         private View view;
 
@@ -651,7 +659,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
     private void otpValidation(androidx.appcompat.app.AlertDialog alertDialog, View v, String userId, String otpStr, String otpSelect) {
-        pDialog.show();
+        if(pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
         RequestQueue queue = Volley.newRequestQueue(UserRegistrationActivity.this);
         String url = API.validateOtp;
         StringRequest strRequest = new StringRequest(Request.Method.POST, url,
@@ -663,7 +673,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                 JSONObject jsonObject2 = new JSONObject(response);
                                 int getStatus = Integer.parseInt(jsonObject2.getString("status"));
                                 if (getStatus != 0) {
-                                    pDialog.dismiss();
+                                    if (pDialog != null && pDialog.isShowing()){
+                                        pDialog.dismiss();
+                                    }
                                     String smsg = jsonObject2.getString("msg");
                                     Toast.makeText(UserRegistrationActivity.this, smsg, Toast.LENGTH_SHORT).show();
                                     alertDialog.dismiss();
@@ -681,12 +693,16 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                     startActivity(intent);
                                     UserRegistrationActivity.this.finish();
                                 }else {
-                                    pDialog.dismiss();
+                                    if (pDialog != null && pDialog.isShowing()) {
+                                        pDialog.dismiss();
+                                    }
                                     String smsg = jsonObject2.getString("msg");
                                     showfailedDialog(UserRegistrationActivity.this, v, smsg);
                                 }
                             } else {
-                                pDialog.dismiss();
+                                if (pDialog != null && pDialog.isShowing()) {
+                                    pDialog.dismiss();
+                                }
                                 //sign_up.setVisibility(View.VISIBLE);
                                 showfailedDialog(UserRegistrationActivity.this, v, response);
                             }
@@ -698,7 +714,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        pDialog.dismiss();
+                        if (pDialog != null && pDialog.isShowing()) {
+                            pDialog.dismiss();
+                        }
                         //sign_up.setVisibility(View.VISIBLE);
                         Toast.makeText(UserRegistrationActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }

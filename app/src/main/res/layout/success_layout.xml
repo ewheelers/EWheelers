@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/colorGreen">
+        android:background="@color/colorPrimary">
 
         <ImageView
             android:layout_width="50dp"
@@ -112,7 +112,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_gravity="center_horizontal" />
 
         <Button
             android:visibility="visible"
@@ -123,7 +124,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/button_bg_transperent"
             android:text="Verify to Login"
-            android:textColor="@color/colorGreen" />
+            android:textColor="@color/colorPrimary" />
 
     </LinearLayout>
 
