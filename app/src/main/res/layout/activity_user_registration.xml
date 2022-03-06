@@ -42,7 +42,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Name"
+            android:text="Name*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -66,7 +66,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Last Name"
+            android:text="Last Name*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -90,7 +90,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="User Name"
+            android:text="User Name*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -114,7 +114,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Email Id"
+            android:text="Email Id*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -154,7 +154,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Password"
+            android:text="Password*"
             android:textColor="#992b1e"
             android:textStyle="normal"
             android:visibility="gone"/>
@@ -185,7 +185,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Repeat Password"
+            android:text="Repeat Password*"
             android:textColor="#992b1e"
             android:visibility="gone"
             android:textStyle="normal" />
@@ -230,7 +230,7 @@
                 android:id="@+id/terms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Terms and Conditions"
+                android:text=" Terms and Conditions*"
                 android:textColor="@color/colorHeadings"></TextView>
         </LinearLayout>
 

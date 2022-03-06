@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -34,12 +35,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ewheelers.ewheelers.Activities.Home;
 import com.ewheelers.ewheelers.Activities.MapsActivity;
 import com.ewheelers.ewheelers.ActivityModels.Stateslist;
 import com.ewheelers.ewheelers.Network.API;
+import com.ewheelers.ewheelers.Network.APIClient;
+import com.ewheelers.ewheelers.Network.Model.Response.UpdateShopResponse;
+import com.ewheelers.ewheelers.Network.Model.ShopPostData;
+import com.ewheelers.ewheelers.Network.RestAPI;
+import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.NewGPSTracker;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
@@ -55,6 +62,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class eStoreGeneralFragment extends Fragment implements AdapterView.OnItemSelectedListener, TextWatcher {
     EditText identifier, shopuri, shopaddress, postalcode, mobileno, free_shippingon, maxradious, maxRent, latitude, longitude;
@@ -80,7 +90,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
     String lat, longi, shopaddre, zipcode, u_latitude, u_longitude;
     Switch edit_mode;
     String str_identifier, str_shopuri, str_mobileno, str_freeship, str_maxrad, str_maxrent;
-
+    CheckBox doorTodoorService;
     public eStoreGeneralFragment() {
         // Required empty public constructor
     }
@@ -122,6 +132,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
         save_changes = v.findViewById(R.id.next_three);
         mainlayout = v.findViewById(R.id.main_layout);
         country_list.setOnItemSelectedListener(this);
+        doorTodoorService = v.findViewById(R.id.doorTodoorService);
         //state_list.setOnItemSelectedListener(this);
         country_list.setEnabled(false);
         state_list.setEnabled(false);
@@ -370,6 +381,7 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void onResponse(String response) {
                 try {
+                    Log.d("response..",response);
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
@@ -465,6 +477,12 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
                             String contrid = jsonObj.getString("shop_country_id");
                             String statid = jsonObj.getString("shop_state_id");
                             String cityid = jsonObj.getString("shop_city_id");
+                            if(jsonObj.getInt("shop_isDoorToDoor") == 0){
+                                doorTodoorService.setChecked(false);
+                            }else{
+                                doorTodoorService.setChecked(true);
+                            }
+
                             getStatesNames(contrid, statid, cityid);
                             progressDialog.dismiss();
                         }
@@ -713,84 +731,83 @@ public class eStoreGeneralFragment extends Fragment implements AdapterView.OnIte
     }
 
     private void saveChanges() {
-        //Toast.makeText(getActivity(), "ids : "+contryid+stateid+cityid, Toast.LENGTH_SHORT).show();
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        final String url = API.setupShop;
         progressDialog.show();
-        StringRequest strRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String getStatus = jsonObject.getString("status");
-                            String smsg = jsonObject.getString("msg");
-                            if (getStatus.equals("1")) {
-                                progressDialog.dismiss();
-                                JSONObject jsonObjectData = jsonObject.getJSONObject("data");
-                                String shopidIS = jsonObjectData.getString("shopId");
-                                String langidIs = jsonObjectData.getString("langId");
-                                Snackbar.make(mainlayout, smsg, Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
-                            } else {
-                                progressDialog.dismiss();
-                                Snackbar.make(mainlayout, smsg, Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+        RestAPI.SetupShop service = APIClient.getClient().create(RestAPI.SetupShop.class);
+        Call<UpdateShopResponse> call = service.call(getParams(),tokenValue);
+        call.enqueue(new Callback<UpdateShopResponse>() {
+            @Override
+            public void onResponse(Call<UpdateShopResponse> call, retrofit2.Response<UpdateShopResponse> response) {
+                try {
+                    if (response.body().getStatus().equals("1")) {
                         progressDialog.dismiss();
-                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                        String shopidIS = response.body().getData().getShopId();
+                        String langidIs = response.body().getData().getLangId();
+                        Snackbar.make(mainlayout, response.body().getMsg(), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+                        progressDialog.dismiss();
+                        Snackbar.make(mainlayout, response.body().getMsg(), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }
-                }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("X-TOKEN", tokenValue);
-                return params;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
             @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> data3 = new HashMap<String, String>();
-                data3.put("shop_identifier", identifier.getText().toString());
-                data3.put("urlrewrite_custom", shopuri.getText().toString());
-                data3.put("shop_auto_complete", shopaddress.getText().toString());
-                data3.put("shop_postalcode", postalcode.getText().toString());
-                data3.put("shop_phone", mobileno.getText().toString());
-                data3.put("shop_country_id", contryid);
-                data3.put("shop_state", stateid);
-                data3.put("shop_city_id", cityid);
-                if (sdisp.equals("On")) {
-                    data3.put("shop_supplier_display_status", "0");
-                } else {
-                    data3.put("shop_supplier_display_status", "1");
-                }
-                data3.put("shop_free_ship_upto", free_shippingon.getText().toString());
-                data3.put("shop_max_sell_radius", maxradious.getText().toString());
-                data3.put("shop_max_rent_radius", maxRent.getText().toString());
-                data3.put("shop_latitude", latitude.getText().toString());
-                data3.put("shop_longitude", longitude.getText().toString());
-                if (shopid == null) {
-                    data3.put("shop_id", "");
-                } else {
-                    data3.put("shop_id", shopid);
-                }
-                return data3;
-
+            public void onFailure(Call<UpdateShopResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(), t.getLocalizedMessage().toString(), Toast.LENGTH_SHORT).show();
             }
-        };
+        });
 
-        queue.add(strRequest);
 
     }
+
+    private Map<String, String> getParams() {
+        String shop_identifier = identifier.getText().toString();
+        String shopUri_ = shopuri.getText().toString();
+        String  shop_adress = shopaddress.getText().toString();
+        String postalCode = postalcode.getText().toString();
+        String phoneNumber = mobileno.getText().toString();
+        String freeShippintone = free_shippingon.getText().toString();
+        String maxTraRadius  = maxradious.getText().toString();
+        String maxRent_ = maxRent.getText().toString();
+        String latString = latitude.getText().toString();
+        String longString = longitude.getText().toString();
+        Map<String, String> data3 = new HashMap<String, String>();
+        data3.put("shop_identifier", shop_identifier);
+        data3.put("urlrewrite_custom", shopUri_);
+        data3.put("shop_auto_complete", shop_adress);
+        data3.put("shop_postalcode", postalCode);
+        data3.put("shop_phone", phoneNumber);
+        data3.put("shop_country_id", contryid);
+        data3.put("shop_state", stateid);
+        data3.put("shop_city_id", cityid);
+        if (sdisp.equals("On")) {
+            data3.put("shop_supplier_display_status", "0");
+        } else {
+            data3.put("shop_supplier_display_status", "1");
+        }
+        data3.put("shop_free_ship_upto", freeShippintone);
+        data3.put("shop_max_sell_radius", maxTraRadius);
+        data3.put("shop_max_rent_radius", maxRent_);
+        data3.put("shop_latitude", latString);
+        data3.put("shop_longitude", longString);
+        if(doorTodoorService.isChecked()){
+            data3.put("shop_isDoorToDoor","1");
+        }else{
+            data3.put("shop_isDoorToDoor","0");
+        }
+
+        if (shopid == null) {
+            data3.put("shop_id", "");
+        } else {
+            data3.put("shop_id", shopid);
+        }
+        Log.d("Data...",data3.toString());
+        return data3;
+    };
 
 }

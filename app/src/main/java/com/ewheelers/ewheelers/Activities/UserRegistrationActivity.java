@@ -1,5 +1,7 @@
 package com.ewheelers.ewheelers.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -8,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -16,6 +19,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -39,9 +43,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ewheelers.ewheelers.Activities.SmsIntegration.SmsBroadcastReceiver;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kinda.alert.KAlertDialog;
@@ -79,7 +88,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
     EditText business_name, person_name, lastname, mobile_no, address_one, address_two, city, state, pincode;
     String userid;
-
+    private static final int REQ_USER_CONSENT = 999;
     ProgressDialog progressDialog;
     private InputMethodManager imm;
     private int first = -100, second = -100, third = -100, fourth = -100;
@@ -87,6 +96,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
     androidx.appcompat.app.AlertDialog dismissDailog;
     View listenerView;
     KAlertDialog pDialog;
+    int user_id;
+    SmsBroadcastReceiver smsBroadcastReceiver;
     //String userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +150,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         state = findViewById(R.id.state);
         pincode = findViewById(R.id.pincode);
 
-
+        startSmsUserConsent();
         checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -158,6 +169,17 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         snackbar.show();
                         //Toast.makeText(UserRegistrationActivity.this, "Leaved Empty Field", Toast.LENGTH_SHORT).show();
                         checkBox1.setChecked(false);
+                        if(TextUtils.isEmpty(reg_full_name.getText())){
+                            reg_full_name.setError("Full name is required!");
+                        }else if(TextUtils.isEmpty(reg_user_name.getText())){
+                            reg_user_name.setError("User name is required!");
+                        }else if(TextUtils.isEmpty(reg_email.getText())){
+                            reg_email.setError("Email is required!");
+                        }else if(TextUtils.isEmpty(reg_pswd.getText())){
+                            reg_pswd.setError("Password is required!");
+                        }else if(TextUtils.isEmpty(reg_conf_pswd.getText())){
+                            reg_conf_pswd.setError("Confirm Password is required!");
+                        }
                     } else if (mobileno.length() < 10) {
                         reg_mob.setError("Enter 10 digit mobile number");
                         checkBox1.setChecked(false);
@@ -203,14 +225,86 @@ public class UserRegistrationActivity extends AppCompatActivity {
         });
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerBroadcastReceiver();
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(smsBroadcastReceiver);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_USER_CONSENT) {
+            if ((resultCode == RESULT_OK) && (data != null)) {
+                //That gives all message to us.
+                // We need to get the code from inside with regex
+                String message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE);
+                getOtpFromMessage(message);
+            }
+        }
+    }
+    private void registerBroadcastReceiver() {
+        smsBroadcastReceiver = new SmsBroadcastReceiver();
+        smsBroadcastReceiver.smsBroadcastReceiverListener =
+                new SmsBroadcastReceiver.SmsBroadcastReceiverListener() {
+                    @Override
+                    public void onSuccess(Intent intent) {
+                        startActivityForResult(intent, REQ_USER_CONSENT);
+                    }
+                    @Override
+                    public void onFailure() {
+                    }
+                };
+        IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
+        registerReceiver(smsBroadcastReceiver, intentFilter);
+    }
+    private void getOtpFromMessage(String message) {
+        try{
+            boolean b = message.contains("eWheelers.in");
+            String messageText = message.replaceAll("[^0-9]", "");   // contains otp
+            if (b == true) {
+                Log.d("isFrom...", "OTPSignin");
+                if ( messageText.length() == 4) {
+                    et1.setText(String.valueOf(messageText.charAt(0)));
+                    et2.setText(String.valueOf(messageText.charAt(1)));
+                    et3.setText(String.valueOf(messageText.charAt(2)));
+                    et4.setText(String.valueOf(messageText.charAt(3)));
+                    otpValidation(dismissDailog,listenerView,""+user_id,messageText,""+3);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
-
+    private void startSmsUserConsent() {
+        SmsRetrieverClient client = SmsRetriever.getClient(this);
+        //We can add sender phone number or leave it blank
+        // I'm adding null here
+        client.startSmsUserConsent(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
+    }
 
     private void custom(final View v, final String businessname, final String personname, final String mobileno) {
         try {
@@ -237,7 +331,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                 String getStatus = jsonObject.getString("status");
                                 String smsg = jsonObject.getString("msg");
                                 if (getStatus.equals("1")) {
-                                    int user_id = jsonObject.getInt("user_id");
+                                     user_id = jsonObject.getInt("user_id");
                                     SessionPreference.saveString(UserRegistrationActivity.this, SessionPreference.userid, String.valueOf(user_id));
                                /* Intent i = new Intent(getApplicationContext(),signup_two.class);
                                 startActivity(i);

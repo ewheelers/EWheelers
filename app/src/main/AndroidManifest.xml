@@ -127,7 +127,6 @@
             android:windowSoftInputMode="stateHidden" />
 
         <service android:name=".Utils.NewGPSTracker" />
-
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

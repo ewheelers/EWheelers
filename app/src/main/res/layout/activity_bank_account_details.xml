@@ -61,7 +61,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Bannk Name"
+            android:text="Bank Name*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -86,7 +86,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Account Holder Name"
+            android:text="Account Holder Name*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -112,7 +112,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Account Number"
+            android:text="Account Number*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
@@ -139,7 +139,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="IFSC Code"
+            android:text="IFSC Code*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 

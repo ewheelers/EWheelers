@@ -48,7 +48,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Identifier"
+                android:text="Identifier*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -72,7 +72,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Shop SEO Friendly URL"
+                android:text="Shop SEO Friendly URL*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -145,7 +145,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Max Radius For Sell"
+                android:text="Max Radius For Sell*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -169,7 +169,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Max Radius For Rent"
+                android:text="Max Radius For Rent*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -205,7 +205,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Shop Address"
+                android:text="Shop Address*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -221,7 +221,11 @@
                 android:enabled="false"
                 android:textColor="@color/colorNavy"
                 android:singleLine="true"></EditText>
-
+            <CheckBox
+                android:id="@+id/doorTodoorService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Door to Door Service"></CheckBox>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -244,7 +248,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Country"
+                android:text="Country*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -259,7 +263,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="State"
+                android:text="State*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -275,7 +279,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="City"
+                android:text="City*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -319,7 +323,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Latitude"
+                android:text="Latitude*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 
@@ -343,7 +347,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Longitude"
+                android:text="Longitude*"
                 android:textColor="#992b1e"
                 android:textStyle="normal" />
 

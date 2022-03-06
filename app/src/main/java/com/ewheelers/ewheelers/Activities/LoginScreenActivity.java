@@ -1,5 +1,7 @@
 package com.ewheelers.ewheelers.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,11 +39,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.ewheelers.ewheelers.Activities.SmsIntegration.SmsBroadcastReceiver;
 import com.ewheelers.ewheelers.Network.API;
 import com.ewheelers.ewheelers.Network.VolleySingleton;
 import com.ewheelers.ewheelers.R;
 import com.ewheelers.ewheelers.Utils.Constants;
 import com.ewheelers.ewheelers.Utils.SessionPreference;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -52,6 +59,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginScreenActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int REQ_USER_CONSENT = 999;
     EditText username,phoneNumber;
     TextInputEditText password;
     Button login,sendOtp;
@@ -76,6 +84,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     EditText et1, et2, et3, et4;
     AlertDialog dismissDailog;
     View listenerView;
+    SmsBroadcastReceiver smsBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +117,7 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
         otpLayout = findViewById(R.id.otpLayout);
         sendOtp = findViewById(R.id.sendOTP);
         phoneNumber = findViewById(R.id.phoneNumber);
-
+        startSmsUserConsent();
         sharedPreferences = getApplicationContext().getSharedPreferences("pref", MODE_PRIVATE);
 
         tokenno = new SessionPreference().getStrings(this,SessionPreference.tokenvalue);
@@ -147,6 +156,67 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
             }
         });
 */
+    }
+    private void registerBroadcastReceiver() {
+        smsBroadcastReceiver = new SmsBroadcastReceiver();
+        smsBroadcastReceiver.smsBroadcastReceiverListener =
+                new SmsBroadcastReceiver.SmsBroadcastReceiverListener() {
+                    @Override
+                    public void onSuccess(Intent intent) {
+                        startActivityForResult(intent, REQ_USER_CONSENT);
+                    }
+                    @Override
+                    public void onFailure() {
+                    }
+                };
+        IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
+        registerReceiver(smsBroadcastReceiver, intentFilter);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_USER_CONSENT) {
+            if ((resultCode == RESULT_OK) && (data != null)) {
+                //That gives all message to us.
+                // We need to get the code from inside with regex
+                String message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE);
+                getOtpFromMessage(message);
+            }
+        }
+    }
+    private void startSmsUserConsent() {
+        SmsRetrieverClient client = SmsRetriever.getClient(this);
+        //We can add sender phone number or leave it blank
+        // I'm adding null here
+        client.startSmsUserConsent(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
+    }
+
+    private void getOtpFromMessage(String message) {
+        try{
+        boolean b = message.contains("eWheelers.in");
+        String messageText = message.replaceAll("[^0-9]", "");   // contains otp
+        if (b == true) {
+            Log.d("isFrom...", "OTPSignin");
+            if ( messageText.length() == 4) {
+                et1.setText(String.valueOf(messageText.charAt(0)));
+                et2.setText(String.valueOf(messageText.charAt(1)));
+                et3.setText(String.valueOf(messageText.charAt(2)));
+                et4.setText(String.valueOf(messageText.charAt(3)));
+                loginJson(listenerView,true,messageText);                    }
+        }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
@@ -526,13 +596,15 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onStart() {
         super.onStart();
-        LoginScreenActivity.this.registerReceiver(smsBroadcastReceiver, filter);
+        registerBroadcastReceiver();
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        LoginScreenActivity.this.unregisterReceiver(smsBroadcastReceiver);
+        unregisterReceiver(smsBroadcastReceiver);
+
     }
     public static void showfailedDialog(Context context, View v, String message) {
         ViewGroup viewGroup = v.findViewById(android.R.id.content);
@@ -621,32 +693,5 @@ public class LoginScreenActivity extends AppCompatActivity implements View.OnCli
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
-    IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-    private BroadcastReceiver smsBroadcastReceiver=new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.e("smsBroadcastReceiver", "onReceive");
 
-            Bundle data  = intent.getExtras();
-            Boolean b;
-            Object[] pdus = (Object[]) data.get("pdus");
-            for (int i=0; i<pdus.length;i++) {
-                SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                String sender = smsMessage.getDisplayOriginatingAddress();
-                String messageBody = smsMessage.getMessageBody();
-                b = messageBody.contains("eWheelers.in");
-                String messageText = messageBody.replaceAll("[^0-9]", "");   // contains otp
-                if (b == true) {
-                    Log.d("isFrom...", "OTPSignin");
-                    if ( messageText.length() == 4) {
-                        et1.setText(String.valueOf(messageText.charAt(0)));
-                        et2.setText(String.valueOf(messageText.charAt(1)));
-                        et3.setText(String.valueOf(messageText.charAt(2)));
-                        et4.setText(String.valueOf(messageText.charAt(3)));
-                        loginJson(listenerView,true,messageText);                    }
-                }
-            }
-
-        }
-    };
 }

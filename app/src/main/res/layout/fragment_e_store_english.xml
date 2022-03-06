@@ -41,7 +41,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="Shop Name"
+            android:text="Shop Name*"
             android:textColor="#992b1e"
             android:textStyle="normal" />
 
